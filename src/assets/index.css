@@ -1,0 +1,189 @@
+/* src/assets/index.css - Make sure this path matches where you import it in main.js/ts */
+
+/* ========================================================================== */
+/* Tailwind CSS v4 Import - THIS MUST BE THE VERY FIRST LINE */
+/* ========================================================================== */
+@import "tailwindcss";
+
+/* ========================================================================== */
+/* Custom Variant (Commented Out - Likely Not needed/Incorrect for v4) */
+/* ========================================================================== */
+/* Tailwind v4 handles dark mode via the 'dark:' prefix when .dark class is on html/body */
+/* @custom-variant dark (&:is(.dark *)); */
+
+
+/* ========================================================================== */
+/* Theme Variable Definitions (Light Theme) */
+/* ========================================================================== */
+/* ========================================================================== */
+/* Theme Variable Definitions (Light Theme) */
+/* ========================================================================== */
+:root {
+  --background: oklch(100% 0 0);
+  --foreground: oklch(15% 0.02 285);
+  --card: oklch(100% 0 0);
+  --card-foreground: oklch(15% 0.02 285);
+  --popover: oklch(100% 0 0);
+  --popover-foreground: oklch(15% 0.02 285);
+  --primary: oklch(54% 0.19 255);
+  --primary-foreground: oklch(98% 0.005 285);
+  --secondary: oklch(96% 0.008 285);
+  --secondary-foreground: oklch(15% 0.02 285);
+  --muted: oklch(96% 0.008 285);
+  --muted-foreground: oklch(47% 0.02 285);
+  --accent: oklch(96% 0.008 285);
+  --accent-foreground: oklch(15% 0.02 285);
+  --destructive: oklch(63% 0.25 27);
+  --destructive-foreground: oklch(98% 0.005 285);
+  --border: oklch(91% 0.01 285);
+  --input: oklch(91% 0.01 285);
+  --ring: oklch(54% 0.19 255);
+
+  --chart-1: oklch(62% 0.18 27);
+  --chart-2: oklch(55% 0.15 195);
+  --chart-3: oklch(35% 0.08 255);
+  --chart-4: oklch(70% 0.15 75);
+  --chart-5: oklch(68% 0.2 45);
+
+  --radius: 0.625rem;
+
+  /* Sidebar Specific (Light) */
+  --sidebar: oklch(98% 0.005 285);
+  --sidebar-foreground: oklch(15% 0.02 285);
+  --sidebar-primary: oklch(54% 0.19 255);
+  --sidebar-primary-foreground: oklch(98% 0.005 285);
+  --sidebar-accent: oklch(96% 0.008 285);
+  --sidebar-accent-foreground: oklch(15% 0.02 285);
+  --sidebar-border: oklch(91% 0.01 285);
+  --sidebar-ring: oklch(54% 0.19 255);
+}
+
+/* ========================================================================== */
+/* Theme Variable Definitions (Dark Theme) */
+/* ========================================================================== */
+.dark {
+  --background: oklch(15% 0.02 285);
+  --foreground: oklch(98% 0.005 285);
+  --card: oklch(15% 0.02 285);
+  --card-foreground: oklch(98% 0.005 285);
+  --popover: oklch(15% 0.02 285);
+  --popover-foreground: oklch(98% 0.005 285);
+  --primary: oklch(64% 0.22 255);
+  --primary-foreground: oklch(15% 0.02 285);
+  --secondary: oklch(22% 0.03 255);
+  --secondary-foreground: oklch(98% 0.005 285);
+  --muted: oklch(22% 0.03 255);
+  --muted-foreground: oklch(65% 0.02 255);
+  --accent: oklch(22% 0.03 255);
+  --accent-foreground: oklch(98% 0.005 285);
+  --destructive: oklch(48% 0.25 27);
+  --destructive-foreground: oklch(98% 0.005 285);
+  --border: oklch(22% 0.03 255);
+  --input: oklch(22% 0.03 255);
+  --ring: oklch(85% 0.05 255);
+
+  --chart-1: oklch(58% 0.18 255);
+  --chart-2: oklch(55% 0.15 195);
+  --chart-3: oklch(65% 0.15 75);
+  --chart-4: oklch(68% 0.18 315);
+  --chart-5: oklch(65% 0.2 15);
+
+  /* Sidebar Specific (Dark) */
+  --sidebar: oklch(15% 0.02 285);
+  --sidebar-foreground: oklch(98% 0.005 285);
+  --sidebar-primary: oklch(64% 0.22 255);
+  --sidebar-primary-foreground: oklch(15% 0.02 285);
+  --sidebar-accent: oklch(22% 0.03 255);
+  --sidebar-accent-foreground: oklch(98% 0.005 285);
+  --sidebar-border: oklch(22% 0.03 255);
+  --sidebar-ring: oklch(85% 0.05 255);
+}
+/* ========================================================================== */
+/* Map CSS Variables to Tailwind Theme Values (@theme) */
+/* THIS MUST COME AFTER the variable definitions */
+/* ========================================================================== */
+@theme inline {
+  /* Core Colors -> theme('colors.*') */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Chart Colors -> theme('colors.chart-*') */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Radius -> theme('borderRadius.*') */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  /* Sidebar Colors -> theme('colors.sidebar*') */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+
+/* ========================================================================== */
+/* Base Layer Styles (@layer base) */
+/* Apply global styles using the Tailwind theme values defined via @theme */
+/* ========================================================================== */
+@layer base {
+  * {
+    /* Uses `border-border` which maps to --color-border via @theme */
+    /* Uses `outline-ring` which maps to --color-ring via @theme */
+    @apply border-border outline-ring/50;
+  }
+  body {
+    /* Uses `bg-background` which maps to --color-background via @theme */
+    /* Uses `text-foreground` which maps to --color-foreground via @theme */
+    @apply bg-background text-foreground;
+
+    /* Optional: Common font smoothing for better text rendering */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+
+/* ========================================================================== */
+/* Custom Component / Utility Layers (Optional) */
+/* ========================================================================== */
+/*
+@layer components {
+  .my-button {
+    @apply px-4 py-2 bg-primary text-primary-foreground rounded-lg;
+  }
+}
+
+@layer utilities {
+  .content-auto {
+    content-visibility: auto;
+  }
+}
+*/
