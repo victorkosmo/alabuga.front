@@ -76,7 +76,13 @@ apiInstance.interceptors.request.use(
 
 // Response interceptor - handle token refresh
 apiInstance.interceptors.response.use(
-    (response) => response.data,
+    (response) => {
+        // Handle 204 No Content responses
+        if (response.status === 204) {
+            return { success: true, status: 204 };
+        }
+        return response.data;
+    },
     async (error) => {
         const originalRequest = error.config;
 
