@@ -30,6 +30,7 @@ export const sidebarConfig = {
   icons: {
     'Компетенции': BriefcaseBusiness,
     'Настройки': Settings,
+    'Кампании': Star,
     _default: Circle // Fallback icon
   },
   
