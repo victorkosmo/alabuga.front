@@ -33,7 +33,12 @@
       />
       <CampaignStats :campaign="campaign" />
       <CampaignDetails :campaign="campaign" />
-      <CampaignMissions v-if="campaign.missions" :missions="campaign.missions" :campaign-id="campaignId" />
+      <CampaignMissions
+        v-if="campaign.missions"
+        :missions="campaign.missions"
+        :campaign-id="campaignId"
+        @create-mission="openCreateMissionDialog"
+      />
 
       <EditCampaignDialog
         v-model:open="dialogs.edit"
@@ -43,6 +48,11 @@
       <DeleteCampaignDialog
         v-model:open="dialogs.delete"
         @confirm="handleDeleteCampaign"
+      />
+
+      <CreateMissionDialog
+        v-model:open="dialogs.createMission"
+        @select-type="handleSelectMissionType"
       />
     </div>
   </div>
@@ -61,6 +71,7 @@ import CampaignDetails from './components/CampaignDetails.vue';
 import CampaignMissions from './components/CampaignMissions.vue';
 import EditCampaignDialog from './components/EditCampaignDialog.vue';
 import DeleteCampaignDialog from './components/DeleteCampaignDialog.vue';
+import CreateMissionDialog from './components/CreateMissionDialog.vue';
 
 const { campaignId, campaign, isLoading, error, fetchCampaign } = useCampaignData();
 
@@ -68,7 +79,9 @@ const {
   dialogs,
   openEditDialog,
   openDeleteDialog,
+  openCreateMissionDialog,
   handleUpdateCampaign,
   handleDeleteCampaign,
+  handleSelectMissionType,
 } = useCampaignActions(campaignId, fetchCampaign);
 </script>

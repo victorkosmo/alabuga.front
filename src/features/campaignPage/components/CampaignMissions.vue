@@ -1,6 +1,9 @@
 <template>
   <div class="mt-6">
-    <h2 class="text-2xl font-bold mb-4">Миссии</h2>
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-2xl font-bold">Миссии</h2>
+      <Button @click="$emit('create-mission')">Создать миссию</Button>
+    </div>
     <div v-if="missions && missions.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <router-link v-for="mission in missions" :key="mission.id" :to="{ name: 'Миссия', params: { campaignId: campaignId, missionId: mission.id } }">
         <Card class="h-full hover:border-primary transition-colors">
@@ -29,6 +32,7 @@
 </template>
 
 <script setup>
+import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 defineProps({
@@ -41,4 +45,6 @@ defineProps({
     required: true,
   },
 });
+
+defineEmits(['create-mission']);
 </script>

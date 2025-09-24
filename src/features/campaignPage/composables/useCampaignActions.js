@@ -8,10 +8,12 @@ export function useCampaignActions(campaignId, refetchCampaign) {
   const dialogs = reactive({
     edit: false,
     delete: false,
+    createMission: false,
   });
 
   const openEditDialog = () => (dialogs.edit = true);
   const openDeleteDialog = () => (dialogs.delete = true);
+  const openCreateMissionDialog = () => (dialogs.createMission = true);
 
   const handleUpdateCampaign = async (formData) => {
     try {
@@ -33,11 +35,21 @@ export function useCampaignActions(campaignId, refetchCampaign) {
     }
   };
 
+  const handleSelectMissionType = (missionType) => {
+    router.push({
+      name: 'Новая миссия',
+      params: { id: campaignId },
+      query: { type: missionType },
+    });
+  };
+
   return {
     dialogs,
     openEditDialog,
     openDeleteDialog,
+    openCreateMissionDialog,
     handleUpdateCampaign,
     handleDeleteCampaign,
+    handleSelectMissionType,
   };
 }
