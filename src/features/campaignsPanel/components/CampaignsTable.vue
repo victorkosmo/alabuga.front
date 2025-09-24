@@ -11,11 +11,14 @@
     </TableHeader>
     <TableBody>
       <template v-if="campaigns.length">
-        <TableRow v-for="campaign in campaigns" :key="campaign.id">
+        <TableRow
+          v-for="campaign in campaigns"
+          :key="campaign.id"
+          class="cursor-pointer hover:bg-muted/50"
+          @click="goToCampaign(campaign.id)"
+        >
           <TableCell class="font-medium">
-            <router-link :to="`/campaigns/${campaign.id}`" class="hover:underline">
-              {{ campaign.title }}
-            </router-link>
+            {{ campaign.title }}
           </TableCell>
           <TableCell>
             <Badge :variant="statusVariant(campaign.status)">{{ campaign.status }}</Badge>
@@ -37,7 +40,7 @@
 </template>
 
 <script setup>
-import { RouterLink } from 'vue-router';
+import { useRouter } from 'vue-router';
 import {
   Table,
   TableBody,
@@ -48,12 +51,18 @@ import {
 } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 
+const router = useRouter();
+
 defineProps({
   campaigns: {
     type: Array,
     required: true,
   },
 });
+
+const goToCampaign = (id) => {
+  router.push(`/campaigns/${id}`);
+};
 
 const statusVariant = (status) => {
   const variants = {

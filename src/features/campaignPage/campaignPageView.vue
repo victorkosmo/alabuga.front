@@ -1,5 +1,11 @@
 <template>
   <div class="p-4 sm:p-6 lg:p-8">
+    <div class="mb-4">
+      <Button variant="ghost" size="icon" @click="router.back()" class="h-8 w-8">
+        <ArrowLeft class="h-5 w-5" />
+      </Button>
+    </div>
+
     <div v-if="isLoading" class="space-y-4">
       <Skeleton class="h-10 w-1/2" />
       <Skeleton class="h-8 w-1/4" />
@@ -39,6 +45,8 @@
 </template>
 
 <script setup>
+import { useRouter } from 'vue-router';
+import { ArrowLeft } from 'lucide-vue-next';
 import { useCampaignData } from './composables/useCampaignData';
 import { useCampaignActions } from './composables/useCampaignActions';
 
@@ -51,6 +59,7 @@ import CampaignDetails from './components/CampaignDetails.vue';
 import EditCampaignDialog from './components/EditCampaignDialog.vue';
 import DeleteCampaignDialog from './components/DeleteCampaignDialog.vue';
 
+const router = useRouter();
 const { campaignId, campaign, isLoading, error, fetchCampaign } = useCampaignData();
 
 const {
