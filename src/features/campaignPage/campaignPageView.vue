@@ -33,7 +33,7 @@
       />
       <CampaignStats :campaign="campaign" />
       <CampaignDetails :campaign="campaign" />
-      <CampaignMissions v-if="campaign.missions" :missions="campaign.missions" />
+      <CampaignMissions v-if="campaign.missions" :missions="campaign.missions" :campaign-id="campaignId" />
 
       <EditCampaignDialog
         v-model:open="dialogs.edit"

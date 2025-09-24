@@ -52,7 +52,7 @@ export const mainLayoutRoutes = [
         meta: { requiresAuth: true, useInNav: false }
     },
     {
-        path: '/campaigns/:id/missions/:id',
+        path: '/campaigns/:campaignId/missions/:missionId',
         name: 'Миссия',
         component: () => import('@/features/missionPage/missionPage.vue'),
         meta: { requiresAuth: true, useInNav: false }
