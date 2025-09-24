@@ -40,17 +40,23 @@ export const mainLayoutRoutes = [
         meta: { requiresAuth: true, useInNav: true }
     },
     {
+        path: '/campaigns',
+        name: 'Кампании',
+        component: () => import('@/features/campaignsPanel/campaignsPanelView.vue'),
+        meta: { requiresAuth: true, useInNav: true }
+    },
+    {
+        path: '/campaigns/:id',
+        name: 'Кампания',
+        component: () => import('@/features/campaignPage/campaignPageView.vue'),
+        meta: { requiresAuth: true, useInNav: false }
+    },
+    {
         path: '/competencies',
         name: 'Компетенции',
         component: () => import('@/features/competenciesPanel/competenciesPanelView.vue'),
         meta: { requiresAuth: true, useInNav: true }
-    },
-    {
-        path: '/test',
-        name: 'Test',
-        component: () => import('@/pages/test/TheTestPage.vue'),
-        meta: { requiresAuth: true, useInNav: true }
-    },
+    }
 ];
 
 /**
