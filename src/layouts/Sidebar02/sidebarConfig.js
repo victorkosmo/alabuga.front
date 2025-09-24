@@ -1,5 +1,5 @@
 import { mainLayoutRoutes } from '@/router/routes';
-import { Home, BriefcaseBusiness, Settings, LogOut, Circle, FilePlus, Star } from 'lucide-vue-next';
+import { Home, BriefcaseBusiness, Settings, LogOut, Circle, FileBox, Star } from 'lucide-vue-next';
 
 /**
  * @typedef {Object} SidebarConfig
@@ -28,9 +28,9 @@ export const sidebarConfig = {
   
   // Icon mapping for navigation items
   icons: {
-    'Компетенции': BriefcaseBusiness,
+    'Компетенции': FileBox,
     'Настройки': Settings,
-    'Кампании': Star,
+    'Кампании': BriefcaseBusiness,
     _default: Circle // Fallback icon
   },
   
