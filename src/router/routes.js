@@ -49,7 +49,7 @@ export const mainLayoutRoutes = [
         path: '/campaigns/:id',
         name: 'Кампания',
         component: () => import('@/features/campaignPage/campaignPageView.vue'),
-        meta: { requiresAuth: true, useInNav: true }
+        meta: { requiresAuth: true, useInNav: false }
     },
     {
         path: '/competencies',
