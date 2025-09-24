@@ -42,7 +42,13 @@ export const mainLayoutRoutes = [
     {
         path: '/campaigns',
         name: 'Кампании',
-        component: () => import('src/features/campaignsPanel/campaignsPanelView.vue'),
+        component: () => import('@/features/campaignsPanel/campaignsPanelView.vue'),
+        meta: { requiresAuth: true, useInNav: true }
+    },
+    {
+        path: '/campaigns/:id',
+        name: 'Кампания',
+        component: () => import('@/features/campaignPage/campaignPageView.vue'),
         meta: { requiresAuth: true, useInNav: true }
     },
     {
