@@ -12,7 +12,11 @@
     <TableBody>
       <template v-if="campaigns.length">
         <TableRow v-for="campaign in campaigns" :key="campaign.id">
-          <TableCell class="font-medium">{{ campaign.title }}</TableCell>
+          <TableCell class="font-medium">
+            <router-link :to="`/campaigns/${campaign.id}`" class="hover:underline">
+              {{ campaign.title }}
+            </router-link>
+          </TableCell>
           <TableCell>
             <Badge :variant="statusVariant(campaign.status)">{{ campaign.status }}</Badge>
           </TableCell>
@@ -33,6 +37,7 @@
 </template>
 
 <script setup>
+import { RouterLink } from 'vue-router';
 import {
   Table,
   TableBody,
