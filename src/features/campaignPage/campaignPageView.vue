@@ -8,6 +8,15 @@
         <Skeleton class="h-32 w-full" />
         <Skeleton class="h-32 w-full" />
       </div>
+      <Skeleton class="h-48 w-full mt-6" />
+      <div class="mt-6 space-y-4">
+        <Skeleton class="h-8 w-1/3" />
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Skeleton class="h-40 w-full" />
+          <Skeleton class="h-40 w-full" />
+          <Skeleton class="h-40 w-full" />
+        </div>
+      </div>
     </div>
 
     <div v-else-if="error" class="text-center py-12">
@@ -24,6 +33,12 @@
       />
       <CampaignStats :campaign="campaign" />
       <CampaignDetails :campaign="campaign" />
+      <CampaignMissions
+        v-if="campaign.missions"
+        :missions="campaign.missions"
+        :campaign-id="campaignId"
+        @create-mission="openCreateMissionDialog"
+      />
 
       <EditCampaignDialog
         v-model:open="dialogs.edit"
@@ -33,6 +48,11 @@
       <DeleteCampaignDialog
         v-model:open="dialogs.delete"
         @confirm="handleDeleteCampaign"
+      />
+
+      <CreateMissionDialog
+        v-model:open="dialogs.createMission"
+        @select-type="handleSelectMissionType"
       />
     </div>
   </div>
@@ -48,8 +68,10 @@ import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
 import CampaignHeader from './components/CampaignHeader.vue';
 import CampaignStats from './components/CampaignStats.vue';
 import CampaignDetails from './components/CampaignDetails.vue';
+import CampaignMissions from './components/CampaignMissions.vue';
 import EditCampaignDialog from './components/EditCampaignDialog.vue';
 import DeleteCampaignDialog from './components/DeleteCampaignDialog.vue';
+import CreateMissionDialog from './components/CreateMissionDialog.vue';
 
 const { campaignId, campaign, isLoading, error, fetchCampaign } = useCampaignData();
 
@@ -57,7 +79,9 @@ const {
   dialogs,
   openEditDialog,
   openDeleteDialog,
+  openCreateMissionDialog,
   handleUpdateCampaign,
   handleDeleteCampaign,
+  handleSelectMissionType,
 } = useCampaignActions(campaignId, fetchCampaign);
 </script>

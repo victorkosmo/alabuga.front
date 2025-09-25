@@ -1,0 +1,70 @@
+import { get, post, put, remove } from '@/utils/fetch';
+import { successMessage } from '@/utils/toast';
+
+/**
+ * Get a single mission by ID.
+ * @param {string} campaignId - The ID of the campaign the mission belongs to.
+ * @param {string} missionId - The ID of the mission.
+ * @returns {Promise<Object>} The mission data.
+ */
+export const getMission = async (campaignId, missionId) => {
+  const response = await get(`/web/campaigns/${campaignId}/missions/${missionId}`);
+  if (response.success) {
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to fetch mission');
+};
+
+/**
+ * Get a list of supported mission types.
+ * @returns {Promise<Array>} A list of mission type objects.
+ */
+export const getMissionTypes = async () => {
+  const response = await get('/web/missions/types');
+  if (response.success) {
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to fetch mission types');
+};
+
+/**
+ * Create a new URL-based mission.
+ * @param {Object} data - The mission data.
+ * @returns {Promise<Object>} The created mission data.
+ */
+export const createUrlMission = async (data) => {
+  const response = await post('/web/missions/type-url', data);
+  if (response.success) {
+    successMessage('Миссия успешно создана');
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to create URL mission');
+};
+
+/**
+ * Update a URL-based mission.
+ * @param {string} missionId - The ID of the mission to update.
+ * @param {Object} data - The updated mission data.
+ * @returns {Promise<Object>} The updated mission data.
+ */
+export const updateUrlMission = async (missionId, data) => {
+  const response = await put(`/web/missions/type-url/${missionId}`, data);
+  if (response.success) {
+    successMessage('Миссия успешно обновлена');
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to update URL mission');
+};
+
+/**
+ * Get a URL-based mission by ID.
+ * @param {string} missionId - The ID of the mission.
+ * @returns {Promise<Object>} The mission data.
+ */
+export const getUrlMission = async (missionId) => {
+  const response = await get(`/web/missions/type-url/${missionId}`);
+  if (response.success) {
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to fetch URL mission');
+};

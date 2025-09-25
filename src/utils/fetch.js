@@ -89,8 +89,8 @@ apiInstance.interceptors.response.use(
         // Handle 401 errors
         if (error.response?.status === 401 && !originalRequest._retry) {
             // Skip refresh for auth endpoints
-            if (originalRequest.url?.includes('/auth/login') || 
-                originalRequest.url?.includes('/auth/refresh')) {
+            if (originalRequest.url?.includes('web/auth/login') || 
+                originalRequest.url?.includes('web/auth/refresh')) {
                 return handleErrorResponse(error);
             }
 

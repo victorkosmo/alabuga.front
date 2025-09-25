@@ -52,6 +52,24 @@ export const mainLayoutRoutes = [
         meta: { requiresAuth: true, useInNav: false }
     },
     {
+        path: '/campaigns/:id/missions/new',
+        name: 'Новая миссия',
+        component: () => import('@/features/newMissionForm/newMissionFormView.vue'),
+        meta: { requiresAuth: true, useInNav: false }
+    },
+    {
+        path: '/campaigns/:id/missions/edit',
+        name: 'Редактировать миссию',
+        component: () => import('@/features/editMissionForm/editMissionFormView.vue'),
+        meta: { requiresAuth: true, useInNav: false }
+    },
+    {
+        path: '/campaigns/:campaignId/missions/:missionId',
+        name: 'Миссия',
+        component: () => import('@/features/missionPage/missionPage.vue'),
+        meta: { requiresAuth: true, useInNav: false }
+    },
+    {
         path: '/competencies',
         name: 'Компетенции',
         component: () => import('@/features/competenciesPanel/competenciesPanelView.vue'),

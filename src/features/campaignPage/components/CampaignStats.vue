@@ -21,7 +21,7 @@
         <CardTitle>Участники</CardTitle>
       </CardHeader>
       <CardContent>
-        <p class="text-lg">{{ formatParticipants(campaign.max_participants) }}</p>
+        <p class="text-lg">{{ formatParticipants(campaign.current_participants, campaign.max_participants) }}</p>
       </CardContent>
     </Card>
   </div>
@@ -49,7 +49,8 @@ const statusVariant = (status) => {
   return variants[status] || 'secondary';
 };
 
-const formatParticipants = (max) => {
-  return max === null ? 'Неограниченно' : `до ${max}`;
+const formatParticipants = (current, max) => {
+  const maxDisplay = max === null ? 'Неограниченно' : max;
+  return `${current} / ${maxDisplay}`;
 };
 </script>
