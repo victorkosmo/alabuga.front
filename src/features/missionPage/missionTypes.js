@@ -1,6 +1,10 @@
 export const missionTypeDetails = {
   MANUAL_URL: {
-    // This structure allows for future expansion, e.g., mapping types to specific
-    // components or service functions.
+    // Maps the 'MANUAL_URL' type to the 'getUrlMission' function in mission.service.js
+    service: 'getUrlMission',
   },
+  // EXAMPLE for a future type:
+  // SOME_OTHER_TYPE: {
+  //   service: 'getSomeOtherTypeMission',
+  // },
 };
