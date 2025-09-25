@@ -27,6 +27,12 @@
             </Button>
             <h1 class="text-3xl font-bold">{{ mission.title }}</h1>
           </div>
+          <router-link :to="{ name: 'Редактировать миссию', params: { id: route.params.campaignId }, query: { missionId: mission.id, type: mission.type } }">
+            <Button variant="outline">
+              <Pencil class="mr-2 h-4 w-4" />
+              Редактировать
+            </Button>
+          </router-link>
         </div>
         <p class="text-muted-foreground mt-1 ml-12">{{ mission.description }}</p>
       </header>
@@ -66,9 +72,9 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 import { useMission } from './composables/useMission';
-import { ArrowLeft } from 'lucide-vue-next';
+import { ArrowLeft, Pencil } from 'lucide-vue-next';
 
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
@@ -77,5 +83,6 @@ import { Label } from '@/components/ui/label';
 import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
 
 const router = useRouter();
+const route = useRoute();
 const { mission, isLoading, error, fetchMission } = useMission();
 </script>

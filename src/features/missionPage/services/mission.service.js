@@ -42,6 +42,21 @@ export const createUrlMission = async (data) => {
 };
 
 /**
+ * Update a URL-based mission.
+ * @param {string} missionId - The ID of the mission to update.
+ * @param {Object} data - The updated mission data.
+ * @returns {Promise<Object>} The updated mission data.
+ */
+export const updateUrlMission = async (missionId, data) => {
+  const response = await put(`/web/missions/type-url/${missionId}`, data);
+  if (response.success) {
+    successMessage('Миссия успешно обновлена');
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to update URL mission');
+};
+
+/**
  * Get a URL-based mission by ID.
  * @param {string} missionId - The ID of the mission.
  * @returns {Promise<Object>} The mission data.
