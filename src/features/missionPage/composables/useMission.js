@@ -5,6 +5,7 @@ import * as missionService from '@/features/missionPage/services/mission.service
 export function useMission() {
   const route = useRoute();
   const missionId = route.params.missionId;
+  const campaignId = route.params.id; // Get campaignId from route params
 
   const mission = ref(null);
   const isLoading = ref(true);
@@ -15,9 +16,8 @@ export function useMission() {
     error.value = null;
     mission.value = null;
     try {
-      // The service function will throw an error if the mission type is not MANUAL_URL,
-      // which will be caught here and displayed on the page.
-      const response = await missionService.getUrlMission(missionId);
+      // Use the generic getMission function with campaignId and missionId
+      const response = await missionService.getMission(campaignId, missionId);
       mission.value = response;
     } catch (e) {
       error.value = e.message || 'Failed to load mission details.';
