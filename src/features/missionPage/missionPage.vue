@@ -37,9 +37,9 @@
             <CardTitle>Задание</CardTitle>
           </CardHeader>
           <CardContent>
-            <p class="text-muted-foreground mb-4">{{ mission.details.submission_prompt }}</p>
+            <p class="text-muted-foreground mb-4">{{ mission.details?.submission_prompt }}</p>
             <Label for="submission-url">Ссылка для проверки</Label>
-            <Input id="submission-url" type="url" :placeholder="mission.details.placeholder_text" />
+            <Input id="submission-url" type="url" :placeholder="mission.details?.placeholder_text" />
           </CardContent>
           <CardFooter>
             <Button>Отправить на проверку</Button>
