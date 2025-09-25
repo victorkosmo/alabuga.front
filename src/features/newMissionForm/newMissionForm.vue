@@ -55,8 +55,19 @@
               <Input id="mana_reward" v-model.number="formData.mana_reward" type="number" />
             </div>
             <div>
-              <Label for="required_rank_id">Требуемый ранг (ID)</Label>
-              <Input id="required_rank_id" v-model="formData.required_rank_id" required />
+              <Label for="required_rank_id">Требуемый ранг</Label>
+              <Select v-model="formData.required_rank_id">
+                <SelectTrigger id="required_rank_id">
+                  <SelectValue placeholder="Выберите ранг" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem v-for="rank in ranks" :key="rank.id" :value="rank.id">
+                      {{ rank.title }}
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
             </div>
           </div>
         </div>
@@ -73,7 +84,7 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ArrowLeft, Loader2 } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
@@ -81,7 +92,9 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { createUrlMission } from '@/features/missionPage/services/mission.service';
+import { getMinimalRanks } from './services/ranks.service';
 
 const route = useRoute();
 const router = useRouter();
@@ -90,15 +103,25 @@ const missionType = computed(() => route.query.type);
 const campaignId = route.params.id;
 
 const isSubmitting = ref(false);
+const ranks = ref([]);
 const formData = reactive({
   title: '',
   description: '',
   category: '',
-  required_rank_id: '',
+  required_rank_id: null,
   experience_reward: 0,
   mana_reward: 0,
   submission_prompt: '',
   placeholder_text: '',
+});
+
+onMounted(async () => {
+  try {
+    ranks.value = await getMinimalRanks();
+  } catch (error) {
+    console.error('Failed to fetch ranks:', error);
+    // Error toast is handled by the fetch interceptor
+  }
 });
 
 const handleSubmit = async () => {
