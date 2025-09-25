@@ -1,4 +1,4 @@
-import { get, put, remove } from '@/utils/fetch';
+import { get, post, put, remove } from '@/utils/fetch';
 import { successMessage } from '@/utils/toast';
 
 /**
@@ -25,6 +25,20 @@ export const getMissionTypes = async () => {
     return response.data;
   }
   throw new Error(response.error?.message || 'Failed to fetch mission types');
+};
+
+/**
+ * Create a new URL-based mission.
+ * @param {Object} data - The mission data.
+ * @returns {Promise<Object>} The created mission data.
+ */
+export const createUrlMission = async (data) => {
+  const response = await post('/web/missions/type-url', data);
+  if (response.success) {
+    successMessage('Миссия успешно создана');
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to create URL mission');
 };
 
 /**
