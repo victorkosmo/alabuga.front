@@ -5,7 +5,7 @@
       <Button @click="$emit('create-mission')">Создать миссию</Button>
     </div>
     <div v-if="missions && missions.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <router-link v-for="mission in missions" :key="mission.id" :to="{ name: 'Миссия', params: { id: campaignId, missionId: mission.id }, query: { type: mission.type } }">
+      <router-link v-for="mission in missions" :key="mission.id" :to="{ name: 'Миссия', params: { campaignId: campaignId, missionId: mission.id }, query: { type: mission.type } }">
         <Card class="h-full hover:border-primary transition-colors">
           <CardHeader>
             <CardTitle>{{ mission.title }}</CardTitle>
