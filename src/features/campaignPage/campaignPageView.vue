@@ -39,6 +39,12 @@
         :campaign-id="campaignId"
         @create-mission="openCreateMissionDialog"
       />
+      <CampaignAchievements
+        :achievements="achievements"
+        :is-loading="isAchievementsLoading"
+        :error="achievementsError"
+        @create-achievement="openCreateAchievementDialog"
+      />
 
       <EditCampaignDialog
         v-model:open="dialogs.edit"
@@ -53,6 +59,10 @@
       <CreateMissionDialog
         v-model:open="dialogs.createMission"
         @select-type="handleSelectMissionType"
+      />
+      <CreateAchievementDialog
+        v-model:open="dialogs.createAchievement"
+        @save="handleSaveAchievement"
       />
     </div>
   </div>
@@ -69,19 +79,33 @@ import CampaignHeader from './components/CampaignHeader.vue';
 import CampaignStats from './components/CampaignStats.vue';
 import CampaignDetails from './components/CampaignDetails.vue';
 import CampaignMissions from './components/CampaignMissions.vue';
+import CampaignAchievements from './components/CampaignAchievements.vue';
 import EditCampaignDialog from './components/EditCampaignDialog.vue';
 import DeleteCampaignDialog from './components/DeleteCampaignDialog.vue';
 import CreateMissionDialog from './components/CreateMissionDialog.vue';
+import CreateAchievementDialog from './components/CreateAchievementDialog.vue';
 
-const { campaignId, campaign, isLoading, error, fetchCampaign } = useCampaignData();
+const {
+  campaignId,
+  campaign,
+  isLoading,
+  error,
+  fetchCampaign,
+  achievements,
+  isAchievementsLoading,
+  achievementsError,
+  fetchAchievements,
+} = useCampaignData();
 
 const {
   dialogs,
   openEditDialog,
   openDeleteDialog,
   openCreateMissionDialog,
+  openCreateAchievementDialog,
   handleUpdateCampaign,
   handleDeleteCampaign,
   handleSelectMissionType,
-} = useCampaignActions(campaignId, fetchCampaign);
+  handleSaveAchievement,
+} = useCampaignActions(campaignId, fetchCampaign, fetchAchievements);
 </script>
