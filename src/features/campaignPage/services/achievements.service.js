@@ -33,7 +33,7 @@ export const deleteAchievement = async (id) => {
 };
 
 export const getMinimalAchievements = (campaignId) => {
-  return get('/web/achievements/list-minimal', { params: { campaign_id: campaignId } });
+  return get('/web/achievements/ui/list-minimal', { params: { campaign_id: campaignId } });
 };
 
 export const attachAchievementToMission = async (achievementId, missionId) => {
