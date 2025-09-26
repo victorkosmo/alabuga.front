@@ -65,7 +65,7 @@ export function useMission() {
   const updateRequiredAchievement = async (newAchievementId) => {
     isUpdatingAchievement.value = true;
     try {
-      const oldAchievementId = mission.value.required_achievement?.id;
+      const oldAchievementId = mission.value.required_achievement_id;
 
       if (oldAchievementId) {
         await achievementsService.detachAchievementFromMission(oldAchievementId, missionId);

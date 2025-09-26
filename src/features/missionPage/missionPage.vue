@@ -78,7 +78,7 @@
           </CardHeader>
           <CardContent>
             <Select
-              :model-value="mission.required_achievement?.id"
+              :model-value="mission.required_achievement_id"
               @update:model-value="updateRequiredAchievement"
               :disabled="isUpdatingAchievement"
             >
