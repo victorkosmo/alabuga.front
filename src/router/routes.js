@@ -70,6 +70,12 @@ export const mainLayoutRoutes = [
         meta: { requiresAuth: true, useInNav: false }
     },
     {
+        path: '/campaigns/:campaignId/missions/:missionId/completions',
+        name: 'Проверка заполнений',
+        component: () => import('@/features/completionsPage/completionsPageView.vue'),
+        meta: { requiresAuth: true, useInNav: false }
+    },
+    {
         path: '/competencies',
         name: 'Компетенции',
         component: () => import('@/features/competenciesPanel/competenciesPanelView.vue'),

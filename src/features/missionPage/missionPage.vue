@@ -27,12 +27,29 @@
             </Button>
             <h1 class="text-3xl font-bold">{{ mission.title }}</h1>
           </div>
-          <router-link :to="{ name: 'Редактировать миссию', params: { id: route.params.campaignId }, query: { missionId: mission.id, type: mission.type } }">
-            <Button variant="outline">
-              <Pencil class="mr-2 h-4 w-4" />
-              Редактировать
-            </Button>
-          </router-link>
+          <div class="flex items-center gap-2">
+            <router-link
+              :to="{
+                name: 'Редактировать миссию',
+                params: { id: route.params.campaignId },
+                query: { missionId: mission.id, type: mission.type }
+              }"
+            >
+              <Button variant="outline">
+                <Pencil class="mr-2 h-4 w-4" />
+                Редактировать
+              </Button>
+            </router-link>
+            <router-link
+              v-if="mission.type === 'MANUAL_URL'"
+              :to="{
+                name: 'Проверка заполнений',
+                params: { campaignId: route.params.campaignId, missionId: mission.id }
+              }"
+            >
+              <Button>Проверки</Button>
+            </router-link>
+          </div>
         </div>
         <p class="text-muted-foreground mt-1 ml-12">{{ mission.description }}</p>
       </header>
