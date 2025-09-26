@@ -11,7 +11,7 @@
       <p>Не удалось загрузить ачивки: {{ error }}</p>
     </div>
     <div v-else-if="achievements && achievements.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <Card v-for="achievement in achievements" :key="achievement.id" class="h-full hover:border-primary transition-colors">
+      <Card v-for="achievement in achievements" :key="achievement.id" class="h-full hover:border-primary transition-colors cursor-pointer" @click="$emit('edit-achievement', achievement)">
         <CardHeader>
           <CardTitle>{{ achievement.name }}</CardTitle>
           <CardDescription>{{ achievement.description }}</CardDescription>
@@ -46,5 +46,5 @@ defineProps({
   },
 });
 
-defineEmits(['create-achievement']);
+defineEmits(['create-achievement', 'edit-achievement']);
 </script>

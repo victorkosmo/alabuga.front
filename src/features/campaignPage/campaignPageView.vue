@@ -44,6 +44,7 @@
         :is-loading="isAchievementsLoading"
         :error="achievementsError"
         @create-achievement="openCreateAchievementDialog"
+        @edit-achievement="openEditAchievementDialog"
       />
 
       <EditCampaignDialog
@@ -60,9 +61,15 @@
         v-model:open="dialogs.createMission"
         @select-type="handleSelectMissionType"
       />
-      <CreateAchievementDialog
-        v-model:open="dialogs.createAchievement"
+      <CreateEditAchievementDialog
+        v-model:open="dialogs.createEditAchievement"
+        :achievement="selectedAchievement"
         @save="handleSaveAchievement"
+        @delete="openDeleteAchievementDialog"
+      />
+      <DeleteAchievementDialog
+        v-model:open="dialogs.deleteAchievement"
+        @confirm="handleDeleteAchievement"
       />
     </div>
   </div>
@@ -83,7 +90,8 @@ import CampaignAchievements from './components/CampaignAchievements.vue';
 import EditCampaignDialog from './components/EditCampaignDialog.vue';
 import DeleteCampaignDialog from './components/DeleteCampaignDialog.vue';
 import CreateMissionDialog from './components/CreateMissionDialog.vue';
-import CreateAchievementDialog from './components/CreateAchievementDialog.vue';
+import CreateEditAchievementDialog from './components/CreateEditAchievementDialog.vue';
+import DeleteAchievementDialog from './components/DeleteAchievementDialog.vue';
 
 const {
   campaignId,
@@ -92,6 +100,7 @@ const {
   error,
   fetchCampaign,
   achievements,
+  achievementsPagination,
   isAchievementsLoading,
   achievementsError,
   fetchAchievements,
@@ -99,13 +108,17 @@ const {
 
 const {
   dialogs,
+  selectedAchievement,
   openEditDialog,
   openDeleteDialog,
   openCreateMissionDialog,
   openCreateAchievementDialog,
+  openEditAchievementDialog,
+  openDeleteAchievementDialog,
   handleUpdateCampaign,
   handleDeleteCampaign,
   handleSelectMissionType,
   handleSaveAchievement,
-} = useCampaignActions(campaignId, fetchCampaign, fetchAchievements);
+  handleDeleteAchievement,
+} = useCampaignActions(campaignId, fetchCampaign, fetchAchievements, achievements, achievementsPagination);
 </script>
