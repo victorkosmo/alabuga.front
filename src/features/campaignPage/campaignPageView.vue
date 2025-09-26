@@ -39,6 +39,13 @@
         :campaign-id="campaignId"
         @create-mission="openCreateMissionDialog"
       />
+      <CampaignAchievements
+        :achievements="achievements"
+        :is-loading="isAchievementsLoading"
+        :error="achievementsError"
+        @create-achievement="openCreateAchievementDialog"
+        @edit-achievement="openEditAchievementDialog"
+      />
 
       <EditCampaignDialog
         v-model:open="dialogs.edit"
@@ -53,6 +60,16 @@
       <CreateMissionDialog
         v-model:open="dialogs.createMission"
         @select-type="handleSelectMissionType"
+      />
+      <CreateEditAchievementDialog
+        v-model:open="dialogs.createEditAchievement"
+        :achievement="selectedAchievement"
+        @save="handleSaveAchievement"
+        @delete="openDeleteAchievementDialog"
+      />
+      <DeleteAchievementDialog
+        v-model:open="dialogs.deleteAchievement"
+        @confirm="handleDeleteAchievement"
       />
     </div>
   </div>
@@ -69,19 +86,39 @@ import CampaignHeader from './components/CampaignHeader.vue';
 import CampaignStats from './components/CampaignStats.vue';
 import CampaignDetails from './components/CampaignDetails.vue';
 import CampaignMissions from './components/CampaignMissions.vue';
+import CampaignAchievements from './components/CampaignAchievements.vue';
 import EditCampaignDialog from './components/EditCampaignDialog.vue';
 import DeleteCampaignDialog from './components/DeleteCampaignDialog.vue';
 import CreateMissionDialog from './components/CreateMissionDialog.vue';
+import CreateEditAchievementDialog from './components/CreateEditAchievementDialog.vue';
+import DeleteAchievementDialog from './components/DeleteAchievementDialog.vue';
 
-const { campaignId, campaign, isLoading, error, fetchCampaign } = useCampaignData();
+const {
+  campaignId,
+  campaign,
+  isLoading,
+  error,
+  fetchCampaign,
+  achievements,
+  achievementsPagination,
+  isAchievementsLoading,
+  achievementsError,
+  fetchAchievements,
+} = useCampaignData();
 
 const {
   dialogs,
+  selectedAchievement,
   openEditDialog,
   openDeleteDialog,
   openCreateMissionDialog,
+  openCreateAchievementDialog,
+  openEditAchievementDialog,
+  openDeleteAchievementDialog,
   handleUpdateCampaign,
   handleDeleteCampaign,
   handleSelectMissionType,
-} = useCampaignActions(campaignId, fetchCampaign);
+  handleSaveAchievement,
+  handleDeleteAchievement,
+} = useCampaignActions(campaignId, fetchCampaign, fetchAchievements, achievements, achievementsPagination);
 </script>

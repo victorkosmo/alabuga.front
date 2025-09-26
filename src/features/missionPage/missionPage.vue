@@ -71,6 +71,36 @@
 
         <Card>
           <CardHeader>
+            <CardTitle>Обязательная ачивка</CardTitle>
+            <CardDescription>
+              Выберите ачивку, которую пользователь должен получить перед выполнением этой миссии.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Select
+              :model-value="mission.required_achievement_id"
+              @update:model-value="updateRequiredAchievement"
+              :disabled="isUpdatingAchievement"
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Ачивка не требуется" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem :value="null">Ачивка не требуется</SelectItem>
+                <SelectItem
+                  v-for="achievement in achievements"
+                  :key="achievement.id"
+                  :value="achievement.id"
+                >
+                  {{ achievement.name }}
+                </SelectItem>
+              </SelectContent>
+            </Select>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
             <CardTitle>Награды</CardTitle>
           </CardHeader>
           <CardContent class="space-y-2">
@@ -93,13 +123,35 @@ import { useRouter, useRoute } from 'vue-router';
 import { useMission } from './composables/useMission';
 import { ArrowLeft, Pencil } from 'lucide-vue-next';
 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue
+} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  CardDescription
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
 
 const router = useRouter();
 const route = useRoute();
-const { mission, isLoading, error, fetchMission } = useMission();
+const {
+  mission,
+  isLoading,
+  error,
+  fetchMission,
+  achievements,
+  isUpdatingAchievement,
+  updateRequiredAchievement
+} = useMission();
 </script>

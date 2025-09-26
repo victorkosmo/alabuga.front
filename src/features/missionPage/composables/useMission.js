@@ -2,14 +2,19 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import * as missionService from '@/features/missionPage/services/mission.service';
 import { missionTypeDetails } from '@/features/missionPage/missionTypes';
+import * as achievementsService from '@/features/campaignPage/services/achievements.service.js';
 
 export function useMission() {
   const route = useRoute();
   const missionId = route.params.missionId;
+  const campaignId = route.params.campaignId;
 
   const mission = ref(null);
   const isLoading = ref(true);
   const error = ref(null);
+
+  const achievements = ref([]);
+  const isUpdatingAchievement = ref(false);
 
   const fetchMission = async () => {
     isLoading.value = true;
@@ -46,12 +51,52 @@ export function useMission() {
     }
   };
 
-  onMounted(fetchMission);
+  const fetchAchievements = async () => {
+    try {
+      const response = await achievementsService.getMinimalAchievements(campaignId);
+      if (response.success) {
+        achievements.value = response.data;
+      }
+    } catch (e) {
+      console.error('Failed to load achievements list', e);
+    }
+  };
+
+  const updateRequiredAchievement = async (newAchievementId) => {
+    isUpdatingAchievement.value = true;
+    try {
+      const oldAchievementId = mission.value.required_achievement_id;
+
+      if (oldAchievementId) {
+        await achievementsService.detachAchievementFromMission(oldAchievementId, missionId);
+      }
+
+      if (newAchievementId) {
+        await achievementsService.attachAchievementToMission(newAchievementId, missionId);
+      }
+
+      await fetchMission(); // Refresh mission data
+    } catch (e) {
+      console.error('Failed to update required achievement', e);
+      // Re-fetch to ensure UI is in sync with the backend state after an error
+      await fetchMission();
+    } finally {
+      isUpdatingAchievement.value = false;
+    }
+  };
+
+  onMounted(() => {
+    fetchMission();
+    fetchAchievements();
+  });
 
   return {
     mission,
     isLoading,
     error,
     fetchMission,
+    achievements,
+    isUpdatingAchievement,
+    updateRequiredAchievement
   };
 }
