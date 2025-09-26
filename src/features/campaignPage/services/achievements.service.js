@@ -31,3 +31,29 @@ export const deleteAchievement = async (id) => {
   }
   throw new Error(response.error?.message || 'Failed to delete achievement');
 };
+
+export const getMinimalAchievements = (campaignId) => {
+  return get('/web/achievements/list-minimal', { params: { campaign_id: campaignId } });
+};
+
+export const attachAchievementToMission = async (achievementId, missionId) => {
+  const response = await post(`/web/achievements/${achievementId}/mission/attach`, {
+    mission_id: missionId
+  });
+  if (response.success) {
+    successMessage('Ачивка успешно привязана к миссии');
+    return response;
+  }
+  throw new Error(response.error?.message || 'Failed to attach achievement');
+};
+
+export const detachAchievementFromMission = async (achievementId, missionId) => {
+  const response = await post(`/web/achievements/${achievementId}/mission/detach`, {
+    mission_id: missionId
+  });
+  if (response.success) {
+    successMessage('Ачивка успешно отвязана от миссии');
+    return response;
+  }
+  throw new Error(response.error?.message || 'Failed to detach achievement');
+};
