@@ -39,7 +39,7 @@ const refreshAccessToken = async () => {
     }
 
     try {
-        const response = await unauthorizedInstance.post('/auth/refresh/', { 
+        const response = await unauthorizedInstance.post('web/auth/refresh/', { 
             refresh: refreshTokenValue 
         });
 
