@@ -43,6 +43,7 @@
         :achievements="achievements"
         :is-loading="isAchievementsLoading"
         :error="achievementsError"
+        :missions="missionsForSelector"
         @create-achievement="openCreateAchievementDialog"
         @edit-achievement="openEditAchievementDialog"
       />
@@ -64,6 +65,7 @@
       <CreateEditAchievementDialog
         v-model:open="dialogs.createEditAchievement"
         :achievement="selectedAchievement"
+        :missions="missionsForSelector"
         @save="handleSaveAchievement"
         @delete="openDeleteAchievementDialog"
       />
@@ -104,6 +106,7 @@ const {
   isAchievementsLoading,
   achievementsError,
   fetchAchievements,
+  missionsForSelector,
 } = useCampaignData();
 
 const {

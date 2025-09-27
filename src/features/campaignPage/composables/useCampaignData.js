@@ -16,6 +16,8 @@ export function useCampaignData() {
   const isAchievementsLoading = ref(true);
   const achievementsError = ref(null);
 
+  const missionsForSelector = ref([]);
+
   const fetchCampaign = async () => {
     isLoading.value = true;
     error.value = null;
@@ -50,9 +52,24 @@ export function useCampaignData() {
     }
   };
 
+  const fetchMissionsForSelector = async () => {
+    try {
+      const response = await achievementsService.getMinimalMissions(campaignId);
+      if (response.success) {
+        missionsForSelector.value = response.data;
+      } else {
+        throw new Error(response.error?.message || 'Failed to fetch missions list');
+      }
+    } catch (e) {
+      console.error('Failed to load missions for selector', e);
+      missionsForSelector.value = [];
+    }
+  };
+
   onMounted(() => {
     fetchCampaign();
     fetchAchievements();
+    fetchMissionsForSelector();
   });
 
   return {
@@ -66,5 +83,6 @@ export function useCampaignData() {
     isAchievementsLoading,
     achievementsError,
     fetchAchievements,
+    missionsForSelector,
   };
 }
