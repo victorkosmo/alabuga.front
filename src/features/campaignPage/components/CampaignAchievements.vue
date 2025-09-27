@@ -16,8 +16,14 @@
           <CardTitle>{{ achievement.name }}</CardTitle>
           <CardDescription>{{ achievement.description }}</CardDescription>
         </CardHeader>
-        <CardContent v-if="achievement.image_url">
-          <img :src="achievement.image_url" :alt="achievement.name" class="w-20 h-20 object-cover rounded-md">
+        <CardContent class="space-y-2">
+          <img v-if="achievement.image_url" :src="achievement.image_url" :alt="achievement.name" class="w-20 h-20 object-cover rounded-md">
+          <div v-if="achievement.mana_reward > 0">
+            <span class="font-semibold">Награда Mana:</span> {{ achievement.mana_reward }}
+          </div>
+          <div v-if="achievement.unlock_conditions?.required_missions?.length > 0">
+            <span class="font-semibold">Требуется миссия:</span> {{ getMissionName(achievement.unlock_conditions.required_missions[0]) }}
+          </div>
         </CardContent>
       </Card>
     </div>
@@ -31,10 +37,14 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-defineProps({
+const props = defineProps({
   achievements: {
     type: Array,
     required: true,
+  },
+  missions: {
+    type: Array,
+    default: () => [],
   },
   isLoading: {
     type: Boolean,
@@ -47,4 +57,10 @@ defineProps({
 });
 
 defineEmits(['create-achievement', 'edit-achievement']);
+
+const getMissionName = (missionId) => {
+  if (!missionId || !props.missions) return 'Неизвестная миссия';
+  const mission = props.missions.find(m => m.id === missionId);
+  return mission ? mission.title : 'Неизвестная миссия';
+};
 </script>

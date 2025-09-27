@@ -26,6 +26,30 @@
           </Label>
           <Input id="image_url" v-model="formData.image_url" class="col-span-3" />
         </div>
+        <div class="grid grid-cols-4 items-center gap-4">
+          <Label for="mana_reward" class="text-right">
+            Награда Mana
+          </Label>
+          <Input id="mana_reward" v-model="formData.mana_reward" type="number" class="col-span-3" />
+        </div>
+        <div class="grid grid-cols-4 items-center gap-4">
+          <Label for="required_mission" class="text-right">
+            Требуемая миссия
+          </Label>
+          <Select v-model="formData.required_mission_id">
+            <SelectTrigger class="col-span-3">
+              <SelectValue placeholder="Выберите миссию" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="">
+                Нет
+              </SelectItem>
+              <SelectItem v-for="mission in missions" :key="mission.id" :value="mission.id">
+                {{ mission.title }}
+              </SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
       <DialogFooter>
         <Button v-if="isEditing" variant="destructive" class="mr-auto" @click="handleDelete">Удалить</Button>
@@ -50,12 +74,23 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 
 const props = defineProps({
   open: Boolean,
   achievement: {
     type: Object,
     default: null,
+  },
+  missions: {
+    type: Array,
+    default: () => [],
   },
 });
 
@@ -67,6 +102,8 @@ const defaultFormData = () => ({
   name: '',
   description: '',
   image_url: '',
+  mana_reward: 0,
+  required_mission_id: null,
 });
 
 const formData = ref(defaultFormData());
@@ -78,6 +115,8 @@ watch(() => props.open, (isOpen) => {
         name: props.achievement.name,
         description: props.achievement.description || '',
         image_url: props.achievement.image_url || '',
+        mana_reward: props.achievement.mana_reward || 0,
+        required_mission_id: props.achievement.unlock_conditions?.required_missions?.[0] || null,
       };
     } else {
       formData.value = defaultFormData();
@@ -99,7 +138,22 @@ const handleSave = () => {
     console.error("Name is required");
     return;
   }
-  emit('save', { ...formData.value });
+  
+  const payload = {
+    name: formData.value.name,
+    description: formData.value.description,
+    image_url: formData.value.image_url,
+    mana_reward: Number(formData.value.mana_reward) || 0,
+    unlock_conditions: null,
+  };
+
+  if (formData.value.required_mission_id) {
+    payload.unlock_conditions = {
+      required_missions: [formData.value.required_mission_id],
+    };
+  }
+
+  emit('save', payload);
 };
 
 const handleDelete = () => {

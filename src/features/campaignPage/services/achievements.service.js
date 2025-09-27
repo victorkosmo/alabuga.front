@@ -36,6 +36,10 @@ export const getMinimalAchievements = (campaignId) => {
   return get('/web/ui/achievements/list-minimal', { params: { campaign_id: campaignId } });
 };
 
+export const getMinimalMissions = (campaignId) => {
+  return get('/web/ui/missions/list-minimal', { params: { campaign_id: campaignId } });
+};
+
 export const attachAchievementToMission = async (achievementId, missionId) => {
   const response = await post(`/web/achievements/${achievementId}/mission/attach`, {
     mission_id: missionId
