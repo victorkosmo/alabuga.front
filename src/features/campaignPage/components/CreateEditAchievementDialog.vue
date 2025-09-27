@@ -103,7 +103,7 @@ const defaultFormData = () => ({
   description: '',
   image_url: '',
   mana_reward: 0,
-  required_mission_id: null,
+  required_mission_id: '',
 });
 
 const formData = ref(defaultFormData());
@@ -116,7 +116,7 @@ watch(() => props.open, (isOpen) => {
         description: props.achievement.description || '',
         image_url: props.achievement.image_url || '',
         mana_reward: props.achievement.mana_reward || 0,
-        required_mission_id: props.achievement.unlock_conditions?.required_missions?.[0] || null,
+        required_mission_id: props.achievement.unlock_conditions?.required_missions?.[0] || '',
       };
     } else {
       formData.value = defaultFormData();
@@ -141,8 +141,8 @@ const handleSave = () => {
   
   const payload = {
     name: formData.value.name,
-    description: formData.value.description,
-    image_url: formData.value.image_url,
+    description: formData.value.description || null,
+    image_url: formData.value.image_url || null,
     mana_reward: Number(formData.value.mana_reward) || 0,
     unlock_conditions: null,
   };
