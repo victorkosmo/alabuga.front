@@ -1,6 +1,6 @@
 <template>
   <Dialog :open="open" @update:open="handleOpenChange">
-    <DialogContent class="sm:max-w-[425px]">
+    <DialogContent class="sm:max-w-xl">
       <DialogHeader>
         <DialogTitle>{{ isEditing ? 'Редактировать ачивку' : 'Создать ачивку' }}</DialogTitle>
         <DialogDescription>
@@ -32,23 +32,34 @@
           </Label>
           <Input id="mana_reward" v-model="formData.mana_reward" type="number" class="col-span-3" />
         </div>
-        <div class="grid grid-cols-4 items-center gap-4">
-          <Label for="required_mission" class="text-right">
-            Требуемая миссия
+        <div class="grid grid-cols-4 items-start gap-4">
+          <Label class="text-right pt-2">
+            Требуемые миссии
           </Label>
-          <Select v-model="formData.required_mission_id">
-            <SelectTrigger class="col-span-3">
-              <SelectValue placeholder="Выберите миссию" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem :value="null">
-                Нет
-              </SelectItem>
-              <SelectItem v-for="mission in missions" :key="mission.id" :value="mission.id">
-                {{ mission.title }}
-              </SelectItem>
-            </SelectContent>
-          </Select>
+          <div class="col-span-3 space-y-2">
+            <div v-for="(missionId, index) in formData.required_mission_ids" :key="index" class="flex items-center gap-2">
+              <Select v-model="formData.required_mission_ids[index]">
+                <SelectTrigger>
+                  <SelectValue placeholder="Выберите миссию" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem :value="null">
+                    Нет
+                  </SelectItem>
+                  <SelectItem v-for="mission in missions" :key="mission.id" :value="mission.id">
+                    {{ mission.title }}
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+              <Button variant="ghost" size="icon" @click="removeMission(index)">
+                <X class="h-4 w-4" />
+              </Button>
+            </div>
+            <Button variant="outline" size="sm" @click="addMission">
+              <Plus class="h-4 w-4 mr-2" />
+              Добавить миссию
+            </Button>
+          </div>
         </div>
       </div>
       <DialogFooter>
@@ -81,6 +92,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import { Plus, X } from 'lucide-vue-next';
 
 const props = defineProps({
   open: Boolean,
@@ -103,7 +115,7 @@ const defaultFormData = () => ({
   description: '',
   image_url: '',
   mana_reward: 0,
-  required_mission_id: null,
+  required_mission_ids: [],
 });
 
 const formData = ref(defaultFormData());
@@ -116,7 +128,7 @@ watch(() => props.open, (isOpen) => {
         description: props.achievement.description || '',
         image_url: props.achievement.image_url || '',
         mana_reward: props.achievement.mana_reward || 0,
-        required_mission_id: props.achievement.unlock_conditions?.required_missions?.[0] || null,
+        required_mission_ids: props.achievement.unlock_conditions?.required_missions || [],
       };
     } else {
       formData.value = defaultFormData();
@@ -139,6 +151,8 @@ const handleSave = () => {
     return;
   }
   
+  const validMissionIds = formData.value.required_mission_ids.filter(id => id);
+  
   const payload = {
     name: formData.value.name,
     description: formData.value.description || null,
@@ -147,9 +161,9 @@ const handleSave = () => {
     unlock_conditions: null,
   };
 
-  if (formData.value.required_mission_id) {
+  if (validMissionIds.length > 0) {
     payload.unlock_conditions = {
-      required_missions: [formData.value.required_mission_id],
+      required_missions: validMissionIds,
     };
   }
 
@@ -158,5 +172,13 @@ const handleSave = () => {
 
 const handleDelete = () => {
   emit('delete');
+};
+
+const addMission = () => {
+  formData.value.required_mission_ids.push(null);
+};
+
+const removeMission = (index) => {
+  formData.value.required_mission_ids.splice(index, 1);
 };
 </script>
