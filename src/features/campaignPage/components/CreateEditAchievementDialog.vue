@@ -41,7 +41,7 @@
               <SelectValue placeholder="Выберите миссию" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="">
+              <SelectItem :value="null">
                 Нет
               </SelectItem>
               <SelectItem v-for="mission in missions" :key="mission.id" :value="mission.id">
@@ -103,7 +103,7 @@ const defaultFormData = () => ({
   description: '',
   image_url: '',
   mana_reward: 0,
-  required_mission_id: '',
+  required_mission_id: null,
 });
 
 const formData = ref(defaultFormData());
@@ -116,7 +116,7 @@ watch(() => props.open, (isOpen) => {
         description: props.achievement.description || '',
         image_url: props.achievement.image_url || '',
         mana_reward: props.achievement.mana_reward || 0,
-        required_mission_id: props.achievement.unlock_conditions?.required_missions?.[0] || '',
+        required_mission_id: props.achievement.unlock_conditions?.required_missions?.[0] || null,
       };
     } else {
       formData.value = defaultFormData();
