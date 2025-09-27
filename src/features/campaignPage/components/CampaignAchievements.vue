@@ -22,7 +22,12 @@
             <span class="font-semibold">Награда Mana:</span> {{ achievement.mana_reward }}
           </div>
           <div v-if="achievement.unlock_conditions?.required_missions?.length > 0">
-            <span class="font-semibold">Требуется миссия:</span> {{ getMissionName(achievement.unlock_conditions.required_missions[0]) }}
+            <span class="font-semibold">Требуемые миссии:</span>
+            <ul class="list-disc list-inside text-sm">
+              <li v-for="missionId in achievement.unlock_conditions.required_missions" :key="missionId">
+                {{ getMissionName(missionId) }}
+              </li>
+            </ul>
           </div>
         </CardContent>
       </Card>

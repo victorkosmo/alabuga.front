@@ -46,7 +46,12 @@
                   <SelectItem :value="null">
                     Нет
                   </SelectItem>
-                  <SelectItem v-for="mission in missions" :key="mission.id" :value="mission.id">
+                  <SelectItem
+                    v-for="mission in missions"
+                    :key="mission.id"
+                    :value="mission.id"
+                    :disabled="isMissionSelectedElsewhere(mission.id, index)"
+                  >
                     {{ mission.title }}
                   </SelectItem>
                 </SelectContent>
@@ -180,5 +185,12 @@ const addMission = () => {
 
 const removeMission = (index) => {
   formData.value.required_mission_ids.splice(index, 1);
+};
+
+const isMissionSelectedElsewhere = (missionId, currentIndex) => {
+  if (!missionId) return false; // Don't disable the "Нет" option
+  return formData.value.required_mission_ids.some(
+    (id, index) => id === missionId && index !== currentIndex
+  );
 };
 </script>
