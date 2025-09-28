@@ -47,6 +47,13 @@
         @create-achievement="openCreateAchievementDialog"
         @edit-achievement="openEditAchievementDialog"
       />
+      <CampaignStoreItems
+        :items="storeItems"
+        :is-loading="isStoreItemsLoading"
+        :error="storeItemsError"
+        @create-item="openCreateStoreItemDialog"
+        @edit-item="openEditStoreItemDialog"
+      />
 
       <EditCampaignDialog
         v-model:open="dialogs.edit"
@@ -73,6 +80,17 @@
         v-model:open="dialogs.deleteAchievement"
         @confirm="handleDeleteAchievement"
       />
+
+      <CreateEditStoreItemDialog
+        v-model:open="dialogs.createEditStoreItem"
+        :item="selectedStoreItem"
+        @save="handleSaveStoreItem"
+        @delete="openDeleteStoreItemDialog"
+      />
+      <DeleteStoreItemDialog
+        v-model:open="dialogs.deleteStoreItem"
+        @confirm="handleDeleteStoreItem"
+      />
     </div>
   </div>
 </template>
@@ -94,6 +112,9 @@ import DeleteCampaignDialog from './components/DeleteCampaignDialog.vue';
 import CreateMissionDialog from './components/CreateMissionDialog.vue';
 import CreateEditAchievementDialog from './components/CreateEditAchievementDialog.vue';
 import DeleteAchievementDialog from './components/DeleteAchievementDialog.vue';
+import CampaignStoreItems from './components/CampaignStoreItems.vue';
+import CreateEditStoreItemDialog from './components/CreateEditStoreItemDialog.vue';
+import DeleteStoreItemDialog from './components/DeleteStoreItemDialog.vue';
 
 const {
   campaignId,
@@ -107,6 +128,11 @@ const {
   achievementsError,
   fetchAchievements,
   missionsForSelector,
+  storeItems,
+  storeItemsPagination,
+  isStoreItemsLoading,
+  storeItemsError,
+  fetchStoreItems,
 } = useCampaignData();
 
 const {
@@ -123,5 +149,21 @@ const {
   handleSelectMissionType,
   handleSaveAchievement,
   handleDeleteAchievement,
-} = useCampaignActions(campaignId, fetchCampaign, fetchAchievements, achievements, achievementsPagination);
+  selectedStoreItem,
+  openCreateStoreItemDialog,
+  openEditStoreItemDialog,
+  openDeleteStoreItemDialog,
+  handleSaveStoreItem,
+  handleDeleteStoreItem,
+} = useCampaignActions(
+  campaignId,
+  fetchCampaign,
+  fetchAchievements,
+  achievements,
+  achievementsPagination,
+  fetchStoreItems,
+  storeItems,
+  storeItemsPagination
+);
 </script>
+

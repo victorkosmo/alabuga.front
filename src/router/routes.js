@@ -34,12 +34,6 @@
  */
 export const mainLayoutRoutes = [
     {
-        path: '/',
-        name: 'Dashboard',
-        component: () => import('@/pages/index/TheIndexPage.vue'),
-        meta: { requiresAuth: true, useInNav: true }
-    },
-    {
         path: '/campaigns',
         name: 'Кампании',
         component: () => import('@/features/campaignsPanel/campaignsPanelView.vue'),
@@ -74,6 +68,12 @@ export const mainLayoutRoutes = [
         name: 'Проверка заполнений',
         component: () => import('@/features/completionsPage/completionsPageView.vue'),
         meta: { requiresAuth: true, useInNav: false }
+    },
+    {
+        path: '/store',
+        name: 'Магазин',
+        component: () => import('@/features/storePanel/storePanelView.vue'),
+        meta: { requiresAuth: true, useInNav: true }
     },
     {
         path: '/competencies',

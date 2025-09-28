@@ -2,10 +2,21 @@ import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import * as campaignService from '../services/campaign.service';
 import * as achievementsService from '../services/achievements.service';
+import * as storeService from '../services/store.service';
 
-export function useCampaignActions(campaignId, refetchCampaign, refetchAchievements, achievements, achievementsPagination) {
+export function useCampaignActions(
+  campaignId,
+  refetchCampaign,
+  refetchAchievements,
+  achievements,
+  achievementsPagination,
+  refetchStoreItems,
+  storeItems,
+  storeItemsPagination
+) {
   const router = useRouter();
   const selectedAchievement = ref(null);
+  const selectedStoreItem = ref(null);
 
   const dialogs = reactive({
     edit: false,
@@ -13,6 +24,8 @@ export function useCampaignActions(campaignId, refetchCampaign, refetchAchieveme
     createMission: false,
     createEditAchievement: false,
     deleteAchievement: false,
+    createEditStoreItem: false,
+    deleteStoreItem: false,
   });
 
   const openEditDialog = () => (dialogs.edit = true);
@@ -32,6 +45,21 @@ export function useCampaignActions(campaignId, refetchCampaign, refetchAchieveme
   const openDeleteAchievementDialog = () => {
     dialogs.createEditAchievement = false;
     dialogs.deleteAchievement = true;
+  };
+
+  const openCreateStoreItemDialog = () => {
+    selectedStoreItem.value = null;
+    dialogs.createEditStoreItem = true;
+  };
+
+  const openEditStoreItemDialog = (item) => {
+    selectedStoreItem.value = item;
+    dialogs.createEditStoreItem = true;
+  };
+
+  const openDeleteStoreItemDialog = () => {
+    dialogs.createEditStoreItem = false;
+    dialogs.deleteStoreItem = true;
   };
 
   const handleUpdateCampaign = async (formData) => {
@@ -91,6 +119,35 @@ export function useCampaignActions(campaignId, refetchCampaign, refetchAchieveme
     }
   };
 
+  const handleSaveStoreItem = async (formData) => {
+    try {
+      if (selectedStoreItem.value) {
+        await storeService.updateCampaignStoreItem(campaignId, selectedStoreItem.value.id, formData);
+      } else {
+        await storeService.createCampaignStoreItem(campaignId, formData);
+      }
+      dialogs.createEditStoreItem = false;
+      const pageToFetch = selectedStoreItem.value ? (storeItemsPagination.value?.page || 1) : 1;
+      await refetchStoreItems(pageToFetch);
+    } catch (error) {
+      console.error('Failed to save store item:', error);
+    }
+  };
+
+  const handleDeleteStoreItem = async () => {
+    if (!selectedStoreItem.value) return;
+    try {
+      await storeService.deleteCampaignStoreItem(campaignId, selectedStoreItem.value.id);
+      dialogs.deleteStoreItem = false;
+      
+      const currentPage = storeItemsPagination.value?.page || 1;
+      const isLastItemOnPage = storeItems.value.length === 1 && currentPage > 1;
+      await refetchStoreItems(isLastItemOnPage ? currentPage - 1 : currentPage);
+    } catch (error) {
+      console.error('Failed to delete store item:', error);
+    }
+  };
+
   return {
     dialogs,
     selectedAchievement,
@@ -105,5 +162,12 @@ export function useCampaignActions(campaignId, refetchCampaign, refetchAchieveme
     handleSelectMissionType,
     handleSaveAchievement,
     handleDeleteAchievement,
+    selectedStoreItem,
+    openCreateStoreItemDialog,
+    openEditStoreItemDialog,
+    openDeleteStoreItemDialog,
+    handleSaveStoreItem,
+    handleDeleteStoreItem,
   };
 }
+
