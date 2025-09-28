@@ -2,6 +2,7 @@ import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import * as campaignService from '../services/campaign.service.js';
 import * as achievementsService from '../services/achievements.service.js';
+import * as storeService from '../services/store.service.js';
 
 export function useCampaignData() {
   const route = useRoute();
@@ -15,6 +16,11 @@ export function useCampaignData() {
   const achievementsPagination = ref(null);
   const isAchievementsLoading = ref(true);
   const achievementsError = ref(null);
+
+  const storeItems = ref([]);
+  const storeItemsPagination = ref(null);
+  const isStoreItemsLoading = ref(true);
+  const storeItemsError = ref(null);
 
   const missionsForSelector = ref([]);
 
@@ -52,6 +58,27 @@ export function useCampaignData() {
     }
   };
 
+  const fetchStoreItems = async (page = 1) => {
+    isStoreItemsLoading.value = true;
+    storeItemsError.value = null;
+    try {
+      const response = await storeService.getCampaignStoreItems(campaignId, { page, limit: 10 });
+      if (response.success) {
+        storeItems.value = response.data;
+        storeItemsPagination.value = response.meta.pagination;
+      } else {
+        throw new Error(response.error?.message || 'Failed to fetch store items');
+      }
+    } catch (e) {
+      storeItems.value = [];
+      storeItemsPagination.value = null;
+      storeItemsError.value = e.message;
+      console.error(e);
+    } finally {
+      isStoreItemsLoading.value = false;
+    }
+  };
+
   const fetchMissionsForSelector = async () => {
     try {
       const response = await achievementsService.getMinimalMissions(campaignId);
@@ -70,6 +97,7 @@ export function useCampaignData() {
     fetchCampaign();
     fetchAchievements();
     fetchMissionsForSelector();
+    fetchStoreItems();
   });
 
   return {
@@ -84,5 +112,11 @@ export function useCampaignData() {
     achievementsError,
     fetchAchievements,
     missionsForSelector,
+    storeItems,
+    storeItemsPagination,
+    isStoreItemsLoading,
+    storeItemsError,
+    fetchStoreItems,
   };
 }
+
