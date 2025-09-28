@@ -76,15 +76,20 @@
               Пользователи должны отсканировать этот QR-код и ввести секретный код для выполнения миссии.
             </CardDescription>
           </CardHeader>
-          <CardContent class="text-center">
-            <!-- TODO: Add a QR code generator component here -->
-            <div class="bg-muted p-4 rounded-lg inline-block">
+          <CardContent class="flex flex-col items-center gap-4">
+            <img
+              v-if="mission.qr_url"
+              :src="mission.qr_url"
+              alt="QR Code"
+              class="w-48 h-48 rounded-lg border"
+            />
+            <div class="bg-muted p-4 rounded-lg inline-block text-center">
               <p class="text-sm text-muted-foreground">Секретный код:</p>
               <p class="text-2xl font-mono font-bold tracking-widest">
-                {{ mission.details?.completion_code }}
+                {{ mission.completion_code }}
               </p>
             </div>
-            <p class="text-xs text-muted-foreground mt-2">
+            <p class="text-xs text-muted-foreground">
               Распечатайте этот QR-код или покажите его участникам.
             </p>
           </CardContent>
