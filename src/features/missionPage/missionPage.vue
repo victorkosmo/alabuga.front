@@ -55,7 +55,7 @@
       </header>
 
       <div class="grid gap-6">
-        <Card>
+        <Card v-if="mission.type === 'MANUAL_URL'">
           <CardHeader>
             <CardTitle>Задание</CardTitle>
           </CardHeader>
@@ -67,6 +67,27 @@
           <CardFooter>
             <Button>Отправить на проверку</Button>
           </CardFooter>
+        </Card>
+
+        <Card v-if="mission.type === 'QR_CODE'">
+          <CardHeader>
+            <CardTitle>QR-код для сканирования</CardTitle>
+            <CardDescription>
+              Пользователи должны отсканировать этот QR-код и ввести секретный код для выполнения миссии.
+            </CardDescription>
+          </CardHeader>
+          <CardContent class="text-center">
+            <!-- TODO: Add a QR code generator component here -->
+            <div class="bg-muted p-4 rounded-lg inline-block">
+              <p class="text-sm text-muted-foreground">Секретный код:</p>
+              <p class="text-2xl font-mono font-bold tracking-widest">
+                {{ mission.details?.completion_code }}
+              </p>
+            </div>
+            <p class="text-xs text-muted-foreground mt-2">
+              Распечатайте этот QR-код или покажите его участникам.
+            </p>
+          </CardContent>
         </Card>
 
         <Card>
