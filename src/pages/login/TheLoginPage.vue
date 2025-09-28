@@ -110,7 +110,7 @@ const submitForm = async () => {
       return;
     }
 
-    router.push('/')
+    router.push('/campaigns')
   } catch (error) {
     errorMessage('Login failed. Please try again.')
   } finally {
