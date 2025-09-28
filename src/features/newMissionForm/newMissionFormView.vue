@@ -71,10 +71,53 @@
             </div>
           </div>
         </div>
+        <div v-else-if="missionType === 'QR_CODE'" class="space-y-4">
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+            <div>
+              <Label for="title">Название миссии</Label>
+              <Input id="title" v-model="formData.title" required />
+            </div>
+            <div>
+              <Label for="category">Категория</Label>
+              <Input id="category" v-model="formData.category" required />
+            </div>
+          </div>
+
+          <div>
+            <Label for="description">Описание</Label>
+            <Textarea id="description" v-model="formData.description" />
+          </div>
+
+          <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+            <div>
+              <Label for="experience_reward">Награда (опыт)</Label>
+              <Input id="experience_reward" v-model.number="formData.experience_reward" type="number" />
+            </div>
+            <div>
+              <Label for="mana_reward">Награда (мана)</Label>
+              <Input id="mana_reward" v-model.number="formData.mana_reward" type="number" />
+            </div>
+            <div>
+              <Label for="required_rank_id">Требуемый ранг</Label>
+              <Select v-model="formData.required_rank_id">
+                <SelectTrigger id="required_rank_id">
+                  <SelectValue placeholder="Выберите ранг" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem v-for="rank in ranks" :key="rank.id" :value="rank.id">
+                      {{ rank.title }}
+                    </SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
         <p v-else class="text-muted-foreground">Форма для типа миссии '{{ missionType }}' не реализована.</p>
       </CardContent>
       <CardFooter>
-        <Button :disabled="isSubmitting || missionType !== 'MANUAL_URL'" @click="handleSubmit">
+        <Button :disabled="isSubmitting || !['MANUAL_URL', 'QR_CODE'].includes(missionType)" @click="handleSubmit">
           <Loader2 v-if="isSubmitting" class="mr-2 h-4 w-4 animate-spin" />
           Создать миссию
         </Button>
@@ -93,7 +136,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { createUrlMission } from '@/features/missionPage/services/mission.service';
+import { createUrlMission, createQrMission } from '@/features/missionPage/services/mission.service';
 import { getMinimalRanks } from './services/ranks.service';
 
 const route = useRoute();
@@ -125,14 +168,30 @@ onMounted(async () => {
 });
 
 const handleSubmit = async () => {
-  if (missionType.value !== 'MANUAL_URL') return;
+  if (!['MANUAL_URL', 'QR_CODE'].includes(missionType.value)) return;
 
   isSubmitting.value = true;
+
+  const missionData = {
+    campaign_id: campaignId,
+    title: formData.title,
+    description: formData.description,
+    category: formData.category,
+    required_rank_id: formData.required_rank_id,
+    experience_reward: formData.experience_reward,
+    mana_reward: formData.mana_reward,
+  };
+
   try {
-    await createUrlMission({
-      ...formData,
-      campaign_id: campaignId,
-    });
+    if (missionType.value === 'MANUAL_URL') {
+      await createUrlMission({
+        ...missionData,
+        submission_prompt: formData.submission_prompt,
+        placeholder_text: formData.placeholder_text,
+      });
+    } else if (missionType.value === 'QR_CODE') {
+      await createQrMission(missionData);
+    }
     router.push({ name: 'Кампания', params: { id: campaignId } });
   } catch (error) {
     console.error('Failed to create mission:', error);

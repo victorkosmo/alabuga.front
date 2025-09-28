@@ -22,7 +22,7 @@
       <header class="mb-6">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-4">
-            <Button variant="ghost" size="icon" @click="router.back()" class="h-8 w-8">
+            <Button variant="ghost" size="icon" @click="goToCampaignPage" class="h-8 w-8">
               <ArrowLeft class="h-5 w-5" />
             </Button>
             <h1 class="text-3xl font-bold">{{ mission.title }}</h1>
@@ -55,7 +55,7 @@
       </header>
 
       <div class="grid gap-6">
-        <Card>
+        <Card v-if="mission.type === 'MANUAL_URL'">
           <CardHeader>
             <CardTitle>Задание</CardTitle>
           </CardHeader>
@@ -67,6 +67,33 @@
           <CardFooter>
             <Button>Отправить на проверку</Button>
           </CardFooter>
+        </Card>
+
+        <Card v-if="mission.type === 'QR_CODE'">
+          <CardHeader>
+            <CardTitle>QR-код для сканирования</CardTitle>
+            <CardDescription>
+              Пользователи должны отсканировать этот QR-код и ввести секретный код для выполнения миссии.
+            </CardDescription>
+          </CardHeader>
+          <CardContent class="flex flex-col items-center gap-4">
+            <img
+              v-if="mission.qr_url"
+              :src="mission.qr_url"
+              alt="QR Code"
+              class="w-48 h-48 rounded-lg border cursor-pointer hover:opacity-80 transition-opacity"
+              @click="isQrModalOpen = true"
+            />
+            <div class="bg-muted p-4 rounded-lg inline-block text-center">
+              <p class="text-sm text-muted-foreground">Секретный код:</p>
+              <p class="text-2xl font-mono font-bold tracking-widest">
+                {{ mission.completion_code }}
+              </p>
+            </div>
+            <p class="text-xs text-muted-foreground">
+              Распечатайте этот QR-код или покажите его участникам.
+            </p>
+          </CardContent>
         </Card>
 
         <Card>
@@ -114,15 +141,42 @@
           </CardContent>
         </Card>
       </div>
+
+      <Dialog :open="isQrModalOpen" @update:open="isQrModalOpen = $event">
+        <DialogContent class="sm:max-w-fit">
+          <DialogHeader>
+            <DialogTitle>QR-код миссии</DialogTitle>
+            <DialogDescription>
+              Отсканируйте для выполнения.
+            </DialogDescription>
+          </DialogHeader>
+          <div class="p-4 flex justify-center">
+            <img
+              v-if="mission.qr_url"
+              :src="`${mission.qr_url}?size=512`"
+              alt="QR Code"
+              class="w-[512px] h-[512px] rounded-lg"
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useMission } from './composables/useMission';
 import { ArrowLeft, Pencil } from 'lucide-vue-next';
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
@@ -145,6 +199,12 @@ import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
 
 const router = useRouter();
 const route = useRoute();
+const isQrModalOpen = ref(false);
+
+const goToCampaignPage = () => {
+  router.push({ name: 'Кампания', params: { id: route.params.campaignId } });
+};
+
 const {
   mission,
   isLoading,
