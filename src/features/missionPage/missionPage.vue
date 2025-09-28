@@ -81,7 +81,8 @@
               v-if="mission.qr_url"
               :src="mission.qr_url"
               alt="QR Code"
-              class="w-48 h-48 rounded-lg border"
+              class="w-48 h-48 rounded-lg border cursor-pointer hover:opacity-80 transition-opacity"
+              @click="isQrModalOpen = true"
             />
             <div class="bg-muted p-4 rounded-lg inline-block text-center">
               <p class="text-sm text-muted-foreground">Секретный код:</p>
@@ -140,15 +141,42 @@
           </CardContent>
         </Card>
       </div>
+
+      <Dialog :open="isQrModalOpen" @update:open="isQrModalOpen = $event">
+        <DialogContent class="sm:max-w-fit">
+          <DialogHeader>
+            <DialogTitle>QR-код миссии</DialogTitle>
+            <DialogDescription>
+              Отсканируйте для выполнения.
+            </DialogDescription>
+          </DialogHeader>
+          <div class="p-4 flex justify-center">
+            <img
+              v-if="mission.qr_url"
+              :src="`${mission.qr_url}?size=512`"
+              alt="QR Code"
+              class="w-[512px] h-[512px] rounded-lg"
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useMission } from './composables/useMission';
 import { ArrowLeft, Pencil } from 'lucide-vue-next';
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 import {
   Select,
   SelectContent,
@@ -171,6 +199,7 @@ import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
 
 const router = useRouter();
 const route = useRoute();
+const isQrModalOpen = ref(false);
 const {
   mission,
   isLoading,
