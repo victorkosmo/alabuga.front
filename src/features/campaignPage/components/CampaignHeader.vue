@@ -2,7 +2,7 @@
   <header class="mb-6">
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-4">
-        <Button variant="ghost" size="icon" @click="router.back()" class="h-8 w-8">
+        <Button variant="ghost" size="icon" @click="goToCampaignsPage" class="h-8 w-8">
           <ArrowLeft class="h-5 w-5" />
         </Button>
         <h1 class="text-3xl font-bold">{{ campaign.title }}</h1>
@@ -22,6 +22,10 @@ import { ArrowLeft } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
 
 const router = useRouter();
+
+const goToCampaignsPage = () => {
+  router.push({ name: 'Кампании' });
+};
 
 defineProps({
   campaign: {
