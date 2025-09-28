@@ -80,6 +80,12 @@ export const mainLayoutRoutes = [
         name: 'Компетенции',
         component: () => import('@/features/competenciesPanel/competenciesPanelView.vue'),
         meta: { requiresAuth: true, useInNav: true }
+    },
+    {
+        path: '/store',
+        name: 'Магазин',
+        component: () => import('@/features/storePanel/storePanelView.vue'),
+        meta: { requiresAuth: true, useInNav: true }
     }
 ];
 
