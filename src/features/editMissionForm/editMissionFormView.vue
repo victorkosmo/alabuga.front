@@ -2,7 +2,7 @@
   <div class="p-4 sm:p-6 lg:p-8">
     <header class="mb-6">
       <div class="flex items-center gap-4">
-        <Button variant="ghost" size="icon" @click="router.back()" class="h-8 w-8">
+        <Button variant="ghost" size="icon" @click="goToMissionPage" class="h-8 w-8">
           <ArrowLeft class="h-5 w-5" />
         </Button>
         <h1 class="text-3xl font-bold">Редактировать миссию</h1>
@@ -224,6 +224,14 @@ onMounted(() => {
   fetchRanks();
   fetchMissionData();
 });
+
+const goToMissionPage = () => {
+  router.push({
+    name: 'Миссия',
+    params: { campaignId: campaignId.value, missionId: missionId.value },
+    query: { type: missionType.value }
+  });
+};
 
 const handleSubmit = async () => {
   isSubmitting.value = true;
