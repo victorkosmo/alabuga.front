@@ -85,6 +85,61 @@
         </Button>
       </CardFooter>
     </Card>
+    <Card v-else-if="missionType === 'QR_CODE'">
+      <CardHeader>
+        <CardTitle>Редактирование QR миссии</CardTitle>
+        <CardDescription>Измените детали миссии и сохраните.</CardDescription>
+      </CardHeader>
+      <CardContent class="space-y-4">
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <Label for="title">Название миссии</Label>
+            <Input id="title" v-model="formData.title" required />
+          </div>
+          <div>
+            <Label for="category">Категория</Label>
+            <Input id="category" v-model="formData.category" required />
+          </div>
+        </div>
+
+        <div>
+          <Label for="description">Описание</Label>
+          <Textarea id="description" v-model="formData.description" />
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
+          <div>
+            <Label for="experience_reward">Награда (опыт)</Label>
+            <Input id="experience_reward" v-model.number="formData.experience_reward" type="number" />
+          </div>
+          <div>
+            <Label for="mana_reward">Награда (мана)</Label>
+            <Input id="mana_reward" v-model.number="formData.mana_reward" type="number" />
+          </div>
+          <div>
+            <Label for="required_rank_id">Требуемый ранг</Label>
+            <Select v-model="formData.required_rank_id">
+              <SelectTrigger id="required_rank_id">
+                <SelectValue placeholder="Выберите ранг" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem v-for="rank in ranks" :key="rank.id" :value="rank.id">
+                    {{ rank.title }}
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </CardContent>
+      <CardFooter>
+        <Button :disabled="isSubmitting" @click="handleSubmit">
+          <Loader2 v-if="isSubmitting" class="mr-2 h-4 w-4 animate-spin" />
+          Сохранить изменения
+        </Button>
+      </CardFooter>
+    </Card>
     <p v-else class="text-muted-foreground">Форма редактирования для типа миссии '{{ missionType }}' не реализована.</p>
   </div>
 </template>
@@ -135,14 +190,20 @@ const fetchMissionData = async () => {
     const serviceFn = missionService[details.service];
     const missionData = await serviceFn(missionId.value);
 
+    // Common fields
     formData.title = missionData.title;
     formData.description = missionData.description;
     formData.category = missionData.category;
     formData.required_rank_id = missionData.required_rank_id;
     formData.experience_reward = missionData.experience_reward;
     formData.mana_reward = missionData.mana_reward;
-    formData.submission_prompt = missionData.details.submission_prompt;
-    formData.placeholder_text = missionData.details.placeholder_text;
+
+    // Type-specific fields
+    if (missionType.value === 'MANUAL_URL') {
+      formData.submission_prompt = missionData.details.submission_prompt;
+      formData.placeholder_text = missionData.details.placeholder_text;
+    }
+    // No specific fields to populate for QR_CODE edit form
   } catch (e) {
     error.value = e.message || 'Failed to load mission data.';
     console.error(e);
@@ -169,25 +230,29 @@ const handleSubmit = async () => {
   try {
     const details = missionTypeDetails[missionType.value];
     const updateFn = missionService[details.updateService];
-    
-    // Prepare data payload, separating base fields from details
+
+    // Prepare base payload
     const payload = {
       title: formData.title,
       description: formData.description,
       category: formData.category,
       required_rank_id: formData.required_rank_id,
       experience_reward: formData.experience_reward,
-      mana_reward: formData.mana_reward,
-      submission_prompt: formData.submission_prompt,
-      placeholder_text: formData.placeholder_text,
+      mana_reward: formData.mana_reward
     };
 
+    // Add type-specific fields to payload
+    if (missionType.value === 'MANUAL_URL') {
+      payload.submission_prompt = formData.submission_prompt;
+      payload.placeholder_text = formData.placeholder_text;
+    }
+
     await updateFn(missionId.value, payload);
-    
+
     router.push({
       name: 'Миссия',
       params: { campaignId: campaignId.value, missionId: missionId.value },
-      query: { type: missionType.value },
+      query: { type: missionType.value }
     });
   } catch (e) {
     console.error('Failed to update mission:', e);
