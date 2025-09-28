@@ -10,6 +10,7 @@ export function useStoreItems() {
   const dialogs = reactive({
     createEdit: false,
     delete: false,
+    view: false,
   });
 
   const fetchStoreItems = async (page = 1) => {
@@ -30,6 +31,11 @@ export function useStoreItems() {
     } finally {
       isLoading.value = false;
     }
+  };
+
+  const openViewDialog = (item) => {
+    selectedStoreItem.value = item;
+    dialogs.view = true;
   };
 
   const openCreateDialog = () => {
@@ -86,6 +92,7 @@ export function useStoreItems() {
     dialogs,
     fetchStoreItems,
     openCreateDialog,
+    openViewDialog,
     openEditDialog,
     openDeleteDialog,
     handleSaveStoreItem,

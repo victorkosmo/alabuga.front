@@ -16,6 +16,7 @@
         :store-items="storeItems"
         @edit="openEditDialog"
         @delete="openDeleteDialog"
+        @view="openViewDialog"
       />
 
       <div v-if="pagination && pagination.pages > 1" class="flex items-center justify-end space-x-2 py-4">
@@ -47,6 +48,12 @@
       @save="handleSaveStoreItem"
     />
 
+    <StoreItemDetailsDialog
+      v-if="selectedStoreItem"
+      v-model:open="dialogs.view"
+      :store-item="selectedStoreItem"
+    />
+
     <DeleteStoreItemDialog
       v-if="selectedStoreItem"
       v-model:open="dialogs.delete"
@@ -61,6 +68,7 @@ import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
 import StoreItemsTable from './components/StoreItemsTable.vue';
 import CreateEditStoreItemDialog from './components/CreateEditStoreItemDialog.vue';
+import StoreItemDetailsDialog from './components/StoreItemDetailsDialog.vue';
 import DeleteStoreItemDialog from './components/DeleteStoreItemDialog.vue';
 import { useStoreItems } from './composables/useStoreItems';
 
@@ -72,6 +80,7 @@ const {
   dialogs,
   fetchStoreItems,
   openCreateDialog,
+  openViewDialog,
   openEditDialog,
   openDeleteDialog,
   handleSaveStoreItem,

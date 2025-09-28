@@ -13,7 +13,11 @@
     <TableBody>
       <template v-if="storeItems.length">
         <TableRow v-for="item in storeItems" :key="item.id">
-          <TableCell class="font-medium">{{ item.name }}</TableCell>
+          <TableCell class="font-medium">
+            <Button variant="link" class="p-0 h-auto" @click="$emit('view', item)">
+              {{ item.name }}
+            </Button>
+          </TableCell>
           <TableCell>{{ item.description || '-' }}</TableCell>
           <TableCell>{{ item.cost }}</TableCell>
           <TableCell>{{ item.quantity === null ? '∞' : item.quantity }}</TableCell>
@@ -59,5 +63,5 @@ defineProps({
   },
 });
 
-defineEmits(['edit', 'delete']);
+defineEmits(['edit', 'delete', 'view']);
 </script>
