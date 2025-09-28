@@ -22,7 +22,7 @@
       <header class="mb-6">
         <div class="flex items-center justify-between">
           <div class="flex items-center gap-4">
-            <Button variant="ghost" size="icon" @click="router.back()" class="h-8 w-8">
+            <Button variant="ghost" size="icon" @click="goToCampaignPage" class="h-8 w-8">
               <ArrowLeft class="h-5 w-5" />
             </Button>
             <h1 class="text-3xl font-bold">{{ mission.title }}</h1>
@@ -200,6 +200,11 @@ import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
 const router = useRouter();
 const route = useRoute();
 const isQrModalOpen = ref(false);
+
+const goToCampaignPage = () => {
+  router.push({ name: 'Кампания', params: { id: route.params.campaignId } });
+};
+
 const {
   mission,
   isLoading,
