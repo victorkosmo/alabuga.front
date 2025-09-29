@@ -19,6 +19,7 @@ export function useCampaignActions(
   const selectedStoreItem = ref(null);
   const isUploadingCover = ref(false);
   const isUploadingStoreItemImage = ref(false);
+  const isUploadingAchievementImage = ref(false);
 
   const dialogs = reactive({
     edit: false,
@@ -136,6 +137,23 @@ export function useCampaignActions(
     }
   };
 
+  const handleUploadAchievementImage = async (file) => {
+    if (!selectedAchievement.value) return;
+    isUploadingAchievementImage.value = true;
+    try {
+      const updatedAchievement = await achievementsService.uploadAchievementImage(selectedAchievement.value.id, file);
+      const index = achievements.value.findIndex(item => item.id === updatedAchievement.id);
+      if (index !== -1) {
+        achievements.value[index] = updatedAchievement;
+      }
+      selectedAchievement.value = updatedAchievement;
+    } catch (error) {
+      console.error('Failed to upload achievement image:', error);
+    } finally {
+      isUploadingAchievementImage.value = false;
+    }
+  };
+
   const handleSaveStoreItem = async (formData) => {
     try {
       if (selectedStoreItem.value) {
@@ -198,6 +216,8 @@ export function useCampaignActions(
     handleSelectMissionType,
     handleSaveAchievement,
     handleDeleteAchievement,
+    isUploadingAchievementImage,
+    handleUploadAchievementImage,
     selectedStoreItem,
     openCreateStoreItemDialog,
     openEditStoreItemDialog,

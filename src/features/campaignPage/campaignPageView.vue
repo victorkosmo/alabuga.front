@@ -75,8 +75,10 @@
         v-model:open="dialogs.createEditAchievement"
         :achievement="selectedAchievement"
         :missions="missionsForSelector"
+        :is-uploading="isUploadingAchievementImage"
         @save="handleSaveAchievement"
         @delete="openDeleteAchievementDialog"
+        @upload-image="handleUploadAchievementImage"
       />
       <DeleteAchievementDialog
         v-model:open="dialogs.deleteAchievement"
@@ -155,6 +157,8 @@ const {
   handleSelectMissionType,
   handleSaveAchievement,
   handleDeleteAchievement,
+  isUploadingAchievementImage,
+  handleUploadAchievementImage,
   selectedStoreItem,
   openCreateStoreItemDialog,
   openEditStoreItemDialog,
