@@ -5,21 +5,29 @@
       <Button @click="openCreateDialog">Добавить товар</Button>
     </header>
 
-    <div v-if="isLoading" class="space-y-4">
-      <Skeleton class="h-12 w-full" />
-      <Skeleton class="h-12 w-full" />
-      <Skeleton class="h-12 w-full" />
+    <div v-if="isLoading" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <Skeleton class="h-80 w-full" />
+      <Skeleton class="h-80 w-full" />
+      <Skeleton class="h-80 w-full" />
+      <Skeleton class="h-80 w-full" />
     </div>
 
     <div v-else>
-      <StoreItemsTable
-        :store-items="storeItems"
-        @edit="openEditDialog"
-        @delete="openDeleteDialog"
-        @view="openViewDialog"
-      />
+      <div v-if="storeItems.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <StoreItemCard
+          v-for="item in storeItems"
+          :key="item.id"
+          :store-item="item"
+          @edit="openEditDialog"
+          @delete="openDeleteDialog"
+          @view="openViewDialog"
+        />
+      </div>
+      <div v-else class="flex items-center justify-center h-48 text-muted-foreground">
+        Нет данных.
+      </div>
 
-      <div v-if="pagination && pagination.pages > 1" class="flex items-center justify-end space-x-2 py-4">
+      <div v-if="pagination && pagination.pages > 1" class="flex items-center justify-end space-x-2 py-4 mt-4">
         <Button
           variant="outline"
           size="sm"
@@ -45,7 +53,9 @@
     <CreateEditStoreItemDialog
       v-model:open="dialogs.createEdit"
       :store-item="selectedStoreItem"
+      :is-uploading="isUploadingImage"
       @save="handleSaveStoreItem"
+      @upload-image="handleImageUpload"
     />
 
     <StoreItemDetailsDialog
@@ -66,7 +76,7 @@
 <script setup>
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import StoreItemsTable from './components/StoreItemsTable.vue';
+import StoreItemCard from './components/StoreItemCard.vue';
 import CreateEditStoreItemDialog from './components/CreateEditStoreItemDialog.vue';
 import StoreItemDetailsDialog from './components/StoreItemDetailsDialog.vue';
 import DeleteStoreItemDialog from './components/DeleteStoreItemDialog.vue';
@@ -77,6 +87,7 @@ const {
   pagination,
   isLoading,
   selectedStoreItem,
+  isUploadingImage,
   dialogs,
   fetchStoreItems,
   openCreateDialog,
@@ -85,5 +96,6 @@ const {
   openDeleteDialog,
   handleSaveStoreItem,
   handleDeleteStoreItem,
+  handleImageUpload,
 } = useStoreItems();
 </script>
