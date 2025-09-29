@@ -6,14 +6,14 @@
     </header>
 
     <div v-if="isLoading" class="space-y-4">
-      <Skeleton class="h-44 w-full rounded-lg" />
-      <Skeleton class="h-44 w-full rounded-lg" />
-      <Skeleton class="h-44 w-full rounded-lg" />
+      <Skeleton class="h-[300px] w-full rounded-lg" />
+      <Skeleton class="h-[300px] w-full rounded-lg" />
+      <Skeleton class="h-[300px] w-full rounded-lg" />
     </div>
 
     <div v-else>
       <div v-if="campaigns.length" class="space-y-4">
-        <CampaignCard
+        <CampaignListItem
           v-for="campaign in campaigns"
           :key="campaign.id"
           :campaign="campaign"
@@ -57,7 +57,7 @@
 <script setup>
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import CampaignCard from './components/CampaignCard.vue';
+import CampaignListItem from './components/CampaignListItem.vue';
 import CreateCampaignDialog from './components/CreateCampaignDialog.vue';
 import { useCampaigns } from './composables/useCampaigns';
 
