@@ -23,14 +23,14 @@
           </div>
         </div>
       </div>
-      <div class="md:w-1/4 flex-shrink-0 bg-secondary order-first md:order-last">
+      <div class="relative h-48 md:h-auto md:w-1/4 flex-shrink-0 bg-secondary order-first md:order-last">
         <img
           v-if="campaign.cover_url"
           :src="campaign.cover_url"
           :alt="campaign.title"
-          class="h-48 md:h-full w-full object-cover"
+          class="absolute inset-0 h-full w-full object-cover"
         />
-        <div v-else class="h-48 md:h-full w-full flex items-center justify-center">
+        <div v-else class="flex h-full w-full items-center justify-center">
           <ImageIcon class="h-16 w-16 text-muted-foreground" />
         </div>
       </div>
