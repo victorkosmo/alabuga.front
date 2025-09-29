@@ -28,8 +28,10 @@
     <div v-else-if="campaign">
       <CampaignHeader
         :campaign="campaign"
+        :is-uploading-cover="isUploadingCover"
         @edit="openEditDialog"
         @delete="openDeleteDialog"
+        @upload-cover="handleUploadCover"
       />
       <CampaignStats :campaign="campaign" />
       <CampaignDetails :campaign="campaign" />
@@ -73,8 +75,10 @@
         v-model:open="dialogs.createEditAchievement"
         :achievement="selectedAchievement"
         :missions="missionsForSelector"
+        :is-uploading="isUploadingAchievementImage"
         @save="handleSaveAchievement"
         @delete="openDeleteAchievementDialog"
+        @upload-image="handleUploadAchievementImage"
       />
       <DeleteAchievementDialog
         v-model:open="dialogs.deleteAchievement"
@@ -84,8 +88,10 @@
       <CreateEditStoreItemDialog
         v-model:open="dialogs.createEditStoreItem"
         :item="selectedStoreItem"
+        :is-uploading="isUploadingStoreItemImage"
         @save="handleSaveStoreItem"
         @delete="openDeleteStoreItemDialog"
+        @upload-image="handleUploadStoreItemImage"
       />
       <DeleteStoreItemDialog
         v-model:open="dialogs.deleteStoreItem"
@@ -138,6 +144,7 @@ const {
 const {
   dialogs,
   selectedAchievement,
+  isUploadingCover,
   openEditDialog,
   openDeleteDialog,
   openCreateMissionDialog,
@@ -146,15 +153,20 @@ const {
   openDeleteAchievementDialog,
   handleUpdateCampaign,
   handleDeleteCampaign,
+  handleUploadCover,
   handleSelectMissionType,
   handleSaveAchievement,
   handleDeleteAchievement,
+  isUploadingAchievementImage,
+  handleUploadAchievementImage,
   selectedStoreItem,
   openCreateStoreItemDialog,
   openEditStoreItemDialog,
   openDeleteStoreItemDialog,
   handleSaveStoreItem,
   handleDeleteStoreItem,
+  isUploadingStoreItemImage,
+  handleUploadStoreItemImage,
 } = useCampaignActions(
   campaignId,
   fetchCampaign,

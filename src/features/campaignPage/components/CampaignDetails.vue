@@ -4,6 +4,17 @@
       <CardTitle>Детали</CardTitle>
     </CardHeader>
     <CardContent class="space-y-4">
+      <div v-if="campaign.cover_url">
+        <h3 class="font-semibold">Обложка</h3>
+        <div class="mt-1">
+          <img
+            :src="campaign.cover_url"
+            alt="Обложка кампании"
+            class="w-full h-auto max-h-64 object-cover rounded-md"
+          >
+        </div>
+      </div>
+
       <div>
         <h3 class="font-semibold">Даты проведения</h3>
         <p>{{ formatDateRange(campaign.start_date, campaign.end_date) }}</p>

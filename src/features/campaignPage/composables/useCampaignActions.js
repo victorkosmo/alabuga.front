@@ -17,6 +17,9 @@ export function useCampaignActions(
   const router = useRouter();
   const selectedAchievement = ref(null);
   const selectedStoreItem = ref(null);
+  const isUploadingCover = ref(false);
+  const isUploadingStoreItemImage = ref(false);
+  const isUploadingAchievementImage = ref(false);
 
   const dialogs = reactive({
     edit: false,
@@ -82,6 +85,21 @@ export function useCampaignActions(
     }
   };
 
+  const handleUploadCover = async (file) => {
+    const formData = new FormData();
+    formData.append('cover', file);
+
+    isUploadingCover.value = true;
+    try {
+      await campaignService.uploadCampaignCover(campaignId, formData);
+      await refetchCampaign();
+    } catch (error) {
+      console.error('Failed to upload cover:', error);
+    } finally {
+      isUploadingCover.value = false;
+    }
+  };
+
   const handleSelectMissionType = (missionType) => {
     router.push({
       name: 'Новая миссия',
@@ -119,6 +137,23 @@ export function useCampaignActions(
     }
   };
 
+  const handleUploadAchievementImage = async (file) => {
+    if (!selectedAchievement.value) return;
+    isUploadingAchievementImage.value = true;
+    try {
+      const updatedAchievement = await achievementsService.uploadAchievementImage(selectedAchievement.value.id, file);
+      const index = achievements.value.findIndex(item => item.id === updatedAchievement.id);
+      if (index !== -1) {
+        achievements.value[index] = updatedAchievement;
+      }
+      selectedAchievement.value = updatedAchievement;
+    } catch (error) {
+      console.error('Failed to upload achievement image:', error);
+    } finally {
+      isUploadingAchievementImage.value = false;
+    }
+  };
+
   const handleSaveStoreItem = async (formData) => {
     try {
       if (selectedStoreItem.value) {
@@ -148,9 +183,27 @@ export function useCampaignActions(
     }
   };
 
+  const handleUploadStoreItemImage = async (file) => {
+    if (!selectedStoreItem.value) return;
+    isUploadingStoreItemImage.value = true;
+    try {
+      const updatedItem = await storeService.uploadCampaignStoreItemImage(campaignId, selectedStoreItem.value.id, file);
+      const index = storeItems.value.findIndex(item => item.id === updatedItem.id);
+      if (index !== -1) {
+        storeItems.value[index] = updatedItem;
+      }
+      selectedStoreItem.value = updatedItem;
+    } catch (error) {
+      console.error('Failed to upload store item image:', error);
+    } finally {
+      isUploadingStoreItemImage.value = false;
+    }
+  };
+
   return {
     dialogs,
     selectedAchievement,
+    isUploadingCover,
     openEditDialog,
     openDeleteDialog,
     openCreateMissionDialog,
@@ -159,15 +212,19 @@ export function useCampaignActions(
     openDeleteAchievementDialog,
     handleUpdateCampaign,
     handleDeleteCampaign,
+    handleUploadCover,
     handleSelectMissionType,
     handleSaveAchievement,
     handleDeleteAchievement,
+    isUploadingAchievementImage,
+    handleUploadAchievementImage,
     selectedStoreItem,
     openCreateStoreItemDialog,
     openEditStoreItemDialog,
     openDeleteStoreItemDialog,
     handleSaveStoreItem,
     handleDeleteStoreItem,
+    isUploadingStoreItemImage,
+    handleUploadStoreItemImage,
   };
 }
-

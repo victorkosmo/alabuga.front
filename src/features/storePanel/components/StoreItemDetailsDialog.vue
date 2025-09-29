@@ -6,7 +6,7 @@
       </DialogHeader>
       <div v-if="storeItem" class="grid gap-4 py-4 text-sm">
         <div v-if="storeItem.image_url" class="flex justify-center">
-          <img :src="storeItem.image_url" :alt="storeItem.name" class="max-h-48 rounded-md object-cover">
+          <img :src="storeItem.image_url" :alt="storeItem.name" class="h-48 w-48 rounded-md object-cover">
         </div>
         <div class="grid grid-cols-3 items-center gap-4">
           <Label class="text-right text-muted-foreground">Название</Label>

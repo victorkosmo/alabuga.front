@@ -17,7 +17,7 @@
           <CardDescription>{{ item.description }}</CardDescription>
         </CardHeader>
         <CardContent class="space-y-2">
-          <img v-if="item.image_url" :src="item.image_url" :alt="item.name" class="w-20 h-20 object-cover rounded-md">
+          <img v-if="item.image_url" :src="item.image_url" :alt="item.name" class="w-40 h-40 object-cover rounded-md">
           <div>
             <span class="font-semibold">Цена:</span> {{ item.cost }}
           </div>

@@ -1,4 +1,4 @@
-import { get, put, remove } from '@/utils/fetch';
+import { get, put, remove, post } from '@/utils/fetch';
 import { successMessage } from '@/utils/toast';
 
 /**
@@ -41,4 +41,19 @@ export const deleteCampaign = async (id) => {
     return response;
   }
   throw new Error(response.error?.message || 'Failed to delete campaign');
+};
+
+/**
+ * Upload a cover image for a campaign.
+ * @param {string} id - The ID of the campaign.
+ * @param {FormData} formData - The form data containing the cover image.
+ * @returns {Promise<Object>} The updated campaign data.
+ */
+export const uploadCampaignCover = async (id, formData) => {
+  const response = await post(`/web/campaigns/${id}/cover`, formData);
+  if (response.success) {
+    successMessage('Обложка кампании успешно загружена');
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to upload cover');
 };

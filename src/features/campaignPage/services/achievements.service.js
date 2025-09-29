@@ -32,6 +32,23 @@ export const deleteAchievement = async (id) => {
   throw new Error(response.error?.message || 'Failed to delete achievement');
 };
 
+export const uploadAchievementImage = async (id, imageFile) => {
+  const formData = new FormData();
+  formData.append('image', imageFile);
+
+  const response = await post(`/web/achievements/${id}/image`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  if (response.success) {
+    successMessage('Изображение ачивки успешно загружено');
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to upload achievement image');
+};
+
 export const getMinimalAchievements = (campaignId) => {
   return get('/web/ui/achievements/list-minimal', { params: { campaign_id: campaignId } });
 };

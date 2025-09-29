@@ -13,7 +13,10 @@ const routes = [
     {
         path: '/',
         component: MainLayout,
-        children: mainLayoutRoutes
+        children: [
+            { path: '', redirect: '/campaigns' },
+            ...mainLayoutRoutes
+        ]
     },
     {
         path: '/:pathMatch(.*)*',

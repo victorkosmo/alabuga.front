@@ -57,3 +57,26 @@ export const deleteStoreItem = async (id) => {
   }
   throw new Error(response.error?.message || 'Failed to delete store item');
 };
+
+/**
+ * Upload an image for a store item.
+ * @param {string} id - The ID of the store item.
+ * @param {File} imageFile - The image file to upload.
+ * @returns {Promise<Object>} The updated store item data.
+ */
+export const uploadStoreItemImage = async (id, imageFile) => {
+  const formData = new FormData();
+  formData.append('image', imageFile);
+
+  const response = await post(`/web/store/${id}/image`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  if (response.success) {
+    successMessage('Изображение товара успешно загружено');
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to upload store item image');
+};
