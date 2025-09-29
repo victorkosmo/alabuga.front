@@ -30,6 +30,7 @@
         :campaign="campaign"
         @edit="openEditDialog"
         @delete="openDeleteDialog"
+        @upload-cover="handleUploadCover"
       />
       <CampaignStats :campaign="campaign" />
       <CampaignDetails :campaign="campaign" />
@@ -146,6 +147,7 @@ const {
   openDeleteAchievementDialog,
   handleUpdateCampaign,
   handleDeleteCampaign,
+  handleUploadCover,
   handleSelectMissionType,
   handleSaveAchievement,
   handleDeleteAchievement,

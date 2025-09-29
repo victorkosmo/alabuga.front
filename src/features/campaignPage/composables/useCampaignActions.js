@@ -82,6 +82,18 @@ export function useCampaignActions(
     }
   };
 
+  const handleUploadCover = async (file) => {
+    const formData = new FormData();
+    formData.append('cover', file);
+
+    try {
+      await campaignService.uploadCampaignCover(campaignId, formData);
+      await refetchCampaign();
+    } catch (error) {
+      console.error('Failed to upload cover:', error);
+    }
+  };
+
   const handleSelectMissionType = (missionType) => {
     router.push({
       name: 'Новая миссия',
@@ -159,6 +171,7 @@ export function useCampaignActions(
     openDeleteAchievementDialog,
     handleUpdateCampaign,
     handleDeleteCampaign,
+    handleUploadCover,
     handleSelectMissionType,
     handleSaveAchievement,
     handleDeleteAchievement,
@@ -170,4 +183,3 @@ export function useCampaignActions(
     handleDeleteStoreItem,
   };
 }
-
