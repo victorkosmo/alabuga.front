@@ -2,9 +2,9 @@
   <Dialog :open="open" @update:open="handleOpenChange">
     <DialogContent class="sm:max-w-[425px]">
       <DialogHeader>
-        <DialogTitle>Удалить компетенцию</DialogTitle>
+        <DialogTitle>Удалить навык</DialogTitle>
         <DialogDescription>
-          Вы уверены, что хотите удалить компетенцию "{{ competency.name }}"? Это действие нельзя будет отменить.
+          Вы уверены, что хотите удалить навык "{{ competency.name }}"? Это действие нельзя будет отменить.
         </DialogDescription>
       </DialogHeader>
       <DialogFooter>

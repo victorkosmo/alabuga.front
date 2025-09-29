@@ -28,7 +28,7 @@ export const sidebarConfig = {
   
   // Icon mapping for navigation items
   icons: {
-    'Компетенции': FileBox,
+    'Навыки': FileBox,
     'Настройки': Settings,
     'Кампании': BriefcaseBusiness,
     'Магазин': Store,
