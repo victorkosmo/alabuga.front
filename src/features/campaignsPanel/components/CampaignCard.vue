@@ -1,7 +1,7 @@
 <template>
   <Card class="overflow-hidden cursor-pointer transition-all hover:shadow-md" @click="goToCampaign(campaign.id)">
-    <div class="flex flex-col md:flex-row">
-      <div class="flex-grow p-6">
+    <div class="flex flex-col md:flex-row md:h-[300px]">
+      <div class="flex flex-grow flex-col p-6">
         <div class="flex items-start justify-between mb-2">
           <h3 class="text-xl font-bold pr-4">{{ campaign.title }}</h3>
           <Badge :variant="statusVariant(campaign.status)" class="flex-shrink-0">{{ campaign.status }}</Badge>
