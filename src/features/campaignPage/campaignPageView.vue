@@ -86,8 +86,10 @@
       <CreateEditStoreItemDialog
         v-model:open="dialogs.createEditStoreItem"
         :item="selectedStoreItem"
+        :is-uploading="isUploadingStoreItemImage"
         @save="handleSaveStoreItem"
         @delete="openDeleteStoreItemDialog"
+        @upload-image="handleUploadStoreItemImage"
       />
       <DeleteStoreItemDialog
         v-model:open="dialogs.deleteStoreItem"
@@ -159,6 +161,8 @@ const {
   openDeleteStoreItemDialog,
   handleSaveStoreItem,
   handleDeleteStoreItem,
+  isUploadingStoreItemImage,
+  handleUploadStoreItemImage,
 } = useCampaignActions(
   campaignId,
   fetchCampaign,

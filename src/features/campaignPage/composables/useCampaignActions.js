@@ -18,6 +18,7 @@ export function useCampaignActions(
   const selectedAchievement = ref(null);
   const selectedStoreItem = ref(null);
   const isUploadingCover = ref(false);
+  const isUploadingStoreItemImage = ref(false);
 
   const dialogs = reactive({
     edit: false,
@@ -164,6 +165,23 @@ export function useCampaignActions(
     }
   };
 
+  const handleUploadStoreItemImage = async (file) => {
+    if (!selectedStoreItem.value) return;
+    isUploadingStoreItemImage.value = true;
+    try {
+      const updatedItem = await storeService.uploadCampaignStoreItemImage(campaignId, selectedStoreItem.value.id, file);
+      const index = storeItems.value.findIndex(item => item.id === updatedItem.id);
+      if (index !== -1) {
+        storeItems.value[index] = updatedItem;
+      }
+      selectedStoreItem.value = updatedItem;
+    } catch (error) {
+      console.error('Failed to upload store item image:', error);
+    } finally {
+      isUploadingStoreItemImage.value = false;
+    }
+  };
+
   return {
     dialogs,
     selectedAchievement,
@@ -186,5 +204,7 @@ export function useCampaignActions(
     openDeleteStoreItemDialog,
     handleSaveStoreItem,
     handleDeleteStoreItem,
+    isUploadingStoreItemImage,
+    handleUploadStoreItemImage,
   };
 }

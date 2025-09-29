@@ -31,3 +31,20 @@ export const deleteCampaignStoreItem = async (campaignId, itemId) => {
   }
   throw new Error(response.error?.message || 'Failed to delete store item');
 };
+
+export const uploadCampaignStoreItemImage = async (campaignId, itemId, imageFile) => {
+  const formData = new FormData();
+  formData.append('image', imageFile);
+
+  const response = await post(`/web/store/campaigns/${campaignId}/items/${itemId}/image`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  if (response.success) {
+    successMessage('Изображение товара успешно загружено');
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to upload store item image');
+};
