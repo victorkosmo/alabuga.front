@@ -7,7 +7,7 @@
             <div class="flex flex-col items-center text-center lg:pt-8">
               <img src="/logos/alabuga-wide.svg" alt="Logo" class="h-20 mb-2" />
               <p class="text-balance text-muted-foreground">
-                Enter your email below to login to your account.
+                Введите ваши данные для входа.
               </p>
             </div>
             
@@ -17,7 +17,7 @@
             </div>
             
             <div class="grid gap-2">
-              <Label for="password">Password</Label>
+              <Label for="password">Пароль</Label>
               <div class="relative">
                 <Input 
                   :id="password" 
@@ -35,7 +35,7 @@
                 >
                   <EyeIcon v-if="showPassword" class="h-4 w-4" />
                   <EyeOffIcon v-else class="h-4 w-4" />
-                  <span class="sr-only">Toggle password visibility</span>
+                  <span class="sr-only">Нажмите для смены видимости</span>
                 </Button>
               </div>
             </div>
@@ -46,8 +46,8 @@
               :disabled="loading"
             >
               <Loader2 v-if="loading" class="h-5 w-5 animate-spin" />
-              <span v-if="!loading">Sign in</span>
-              <span v-else>Signing in...</span>
+              <span v-if="!loading">Вход</span>
+              <span v-else>Вход...</span>
             </Button>
           </div>
         </form>
