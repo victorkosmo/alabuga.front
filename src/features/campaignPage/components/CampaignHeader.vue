@@ -8,7 +8,10 @@
         <h1 class="text-3xl font-bold">{{ campaign.title }}</h1>
       </div>
       <div class="flex gap-2">
-        <Button variant="outline" @click="triggerCoverUpload">Загрузить обложку</Button>
+        <Button variant="outline" @click="triggerCoverUpload" :disabled="isUploadingCover">
+          <Loader2 v-if="isUploadingCover" class="mr-2 h-4 w-4 animate-spin" />
+          Загрузить обложку
+        </Button>
         <Button variant="outline" @click="$emit('edit')">Редактировать</Button>
         <Button variant="destructive" @click="$emit('delete')">Удалить</Button>
         <input
@@ -27,7 +30,7 @@
 <script setup>
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
-import { ArrowLeft } from 'lucide-vue-next';
+import { ArrowLeft, Loader2 } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
 
 const router = useRouter();
@@ -41,6 +44,10 @@ defineProps({
   campaign: {
     type: Object,
     required: true,
+  },
+  isUploadingCover: {
+    type: Boolean,
+    default: false,
   },
 });
 

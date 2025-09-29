@@ -17,6 +17,7 @@ export function useCampaignActions(
   const router = useRouter();
   const selectedAchievement = ref(null);
   const selectedStoreItem = ref(null);
+  const isUploadingCover = ref(false);
 
   const dialogs = reactive({
     edit: false,
@@ -86,11 +87,14 @@ export function useCampaignActions(
     const formData = new FormData();
     formData.append('cover', file);
 
+    isUploadingCover.value = true;
     try {
       await campaignService.uploadCampaignCover(campaignId, formData);
       await refetchCampaign();
     } catch (error) {
       console.error('Failed to upload cover:', error);
+    } finally {
+      isUploadingCover.value = false;
     }
   };
 
@@ -163,6 +167,7 @@ export function useCampaignActions(
   return {
     dialogs,
     selectedAchievement,
+    isUploadingCover,
     openEditDialog,
     openDeleteDialog,
     openCreateMissionDialog,

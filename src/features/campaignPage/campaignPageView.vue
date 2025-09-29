@@ -28,6 +28,7 @@
     <div v-else-if="campaign">
       <CampaignHeader
         :campaign="campaign"
+        :is-uploading-cover="isUploadingCover"
         @edit="openEditDialog"
         @delete="openDeleteDialog"
         @upload-cover="handleUploadCover"
@@ -139,6 +140,7 @@ const {
 const {
   dialogs,
   selectedAchievement,
+  isUploadingCover,
   openEditDialog,
   openDeleteDialog,
   openCreateMissionDialog,
