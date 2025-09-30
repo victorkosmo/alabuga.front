@@ -5,7 +5,7 @@
   >
     <div class="flex flex-col md:flex-row">
       <!-- Image Section -->
-      <div class="relative order-first md:order-last md:w-1/3 lg:w-1/4 h-48 md:h-full flex-shrink-0">
+      <div class="relative order-first md:order-last md:w-1/3 lg:w-1/4 h-48 md:h-auto flex-shrink-0">
         <img
           v-if="campaign.cover_url"
           :src="campaign.cover_url"

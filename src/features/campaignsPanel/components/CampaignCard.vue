@@ -19,7 +19,7 @@
 
         <CampaignCardDetails :campaign="campaign" />
       </div>
-      <div class="relative h-48 md:w-1/4 flex-shrink-0 bg-secondary order-first md:order-last">
+      <div class="relative h-48 md:h-auto md:w-1/4 flex-shrink-0 bg-secondary order-first md:order-last">
         <img
           v-if="campaign.cover_url"
           :src="campaign.cover_url"
