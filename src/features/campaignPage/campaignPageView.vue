@@ -61,8 +61,21 @@
                 <CardDescription>{{ mission.description }}</CardDescription>
               </CardHeader>
               <CardContent class="space-y-2">
-                <div>
-                  <span class="font-semibold">Тип:</span> {{ mission.type }}
+                <div class="flex items-center">
+                  <span class="font-semibold">Тип:</span>
+                  <Badge v-if="mission.type === 'MANUAL_URL'" class="ml-2 bg-blue-100 text-blue-800 hover:bg-blue-100/80">
+                    <component :is="missionTypeDetails.MANUAL_URL.icon" class="h-3.5 w-3.5 mr-1" aria-hidden="true" />
+                    {{ missionTypeDetails.MANUAL_URL.label }}
+                  </Badge>
+                  <Badge v-else-if="mission.type === 'QR_CODE'" class="ml-2 bg-green-100 text-green-800 hover:bg-green-100/80">
+                    <component :is="missionTypeDetails.QR_CODE.icon" class="h-3.5 w-3.5 mr-1" aria-hidden="true" />
+                    {{ missionTypeDetails.QR_CODE.label }}
+                  </Badge>
+                  <Badge v-else-if="mission.type === 'QUIZ'" class="ml-2 bg-purple-100 text-purple-800 hover:bg-purple-100/80">
+                    <component :is="missionTypeDetails.QUIZ.icon" class="h-3.5 w-3.5 mr-1" aria-hidden="true" />
+                    {{ missionTypeDetails.QUIZ.label }}
+                  </Badge>
+                  <span v-else class="ml-2">{{ mission.type }}</span>
                 </div>
                 <div>
                   <span class="font-semibold">Награда EXP:</span> {{ mission.experience_reward }}
@@ -106,8 +119,7 @@
                     {{ getMissionName(missionId) }}
                   </li>
                 </ul>
-              </div>
-            </CardContent>
+              </CardContent>
           </Card>
         </template>
       </CampaignSection>
@@ -194,6 +206,8 @@ import { useCampaignActions } from './composables/useCampaignActions';
 import Button from '@/components/ui/button/Button.vue';
 import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Link, QrCode, FileQuestion } from 'lucide-vue-next';
 
 import CampaignHeader from './components/CampaignHeader.vue';
 import CampaignJoiningInfo from './components/CampaignJoiningInfo.vue';
@@ -207,6 +221,12 @@ import CreateEditAchievementDialog from './components/CreateEditAchievementDialo
 import DeleteAchievementDialog from './components/DeleteAchievementDialog.vue';
 import CreateEditStoreItemDialog from './components/CreateEditStoreItemDialog.vue';
 import DeleteStoreItemDialog from './components/DeleteStoreItemDialog.vue';
+
+const missionTypeDetails = {
+  MANUAL_URL: { label: 'Ссылка', icon: Link },
+  QR_CODE: { label: 'QR-код', icon: QrCode },
+  QUIZ: { label: 'Квиз', icon: FileQuestion },
+};
 
 const {
   campaignId,
