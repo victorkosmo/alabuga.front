@@ -1,5 +1,5 @@
 <template>
-  <Card class="mt-6">
+  <Card>
     <CardHeader>
       <CardTitle>Воронка участников</CardTitle>
     </CardHeader>

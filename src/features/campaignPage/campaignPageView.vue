@@ -33,8 +33,14 @@
         @delete="openDeleteDialog"
         @upload-cover="handleUploadCover"
       />
-      <CampaignJoiningInfo :campaign="campaign" />
-      <CampaignStats :campaign="campaign" />
+      <div class="mt-6 flex items-start gap-6">
+        <div class="w-3/5">
+          <CampaignJoiningInfo :campaign="campaign" />
+        </div>
+        <div class="w-2/5">
+          <CampaignStats :campaign="campaign" />
+        </div>
+      </div>
       <CampaignMissions
         v-if="campaign.missions"
         :missions="campaign.missions"
