@@ -1,19 +1,11 @@
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
     <Card>
       <CardHeader>
         <CardTitle>Статус</CardTitle>
       </CardHeader>
       <CardContent>
         <Badge :variant="statusVariant(campaign.status)">{{ campaign.status }}</Badge>
-      </CardContent>
-    </Card>
-    <Card>
-      <CardHeader>
-        <CardTitle>Код активации</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p class="text-2xl font-mono">{{ campaign.activation_code }}</p>
       </CardContent>
     </Card>
     <Card>

@@ -33,6 +33,7 @@
         @delete="openDeleteDialog"
         @upload-cover="handleUploadCover"
       />
+      <CampaignJoiningInfo :campaign="campaign" />
       <CampaignStats :campaign="campaign" />
       <CampaignDetails :campaign="campaign" />
       <CampaignMissions
@@ -109,6 +110,7 @@ import Button from '@/components/ui/button/Button.vue';
 import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
 
 import CampaignHeader from './components/CampaignHeader.vue';
+import CampaignJoiningInfo from './components/CampaignJoiningInfo.vue';
 import CampaignStats from './components/CampaignStats.vue';
 import CampaignDetails from './components/CampaignDetails.vue';
 import CampaignMissions from './components/CampaignMissions.vue';
@@ -178,4 +180,3 @@ const {
   storeItemsPagination
 );
 </script>
-
