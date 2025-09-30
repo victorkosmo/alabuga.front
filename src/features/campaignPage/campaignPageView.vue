@@ -213,7 +213,7 @@ import { Link, QrCode, FileQuestion } from 'lucide-vue-next';
 import CampaignHeader from './components/CampaignHeader.vue';
 import CampaignJoiningInfo from './components/CampaignJoiningInfo.vue';
 import CampaignStats from './components/CampaignStats.vue';
-CampaignCover from './components/CampaignCover.vue';
+import CampaignCover from './components/CampaignCover.vue';
 import CampaignSection from './components/CampaignSection.vue';
 import EditCampaignDialog from './components/EditCampaignDialog.vue';
 import DeleteCampaignDialog from './components/DeleteCampaignDialog.vue';
