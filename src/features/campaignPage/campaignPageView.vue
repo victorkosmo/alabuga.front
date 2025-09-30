@@ -28,27 +28,44 @@
     <div v-else-if="campaign">
       <CampaignHeader
         :campaign="campaign"
-        :is-uploading-cover="isUploadingCover"
         @edit="openEditDialog"
         @delete="openDeleteDialog"
-        @upload-cover="handleUploadCover"
       />
-      <CampaignStats :campaign="campaign" />
-      <CampaignDetails :campaign="campaign" />
+      <div class="flex flex-col min-[1230px]:flex-row gap-3 mt-6 w-full">
+
+        <div class="w-full min-[1230px]:w-7/12">
+          <CampaignJoiningInfo :campaign="campaign" />
+        </div>
+
+        <div class="flex w-full min-[1230px]:w-5/12 gap-3">
+          <div class="w-1/2">
+            <CampaignStats :campaign="campaign" />
+          </div>
+          <div class="w-1/2">
+            <CampaignCover
+              :campaign="campaign"
+              :is-uploading-cover="isUploadingCover"
+              @upload-cover="handleUploadCover"
+            />
+          </div>
+        </div>
+
+      </div>
       <CampaignMissions
-        v-if="campaign.missions"
         :missions="campaign.missions"
         :campaign-id="campaignId"
         @create-mission="openCreateMissionDialog"
       />
+
       <CampaignAchievements
         :achievements="achievements"
+        :missions="missionsForSelector"
         :is-loading="isAchievementsLoading"
         :error="achievementsError"
-        :missions="missionsForSelector"
         @create-achievement="openCreateAchievementDialog"
         @edit-achievement="openEditAchievementDialog"
       />
+
       <CampaignStoreItems
         :items="storeItems"
         :is-loading="isStoreItemsLoading"
@@ -109,18 +126,20 @@ import Button from '@/components/ui/button/Button.vue';
 import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
 
 import CampaignHeader from './components/CampaignHeader.vue';
+import CampaignJoiningInfo from './components/CampaignJoiningInfo.vue';
 import CampaignStats from './components/CampaignStats.vue';
-import CampaignDetails from './components/CampaignDetails.vue';
+import CampaignCover from './components/CampaignCover.vue';
 import CampaignMissions from './components/CampaignMissions.vue';
 import CampaignAchievements from './components/CampaignAchievements.vue';
+import CampaignStoreItems from './components/CampaignStoreItems.vue';
 import EditCampaignDialog from './components/EditCampaignDialog.vue';
 import DeleteCampaignDialog from './components/DeleteCampaignDialog.vue';
 import CreateMissionDialog from './components/CreateMissionDialog.vue';
 import CreateEditAchievementDialog from './components/CreateEditAchievementDialog.vue';
 import DeleteAchievementDialog from './components/DeleteAchievementDialog.vue';
-import CampaignStoreItems from './components/CampaignStoreItems.vue';
 import CreateEditStoreItemDialog from './components/CreateEditStoreItemDialog.vue';
 import DeleteStoreItemDialog from './components/DeleteStoreItemDialog.vue';
+
 
 const {
   campaignId,
@@ -177,5 +196,5 @@ const {
   storeItems,
   storeItemsPagination
 );
-</script>
 
+</script>

@@ -1,35 +1,52 @@
 <template>
-  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-    <Card>
-      <CardHeader>
-        <CardTitle>Статус</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <Badge :variant="statusVariant(campaign.status)">{{ campaign.status }}</Badge>
-      </CardContent>
-    </Card>
-    <Card>
-      <CardHeader>
-        <CardTitle>Код активации</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p class="text-2xl font-mono">{{ campaign.activation_code }}</p>
-      </CardContent>
-    </Card>
-    <Card>
-      <CardHeader>
-        <CardTitle>Участники</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <p class="text-lg">{{ formatParticipants(campaign.current_participants, campaign.max_participants) }}</p>
-      </CardContent>
-    </Card>
-  </div>
+  <Card>
+    <CardHeader>
+      <CardTitle>Статистика</CardTitle>
+    </CardHeader>
+    <CardContent>
+      <div class="flex flex-col gap-4">
+        <div class="flex items-center text-base text-muted-foreground">
+          <UsersIcon class="h-5 w-5 mr-2" />
+          <span>Макс. участников</span>
+          <div class="ml-auto flex h-6 items-center justify-center rounded-md bg-muted px-2 text-foreground font-medium text-sm">
+            {{ campaign.max_participants ?? 'Неограниченно' }}
+          </div>
+        </div>
+
+        <div v-if="campaign.stats" class="contents">
+          <div class="flex items-center text-base text-muted-foreground">
+            <UsersIcon class="h-5 w-5 mr-2" />
+            <span>Присоединились</span>
+            <div class="ml-auto flex h-6 w-6 items-center justify-center rounded-full bg-muted text-foreground font-medium text-sm">
+              {{ campaign.stats.participants_joined ?? 0 }}
+            </div>
+          </div>
+          <div class="flex items-center text-base text-muted-foreground">
+            <StarIcon class="h-5 w-5 mr-2" />
+            <span>Выполнили 1+ миссию</span>
+            <div class="ml-auto flex h-6 w-6 items-center justify-center rounded-full bg-muted text-foreground font-medium text-sm">
+              {{ campaign.stats.participants_completed_one_mission ?? 0 }}
+            </div>
+          </div>
+          <div class="flex items-center text-base text-muted-foreground">
+            <CrownIcon class="h-5 w-5 mr-2" />
+            <span>Завершили кампанию</span>
+            <div class="ml-auto flex h-6 w-6 items-center justify-center rounded-full bg-muted text-foreground font-medium text-sm">
+              {{ campaign.stats.participants_completed_all_missions ?? 0 }}
+            </div>
+          </div>
+        </div>
+        <div v-else>
+          <p class="text-muted-foreground">Статистика по участникам пока недоступна.</p>
+        </div>
+      </div>
+    </CardContent>
+  </Card>
 </template>
 
 <script setup>
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { UsersIcon, StarIcon, CrownIcon } from 'lucide-vue-next';
 
 defineProps({
   campaign: {
@@ -37,20 +54,4 @@ defineProps({
     required: true,
   },
 });
-
-const statusVariant = (status) => {
-  const variants = {
-    DRAFT: 'secondary',
-    ACTIVE: 'default',
-    PAUSED: 'outline',
-    COMPLETED: 'secondary',
-    ARCHIVED: 'outline',
-  };
-  return variants[status] || 'secondary';
-};
-
-const formatParticipants = (current, max) => {
-  const maxDisplay = max === null ? 'Неограниченно' : max;
-  return `${current} / ${maxDisplay}`;
-};
 </script>

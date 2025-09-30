@@ -6,7 +6,7 @@
         <TableHead>Статус</TableHead>
         <TableHead>Код активации</TableHead>
         <TableHead>Даты проведения</TableHead>
-        <TableHead>Участники</TableHead>
+        <TableHead>Воронка</TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
@@ -21,11 +21,11 @@
             {{ campaign.title }}
           </TableCell>
           <TableCell>
-            <Badge :variant="statusVariant(campaign.status)">{{ campaign.status }}</Badge>
+            <Badge :variant="statusVariant(campaign.status)">{{ translateStatus(campaign.status) }}</Badge>
           </TableCell>
           <TableCell>{{ campaign.activation_code }}</TableCell>
           <TableCell>{{ formatDateRange(campaign.start_date, campaign.end_date) }}</TableCell>
-          <TableCell>{{ formatParticipants(campaign.current_participants, campaign.max_participants) }}</TableCell>
+          <TableCell>{{ formatStats(campaign.stats) }}</TableCell>
         </TableRow>
       </template>
       <template v-else>
@@ -60,6 +60,18 @@ defineProps({
   },
 });
 
+const statusMap = {
+  DRAFT: 'Черновик',
+  ACTIVE: 'Активна',
+  PAUSED: 'На паузе',
+  COMPLETED: 'Завершена',
+  ARCHIVED: 'В архиве',
+};
+
+const translateStatus = (status) => {
+  return statusMap[status] || status;
+};
+
 const goToCampaign = (id) => {
   router.push(`/campaigns/${id}`);
 };
@@ -87,8 +99,11 @@ const formatDateRange = (start, end) => {
   return `${startDate} - ${endDate}`;
 };
 
-const formatParticipants = (current, max) => {
-  const maxDisplay = max === null ? 'Неограниченно' : max;
-  return `${current} / ${maxDisplay}`;
+const formatStats = (stats) => {
+  if (!stats) return '0 / 0 / 0';
+  const joined = stats.participants_joined ?? 0;
+  const oneMission = stats.participants_completed_one_mission ?? 0;
+  const allMissions = stats.participants_completed_all_missions ?? 0;
+  return `${joined} / ${oneMission} / ${allMissions}`;
 };
 </script>

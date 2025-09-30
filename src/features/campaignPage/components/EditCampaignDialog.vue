@@ -1,6 +1,6 @@
 <template>
   <Dialog :open="open" @update:open="handleOpenChange">
-    <DialogContent class="sm:max-w-[425px]">
+    <DialogContent class="sm:max-w-2xl">
       <DialogHeader>
         <DialogTitle>Редактировать кампанию</DialogTitle>
       </DialogHeader>
@@ -25,6 +25,18 @@
               </SelectItem>
             </SelectContent>
           </Select>
+        </div>
+        <div class="grid grid-cols-4 items-center gap-4">
+          <Label for="start_date" class="text-right">Дата начала</Label>
+          <Input id="start_date" type="datetime-local" v-model="formData.start_date" class="col-span-3" />
+        </div>
+        <div class="grid grid-cols-4 items-center gap-4">
+          <Label for="end_date" class="text-right">Дата окончания</Label>
+          <Input id="end_date" type="datetime-local" v-model="formData.end_date" class="col-span-3" />
+        </div>
+        <div class="grid grid-cols-4 items-center gap-4">
+          <Label for="max_participants" class="text-right">Макс. участников</Label>
+          <Input id="max_participants" v-model="formData.max_participants" type="number" class="col-span-3" placeholder="Неограниченно" />
         </div>
       </div>
       <DialogFooter>
@@ -54,7 +66,7 @@ const props = defineProps({
   open: Boolean,
   campaign: {
     type: Object,
-    default: () => ({ title: '', description: '', status: '' }),
+    default: () => ({ title: '', description: '', status: '', start_date: null, end_date: null, max_participants: null }),
   },
 });
 
@@ -68,7 +80,14 @@ const campaignStatuses = [
   { value: 'ARCHIVED', label: 'В архиве' },
 ];
 
-const formData = ref({ title: '', description: '', status: '' });
+const formData = ref({ title: '', description: '', status: '', start_date: '', end_date: '', max_participants: null });
+
+const formatForInput = (dateString) => {
+  if (!dateString) return '';
+  // API returns ISO string like '2024-05-21T10:00:00Z'
+  // datetime-local input needs 'YYYY-MM-DDTHH:mm'
+  return dateString.slice(0, 16);
+};
 
 watch(
   () => props.campaign,
@@ -77,6 +96,9 @@ watch(
       formData.value.title = newCampaign.title;
       formData.value.description = newCampaign.description;
       formData.value.status = newCampaign.status;
+      formData.value.start_date = formatForInput(newCampaign.start_date);
+      formData.value.end_date = formatForInput(newCampaign.end_date);
+      formData.value.max_participants = newCampaign.max_participants ?? null;
     }
   },
   { immediate: true }
@@ -87,6 +109,12 @@ const handleOpenChange = (value) => {
 };
 
 const handleSave = () => {
-  emit('save', { ...formData.value });
+  const payload = {
+    ...formData.value,
+    start_date: formData.value.start_date ? new Date(formData.value.start_date).toISOString() : null,
+    end_date: formData.value.end_date ? new Date(formData.value.end_date).toISOString() : null,
+    max_participants: (formData.value.max_participants === '' || formData.value.max_participants === null) ? null : Number(formData.value.max_participants),
+  };
+  emit('save', payload);
 };
 </script>

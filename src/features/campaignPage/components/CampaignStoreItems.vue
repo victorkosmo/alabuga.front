@@ -1,17 +1,15 @@
 <template>
-  <div class="mt-6">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-2xl font-bold">Товары магазина</h2>
-      <Button @click="$emit('create-item')">Создать товар</Button>
-    </div>
-    <div v-if="isLoading" class="flex justify-center items-center h-40">
-      <p>Загрузка товаров...</p>
-    </div>
-    <div v-else-if="error" class="text-red-500">
-      <p>Не удалось загрузить товары: {{ error }}</p>
-    </div>
-    <div v-else-if="items && items.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <Card v-for="item in items" :key="item.id" class="h-full hover:border-primary transition-colors cursor-pointer" @click="$emit('edit-item', item)">
+  <CampaignSection
+    title="Товары магазина"
+    :items="items"
+    :is-loading="isLoading"
+    loading-text="Загрузка товаров..."
+    :error="error ? `Не удалось загрузить товары: ${error}` : null"
+    empty-text="Для этой кампании еще не создано ни одного товара."
+    @create="$emit('create-item')"
+  >
+    <template #item="{ item }">
+      <Card class="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] h-full hover:border-primary transition-colors cursor-pointer" @click="$emit('edit-item', item)">
         <CardHeader>
           <CardTitle>{{ item.name }}</CardTitle>
           <CardDescription>{{ item.description }}</CardDescription>
@@ -29,16 +27,13 @@
           </div>
         </CardContent>
       </Card>
-    </div>
-    <div v-else>
-      <p class="text-muted-foreground">Для этой кампании еще не создано ни одного товара.</p>
-    </div>
-  </div>
+    </template>
+  </CampaignSection>
 </template>
 
 <script setup>
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import CampaignSection from './CampaignSection.vue';
 
 defineProps({
   items: {

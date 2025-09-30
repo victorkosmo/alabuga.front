@@ -1,29 +1,27 @@
 <template>
   <Card class="overflow-hidden cursor-pointer transition-all hover:shadow-md" @click="goToCampaign(campaign.id)">
-    <div class="flex flex-col md:flex-row md:h-[300px]">
+    <div class="flex flex-col md:flex-row">
       <div class="flex flex-grow flex-col p-6">
-        <div class="flex items-start justify-between mb-2">
-          <h3 class="text-xl font-bold pr-4">{{ campaign.title }}</h3>
-          <Badge :variant="statusVariant(campaign.status)" class="flex-shrink-0">{{ campaign.status }}</Badge>
+        <div class="flex justify-between items-start mb-4">
+          <div class="flex-grow pr-4">
+            <h3 class="text-xl font-bold">{{ campaign.title }}</h3>
+            <p class="text-sm text-muted-foreground mt-1">
+              Даты проведения: {{ formatDateRange(campaign.start_date, campaign.end_date) }}
+            </p>
+          </div>
+          <div class="flex-shrink-0 text-right">
+            <Badge :variant="statusVariant(campaign.status)">{{ translateStatus(campaign.status) }}</Badge>
+            <div class="mt-1">
+              <p class="text-xs text-muted-foreground">Код активации</p>
+              <p class="font-mono text-sm">{{ campaign.activation_code || 'N/A' }}</p>
+            </div>
+          </div>
         </div>
         <p v-if="campaign.description" class="text-sm text-muted-foreground mb-4 line-clamp-2">{{ campaign.description }}</p>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm mt-auto">
-          <div>
-            <p class="font-semibold text-muted-foreground">Код активации</p>
-            <p class="font-mono">{{ campaign.activation_code || 'N/A' }}</p>
-          </div>
-          <div>
-            <p class="font-semibold text-muted-foreground">Даты проведения</p>
-            <p>{{ formatDateRange(campaign.start_date, campaign.end_date) }}</p>
-          </div>
-          <div>
-            <p class="font-semibold text-muted-foreground">Участники</p>
-            <p>{{ formatParticipants(campaign.current_participants, campaign.max_participants) }}</p>
-          </div>
-        </div>
+        <CampaignCardDetails :campaign="campaign" />
       </div>
-      <div class="relative h-48 md:w-1/4 flex-shrink-0 bg-secondary order-first md:order-last">
+      <div class="relative h-48 md:h-auto md:w-1/4 flex-shrink-0 bg-secondary order-first md:order-last">
         <img
           v-if="campaign.cover_url"
           :src="campaign.cover_url"
@@ -43,6 +41,7 @@ import { useRouter } from 'vue-router';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { ImageIcon } from 'lucide-vue-next';
+import CampaignCardDetails from './CampaignCardDetails.vue';
 
 const router = useRouter();
 
@@ -55,6 +54,18 @@ defineProps({
 
 const goToCampaign = (id) => {
   router.push(`/campaigns/${id}`);
+};
+
+const statusMap = {
+  DRAFT: 'Черновик',
+  ACTIVE: 'Активна',
+  PAUSED: 'На паузе',
+  COMPLETED: 'Завершена',
+  ARCHIVED: 'В архиве',
+};
+
+const translateStatus = (status) => {
+  return statusMap[status] || status;
 };
 
 const statusVariant = (status) => {
@@ -78,10 +89,5 @@ const formatDateRange = (start, end) => {
   const startDate = start ? formatDate(start) : '...';
   const endDate = end ? formatDate(end) : '...';
   return `${startDate} - ${endDate}`;
-};
-
-const formatParticipants = (current, max) => {
-  const maxDisplay = max === null ? 'Неограниченно' : max;
-  return `${current} / ${maxDisplay}`;
 };
 </script>
