@@ -71,10 +71,3 @@ const {
   handleSaveCampaign,
 } = useCampaigns();
 </script>
-
-<style>
-/* Force the tooltip arrow to be black */
-[data-radix-popper-arrow] {
-  fill: rgb(0 0 0 / 0.9) !important;
-}
-</style>
