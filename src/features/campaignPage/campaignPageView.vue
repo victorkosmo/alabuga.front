@@ -46,27 +46,102 @@
           />
         </div>
       </div>
-      <CampaignMissions
+      <CampaignSection
         v-if="campaign.missions"
-        :missions="campaign.missions"
-        :campaign-id="campaignId"
-        @create-mission="openCreateMissionDialog"
-      />
-      <CampaignAchievements
-        :achievements="achievements"
+        title="Миссии"
+        :items="campaign.missions"
+        empty-text="Для этой кампании еще не создано ни одной миссии."
+        @create="openCreateMissionDialog"
+      >
+        <template #item="{ item: mission }">
+          <router-link :to="{ name: 'Миссия', params: { campaignId: campaignId, missionId: mission.id }, query: { type: mission.type } }" class="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
+            <Card class="h-full hover:border-primary transition-colors">
+              <CardHeader>
+                <CardTitle>{{ mission.title }}</CardTitle>
+                <CardDescription>{{ mission.description }}</CardDescription>
+              </CardHeader>
+              <CardContent class="space-y-2">
+                <div>
+                  <span class="font-semibold">Тип:</span> {{ mission.type }}
+                </div>
+                <div>
+                  <span class="font-semibold">Награда EXP:</span> {{ mission.experience_reward }}
+                </div>
+                <div v-if="mission.mana_reward > 0">
+                  <span class="font-semibold">Награда Mana:</span> {{ mission.mana_reward }}
+                </div>
+                <div v-if="mission.required_achievement_name">
+                  <span class="font-semibold">Требуется ачивка:</span> {{ mission.required_achievement_name }}
+                </div>
+              </CardContent>
+            </Card>
+          </router-link>
+        </template>
+      </CampaignSection>
+
+      <CampaignSection
+        title="Ачивки"
+        :items="achievements"
         :is-loading="isAchievementsLoading"
-        :error="achievementsError"
-        :missions="missionsForSelector"
-        @create-achievement="openCreateAchievementDialog"
-        @edit-achievement="openEditAchievementDialog"
-      />
-      <CampaignStoreItems
+        loading-text="Загрузка ачивок..."
+        :error="achievementsError ? `Не удалось загрузить ачивки: ${achievementsError}` : null"
+        empty-text="Для этой кампании еще не создано ни одной ачивки."
+        @create="openCreateAchievementDialog"
+      >
+        <template #item="{ item: achievement }">
+          <Card class="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] h-full hover:border-primary transition-colors cursor-pointer" @click="openEditAchievementDialog(achievement)">
+            <CardHeader>
+              <CardTitle>{{ achievement.name }}</CardTitle>
+              <CardDescription>{{ achievement.description }}</CardDescription>
+            </CardHeader>
+            <CardContent class="space-y-2">
+              <img v-if="achievement.image_url" :src="achievement.image_url" :alt="achievement.name" class="w-20 h-20 object-cover rounded-md">
+              <div v-if="achievement.mana_reward > 0">
+                <span class="font-semibold">Награда Mana:</span> {{ achievement.mana_reward }}
+              </div>
+              <div v-if="achievement.unlock_conditions?.required_missions?.length > 0">
+                <span class="font-semibold">Требуемые миссии:</span>
+                <ul class="list-disc list-inside text-sm">
+                  <li v-for="missionId in achievement.unlock_conditions.required_missions" :key="missionId">
+                    {{ getMissionName(missionId) }}
+                  </li>
+                </ul>
+              </div>
+            </CardContent>
+          </Card>
+        </template>
+      </CampaignSection>
+
+      <CampaignSection
+        title="Товары магазина"
         :items="storeItems"
         :is-loading="isStoreItemsLoading"
-        :error="storeItemsError"
-        @create-item="openCreateStoreItemDialog"
-        @edit-item="openEditStoreItemDialog"
-      />
+        loading-text="Загрузка товаров..."
+        :error="storeItemsError ? `Не удалось загрузить товары: ${storeItemsError}` : null"
+        empty-text="Для этой кампании еще не создано ни одного товара."
+        @create="openCreateStoreItemDialog"
+      >
+        <template #item="{ item }">
+          <Card class="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)] h-full hover:border-primary transition-colors cursor-pointer" @click="openEditStoreItemDialog(item)">
+            <CardHeader>
+              <CardTitle>{{ item.name }}</CardTitle>
+              <CardDescription>{{ item.description }}</CardDescription>
+            </CardHeader>
+            <CardContent class="space-y-2">
+              <img v-if="item.image_url" :src="item.image_url" :alt="item.name" class="w-40 h-40 object-cover rounded-md">
+              <div>
+                <span class="font-semibold">Цена:</span> {{ item.cost }}
+              </div>
+              <div>
+                <span class="font-semibold">Количество:</span> {{ item.quantity === null ? 'Бесконечно' : item.quantity }}
+              </div>
+              <div>
+                <span class="font-semibold">Статус:</span> {{ item.is_active ? 'Активен' : 'Неактивен' }}
+              </div>
+            </CardContent>
+          </Card>
+        </template>
+      </CampaignSection>
 
       <EditCampaignDialog
         v-model:open="dialogs.edit"
@@ -118,19 +193,18 @@ import { useCampaignActions } from './composables/useCampaignActions';
 
 import Button from '@/components/ui/button/Button.vue';
 import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 import CampaignHeader from './components/CampaignHeader.vue';
 import CampaignJoiningInfo from './components/CampaignJoiningInfo.vue';
 import CampaignStats from './components/CampaignStats.vue';
 import CampaignCover from './components/CampaignCover.vue';
-import CampaignMissions from './components/CampaignMissions.vue';
-import CampaignAchievements from './components/CampaignAchievements.vue';
+import CampaignSection from './components/CampaignSection.vue';
 import EditCampaignDialog from './components/EditCampaignDialog.vue';
 import DeleteCampaignDialog from './components/DeleteCampaignDialog.vue';
 import CreateMissionDialog from './components/CreateMissionDialog.vue';
 import CreateEditAchievementDialog from './components/CreateEditAchievementDialog.vue';
 import DeleteAchievementDialog from './components/DeleteAchievementDialog.vue';
-import CampaignStoreItems from './components/CampaignStoreItems.vue';
 import CreateEditStoreItemDialog from './components/CreateEditStoreItemDialog.vue';
 import DeleteStoreItemDialog from './components/DeleteStoreItemDialog.vue';
 
@@ -189,4 +263,10 @@ const {
   storeItems,
   storeItemsPagination
 );
+
+const getMissionName = (missionId) => {
+  if (!missionId || !missionsForSelector.value) return 'Неизвестная миссия';
+  const mission = missionsForSelector.value.find(m => m.id === missionId);
+  return mission ? mission.title : 'Неизвестная миссия';
+};
 </script>
