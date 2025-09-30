@@ -9,6 +9,10 @@ export const missionTypeDetails = {
     service: 'getQrMission',
     updateService: 'updateQrMission',
   },
+  QUIZ: {
+    service: 'getQuizMission',
+    updateService: 'updateQuizMission',
+  },
   // EXAMPLE for a future type:
   // SOME_OTHER_TYPE: {
   //   service: 'getSomeOtherTypeMission',
