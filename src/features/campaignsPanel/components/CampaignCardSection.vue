@@ -56,8 +56,3 @@ defineProps({
 });
 </script>
 
-<style scoped>
-:deep() [data-radix-popper-arrow] {
-  fill: rgb(0 0 0 / 0.9);
-}
-</style>
