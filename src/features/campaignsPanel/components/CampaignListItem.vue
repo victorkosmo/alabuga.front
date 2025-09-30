@@ -28,6 +28,37 @@
           <p v-if="campaign.description" class="text-sm text-muted-foreground mb-4 line-clamp-3">{{ campaign.description }}</p>
         </div>
 
+        <div class="my-4 space-y-4">
+          <div v-if="campaign.achievements?.length">
+            <p class="text-sm font-semibold text-muted-foreground mb-2">Ачивки</p>
+            <div class="flex items-center -space-x-2">
+              <div v-for="achievement in campaign.achievements.slice(0, 5)" :key="achievement.title" class="relative h-10 w-10 border-2 border-card rounded-full" :title="achievement.title">
+                <img v-if="achievement.image_url" :src="achievement.image_url" :alt="achievement.title" class="h-full w-full rounded-full object-cover" />
+                <div v-else class="flex h-full w-full items-center justify-center rounded-full bg-muted">
+                  <TrophyIcon class="h-5 w-5 text-muted-foreground" />
+                </div>
+              </div>
+              <div v-if="campaign.achievements.length > 5" class="flex items-center justify-center h-10 w-10 rounded-full bg-muted-foreground/20 text-xs font-medium text-muted-foreground border-2 border-card">
+                +{{ campaign.achievements.length - 5 }}
+              </div>
+            </div>
+          </div>
+          <div v-if="campaign.store_items?.length">
+            <p class="text-sm font-semibold text-muted-foreground mb-2">Товары в магазине</p>
+            <div class="flex items-center -space-x-2">
+              <div v-for="item in campaign.store_items.slice(0, 5)" :key="item.title" class="relative h-10 w-10 border-2 border-card rounded-full" :title="item.title">
+                <img v-if="item.image_url" :src="item.image_url" :alt="item.title" class="h-full w-full rounded-full object-cover" />
+                <div v-else class="flex h-full w-full items-center justify-center rounded-full bg-muted">
+                  <ShoppingBagIcon class="h-5 w-5 text-muted-foreground" />
+                </div>
+              </div>
+              <div v-if="campaign.store_items.length > 5" class="flex items-center justify-center h-10 w-10 rounded-full bg-muted-foreground/20 text-xs font-medium text-muted-foreground border-2 border-card">
+                +{{ campaign.store_items.length - 5 }}
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Spacer to push stats to bottom -->
         <div class="flex-grow"></div>
 
@@ -43,7 +74,7 @@
           </div>
           <div>
             <p class="font-semibold text-muted-foreground">Участники</p>
-            <p>{{ formatParticipants(campaign.current_participants, campaign.max_participants) }}</p>
+            <p>{{ formatParticipants(campaign.stats?.participants_joined, campaign.max_participants) }}</p>
           </div>
         </div>
       </div>
@@ -54,7 +85,7 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { Badge } from '@/components/ui/badge';
-import { ImageIcon } from 'lucide-vue-next';
+import { ImageIcon, ShoppingBagIcon, TrophyIcon } from 'lucide-vue-next';
 
 const router = useRouter();
 
@@ -93,7 +124,8 @@ const formatDateRange = (start, end) => {
 };
 
 const formatParticipants = (current, max) => {
+  const currentDisplay = current ?? 0;
   const maxDisplay = max === null ? 'Неограниченно' : max;
-  return `${current} / ${maxDisplay}`;
+  return `${currentDisplay} / ${maxDisplay}`;
 };
 </script>

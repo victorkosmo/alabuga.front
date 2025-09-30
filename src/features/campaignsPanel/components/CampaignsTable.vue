@@ -25,7 +25,7 @@
           </TableCell>
           <TableCell>{{ campaign.activation_code }}</TableCell>
           <TableCell>{{ formatDateRange(campaign.start_date, campaign.end_date) }}</TableCell>
-          <TableCell>{{ formatParticipants(campaign.current_participants, campaign.max_participants) }}</TableCell>
+          <TableCell>{{ formatParticipants(campaign.stats?.participants_joined, campaign.max_participants) }}</TableCell>
         </TableRow>
       </template>
       <template v-else>
@@ -88,7 +88,8 @@ const formatDateRange = (start, end) => {
 };
 
 const formatParticipants = (current, max) => {
+  const currentDisplay = current ?? 0;
   const maxDisplay = max === null ? 'Неограниченно' : max;
-  return `${current} / ${maxDisplay}`;
+  return `${currentDisplay} / ${maxDisplay}`;
 };
 </script>
