@@ -11,13 +11,13 @@
         </div>
 
         <div v-if="campaign.joining_link">
-          <h3 class="font-semibold">Ссылка для входа</h3>
-          <div class="flex items-center gap-2 mt-1">
-            <p class="text-sm text-muted-foreground bg-muted px-3 py-2 rounded-md flex-grow break-all">{{ campaign.joining_link }}</p>
+          <div class="flex justify-between items-center">
+            <h3 class="font-semibold">Ссылка для входа</h3>
             <Button variant="outline" size="sm" @click="copyToClipboard(campaign.joining_link)">
               Копировать
             </Button>
           </div>
+          <p class="text-sm text-muted-foreground bg-muted px-3 py-2 rounded-md break-all mt-1">{{ campaign.joining_link }}</p>
         </div>
       </div>
 
@@ -27,7 +27,7 @@
           <img
             :src="campaign.qr_url"
             alt="QR Code"
-            class="w-32 h-32 rounded-md cursor-pointer hover:opacity-80 transition-opacity"
+            class="w-40 h-40 rounded-md cursor-pointer hover:opacity-80 transition-opacity"
             @click="isQrModalOpen = true"
           >
         </div>

@@ -4,25 +4,25 @@
       <CardTitle>Воронка участников</CardTitle>
     </CardHeader>
     <CardContent>
-      <div v-if="campaign.stats" class="flex flex-wrap gap-x-6 gap-y-2">
-        <div class="flex items-center text-sm text-muted-foreground">
-          <UsersIcon class="h-4 w-4 mr-2" />
+      <div v-if="campaign.stats" class="flex flex-col gap-4">
+        <div class="flex items-center text-base text-muted-foreground">
+          <UsersIcon class="h-5 w-5 mr-2" />
           <span>Присоединились</span>
-          <div class="ml-2 flex h-5 w-5 items-center justify-center rounded-full bg-muted text-foreground font-medium text-xs">
+          <div class="ml-auto flex h-6 w-6 items-center justify-center rounded-full bg-muted text-foreground font-medium text-sm">
             {{ campaign.stats.participants_joined ?? 0 }}
           </div>
         </div>
-        <div class="flex items-center text-sm text-muted-foreground">
-          <StarIcon class="h-4 w-4 mr-2" />
+        <div class="flex items-center text-base text-muted-foreground">
+          <StarIcon class="h-5 w-5 mr-2" />
           <span>Выполнили 1+ миссию</span>
-          <div class="ml-2 flex h-5 w-5 items-center justify-center rounded-full bg-muted text-foreground font-medium text-xs">
+          <div class="ml-auto flex h-6 w-6 items-center justify-center rounded-full bg-muted text-foreground font-medium text-sm">
             {{ campaign.stats.participants_completed_one_mission ?? 0 }}
           </div>
         </div>
-        <div class="flex items-center text-sm text-muted-foreground">
-          <CrownIcon class="h-4 w-4 mr-2" />
+        <div class="flex items-center text-base text-muted-foreground">
+          <CrownIcon class="h-5 w-5 mr-2" />
           <span>Завершили кампанию</span>
-          <div class="ml-2 flex h-5 w-5 items-center justify-center rounded-full bg-muted text-foreground font-medium text-xs">
+          <div class="ml-auto flex h-6 w-6 items-center justify-center rounded-full bg-muted text-foreground font-medium text-sm">
             {{ campaign.stats.participants_completed_all_missions ?? 0 }}
           </div>
         </div>
