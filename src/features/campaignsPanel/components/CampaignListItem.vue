@@ -57,13 +57,14 @@
               </div>
             </div>
           </div>
+          <CampaignStatsFunnel v-if="campaign.stats" :stats="campaign.stats" />
         </div>
 
         <!-- Spacer to push stats to bottom -->
         <div class="flex-grow"></div>
 
         <!-- Bottom Content: Stats -->
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-sm flex-shrink-0">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm flex-shrink-0">
           <div>
             <p class="font-semibold text-muted-foreground">Код активации</p>
             <p class="font-mono">{{ campaign.activation_code || 'N/A' }}</p>
@@ -71,10 +72,6 @@
           <div>
             <p class="font-semibold text-muted-foreground">Даты проведения</p>
             <p>{{ formatDateRange(campaign.start_date, campaign.end_date) }}</p>
-          </div>
-          <div>
-            <p class="font-semibold text-muted-foreground">Участники</p>
-            <p>{{ formatParticipants(campaign.stats?.participants_joined, campaign.max_participants) }}</p>
           </div>
         </div>
       </div>
@@ -86,6 +83,7 @@
 import { useRouter } from 'vue-router';
 import { Badge } from '@/components/ui/badge';
 import { ImageIcon, ShoppingBagIcon, TrophyIcon } from 'lucide-vue-next';
+import CampaignStatsFunnel from './CampaignStatsFunnel.vue';
 
 const router = useRouter();
 
@@ -121,11 +119,5 @@ const formatDateRange = (start, end) => {
   const startDate = start ? formatDate(start) : '...';
   const endDate = end ? formatDate(end) : '...';
   return `${startDate} - ${endDate}`;
-};
-
-const formatParticipants = (current, max) => {
-  const currentDisplay = current ?? 0;
-  const maxDisplay = max === null ? 'Неограниченно' : max;
-  return `${currentDisplay} / ${maxDisplay}`;
 };
 </script>

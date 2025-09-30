@@ -6,7 +6,7 @@
         <TableHead>Статус</TableHead>
         <TableHead>Код активации</TableHead>
         <TableHead>Даты проведения</TableHead>
-        <TableHead>Участники</TableHead>
+        <TableHead>Воронка</TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
@@ -25,7 +25,7 @@
           </TableCell>
           <TableCell>{{ campaign.activation_code }}</TableCell>
           <TableCell>{{ formatDateRange(campaign.start_date, campaign.end_date) }}</TableCell>
-          <TableCell>{{ formatParticipants(campaign.stats?.participants_joined, campaign.max_participants) }}</TableCell>
+          <TableCell>{{ formatStats(campaign.stats) }}</TableCell>
         </TableRow>
       </template>
       <template v-else>
@@ -87,9 +87,11 @@ const formatDateRange = (start, end) => {
   return `${startDate} - ${endDate}`;
 };
 
-const formatParticipants = (current, max) => {
-  const currentDisplay = current ?? 0;
-  const maxDisplay = max === null ? 'Неограниченно' : max;
-  return `${currentDisplay} / ${maxDisplay}`;
+const formatStats = (stats) => {
+  if (!stats) return '0 / 0 / 0';
+  const joined = stats.participants_joined ?? 0;
+  const oneMission = stats.participants_completed_one_mission ?? 0;
+  const allMissions = stats.participants_completed_all_missions ?? 0;
+  return `${joined} / ${oneMission} / ${allMissions}`;
 };
 </script>
