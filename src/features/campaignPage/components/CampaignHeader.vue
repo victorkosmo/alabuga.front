@@ -5,7 +5,10 @@
         <Button variant="ghost" size="icon" @click="goToCampaignsPage" class="h-8 w-8">
           <ArrowLeft class="h-5 w-5" />
         </Button>
-        <h1 class="text-3xl font-bold">{{ campaign.title }}</h1>
+        <div class="flex items-center gap-3">
+          <h1 class="text-3xl font-bold">{{ campaign.title }}</h1>
+          <Badge :variant="statusVariant(campaign.status)">{{ campaign.status }}</Badge>
+        </div>
       </div>
       <div class="flex gap-2">
         <Button variant="outline" @click="triggerCoverUpload" :disabled="isUploadingCover">
@@ -32,6 +35,7 @@ import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { ArrowLeft, Loader2 } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 const router = useRouter();
 const coverInput = ref(null);
@@ -52,6 +56,17 @@ defineProps({
 });
 
 const emit = defineEmits(['edit', 'delete', 'upload-cover']);
+
+const statusVariant = (status) => {
+  const variants = {
+    DRAFT: 'secondary',
+    ACTIVE: 'default',
+    PAUSED: 'outline',
+    COMPLETED: 'secondary',
+    ARCHIVED: 'outline',
+  };
+  return variants[status] || 'secondary';
+};
 
 const triggerCoverUpload = () => {
   coverInput.value?.click();
