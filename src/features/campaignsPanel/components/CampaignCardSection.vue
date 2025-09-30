@@ -12,7 +12,7 @@
               </div>
             </div>
           </TooltipTrigger>
-          <TooltipContent>
+          <TooltipContent class="bg-black/90 text-primary-foreground border-none px-2 py-1 text-xs rounded-sm">
             <p>{{ item.title }}</p>
           </TooltipContent>
         </Tooltip>
