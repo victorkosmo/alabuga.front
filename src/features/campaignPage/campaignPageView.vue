@@ -31,14 +31,14 @@
         @edit="openEditDialog"
         @delete="openDeleteDialog"
       />
-      <div class="mt-6 flex items-start gap-6">
-        <div class="w-1/2">
+      <div class="mt-6 flex flex-wrap items-start gap-6">
+        <div class="w-full lg:w-1/2">
           <CampaignJoiningInfo :campaign="campaign" />
         </div>
-        <div class="w-1/4">
+        <div class="w-full md:w-1/2 lg:w-1/4">
           <CampaignStats :campaign="campaign" />
         </div>
-        <div class="w-1/4">
+        <div class="w-full md:w-1/2 lg:w-1/4">
           <CampaignCover
             :campaign="campaign"
             :is-uploading-cover="isUploadingCover"
