@@ -12,17 +12,13 @@
       </div>
 
       <div v-if="campaign.joining_link" class="border rounded-lg p-4 flex flex-col">
-        <div class="flex justify-between items-start">
-          <div>
-            <h3 class="font-semibold">Ссылка для входа</h3>
-            <p class="text-sm text-muted-foreground mt-1">Поделитесь этой ссылкой для прямого доступа.</p>
-          </div>
-          <Button variant="outline" size="sm" @click="copyToClipboard(campaign.joining_link)" class="ml-2 shrink-0">
-            Копировать
-          </Button>
-        </div>
-        <div class="mt-auto pt-2">
+        <h3 class="font-semibold">Ссылка для входа</h3>
+        <p class="text-sm text-muted-foreground mt-1">Поделитесь этой ссылкой для прямого доступа.</p>
+        <div class="mt-auto pt-2 space-y-2">
           <p class="text-sm text-muted-foreground bg-muted px-3 py-2 rounded-md break-all">{{ campaign.joining_link }}</p>
+          <Button variant="outline" @click="copyToClipboard(campaign.joining_link)" class="w-full">
+            Копировать ссылку
+          </Button>
         </div>
       </div>
 

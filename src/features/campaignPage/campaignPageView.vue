@@ -34,10 +34,10 @@
         @upload-cover="handleUploadCover"
       />
       <div class="mt-6 flex items-start gap-6">
-        <div class="w-3/5">
+        <div class="w-1/2">
           <CampaignJoiningInfo :campaign="campaign" />
         </div>
-        <div class="w-2/5">
+        <div class="w-1/2">
           <CampaignStats :campaign="campaign" />
         </div>
       </div>
