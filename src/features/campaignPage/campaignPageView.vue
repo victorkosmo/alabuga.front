@@ -28,17 +28,22 @@
     <div v-else-if="campaign">
       <CampaignHeader
         :campaign="campaign"
-        :is-uploading-cover="isUploadingCover"
         @edit="openEditDialog"
         @delete="openDeleteDialog"
-        @upload-cover="handleUploadCover"
       />
       <div class="mt-6 flex items-start gap-6">
         <div class="w-1/2">
           <CampaignJoiningInfo :campaign="campaign" />
         </div>
-        <div class="w-1/2">
+        <div class="w-1/4">
           <CampaignStats :campaign="campaign" />
+        </div>
+        <div class="w-1/4">
+          <CampaignCover
+            :campaign="campaign"
+            :is-uploading-cover="isUploadingCover"
+            @upload-cover="handleUploadCover"
+          />
         </div>
       </div>
       <CampaignMissions
@@ -117,6 +122,7 @@ import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
 import CampaignHeader from './components/CampaignHeader.vue';
 import CampaignJoiningInfo from './components/CampaignJoiningInfo.vue';
 import CampaignStats from './components/CampaignStats.vue';
+import CampaignCover from './components/CampaignCover.vue';
 import CampaignMissions from './components/CampaignMissions.vue';
 import CampaignAchievements from './components/CampaignAchievements.vue';
 import EditCampaignDialog from './components/EditCampaignDialog.vue';
