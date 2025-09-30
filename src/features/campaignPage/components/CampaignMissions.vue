@@ -1,11 +1,13 @@
 <template>
-  <div class="mt-6">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-2xl font-bold">Миссии</h2>
-      <Button @click="$emit('create-mission')">Создать миссию</Button>
-    </div>
-    <div v-if="missions && missions.length > 0" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <router-link v-for="mission in missions" :key="mission.id" :to="{ name: 'Миссия', params: { campaignId: campaignId, missionId: mission.id }, query: { type: mission.type } }">
+  <CampaignSection
+    v-if="missions"
+    title="Миссии"
+    :items="missions"
+    empty-text="Для этой кампании еще не создано ни одной миссии."
+    @create="$emit('create-mission')"
+  >
+    <template #item="{ item: mission }">
+      <router-link :to="{ name: 'Миссия', params: { campaignId: campaignId, missionId: mission.id }, query: { type: mission.type } }" class="w-full md:w-[calc(50%-12px)] lg:w-[calc(33.333%-16px)]">
         <Card class="h-full hover:border-primary transition-colors">
           <CardHeader>
             <CardTitle>{{ mission.title }}</CardTitle>
@@ -40,18 +42,15 @@
           </CardContent>
         </Card>
       </router-link>
-    </div>
-    <div v-else>
-      <p class="text-muted-foreground">Для этой кампании еще не создано ни одной миссии.</p>
-    </div>
-  </div>
+    </template>
+  </CampaignSection>
 </template>
 
 <script setup>
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Link, QrCode, FileQuestion } from 'lucide-vue-next';
+import CampaignSection from './CampaignSection.vue';
 
 defineProps({
   missions: {
