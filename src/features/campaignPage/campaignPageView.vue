@@ -35,7 +35,6 @@
       />
       <CampaignJoiningInfo :campaign="campaign" />
       <CampaignStats :campaign="campaign" />
-      <CampaignDetails :campaign="campaign" />
       <CampaignMissions
         v-if="campaign.missions"
         :missions="campaign.missions"
@@ -112,7 +111,6 @@ import Skeleton from '@/components/ui/skeleton/Skeleton.vue';
 import CampaignHeader from './components/CampaignHeader.vue';
 import CampaignJoiningInfo from './components/CampaignJoiningInfo.vue';
 import CampaignStats from './components/CampaignStats.vue';
-import CampaignDetails from './components/CampaignDetails.vue';
 import CampaignMissions from './components/CampaignMissions.vue';
 import CampaignAchievements from './components/CampaignAchievements.vue';
 import EditCampaignDialog from './components/EditCampaignDialog.vue';

@@ -27,6 +27,11 @@
       </div>
     </div>
     <p class="text-muted-foreground mt-1">{{ campaign.description }}</p>
+    <div class="flex items-center gap-4 text-sm text-muted-foreground mt-2">
+      <span>Даты: {{ formatDateRange(campaign.start_date, campaign.end_date) }}</span>
+      <span>•</span>
+      <span>Создана: {{ formatDate(campaign.created_at) }}</span>
+    </div>
   </header>
 </template>
 
@@ -66,6 +71,18 @@ const statusVariant = (status) => {
     ARCHIVED: 'outline',
   };
   return variants[status] || 'secondary';
+};
+
+const formatDate = (dateString) => {
+  if (!dateString) return 'N/A';
+  return new Date(dateString).toLocaleString();
+};
+
+const formatDateRange = (start, end) => {
+  if (!start && !end) return 'Не заданы';
+  const startDate = start ? new Date(start).toLocaleDateString() : '...';
+  const endDate = end ? new Date(end).toLocaleDateString() : '...';
+  return `${startDate} - ${endDate}`;
 };
 
 const triggerCoverUpload = () => {
