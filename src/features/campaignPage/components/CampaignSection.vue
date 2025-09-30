@@ -1,10 +1,10 @@
 <template>
   <Card class="mt-6">
     <CardHeader>
-      <div class="flex justify-between items-center">
+      <div class="flex items-center gap-4">
         <CardTitle>{{ title }}</CardTitle>
-        <Button variant="ghost" size="icon" @click="$emit('create')">
-          <Plus class="h-5 w-5" />
+        <Button variant="outline" size="icon" @click="$emit('create')">
+          <Plus class="h-6 w-6" />
         </Button>
       </div>
     </CardHeader>
