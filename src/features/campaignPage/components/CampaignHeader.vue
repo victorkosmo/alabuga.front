@@ -15,12 +15,12 @@
         <Button variant="destructive" @click="$emit('delete')">Удалить</Button>
       </div>
     </div>
-    <p class="text-muted-foreground mt-1">{{ campaign.description }}</p>
     <div class="flex items-center gap-4 text-sm text-muted-foreground mt-2">
       <span>Даты: {{ formatDateRange(campaign.start_date, campaign.end_date) }}</span>
       <span>•</span>
       <span>Создана: {{ formatDate(campaign.created_at) }}</span>
     </div>
+    <p class="text-muted-foreground mt-3">{{ campaign.description }}</p>
   </header>
 </template>
 
