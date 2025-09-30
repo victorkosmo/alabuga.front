@@ -96,6 +96,32 @@
           </CardContent>
         </Card>
 
+        <Card v-if="mission.type === 'QUIZ'">
+          <CardHeader>
+            <CardTitle>Квиз</CardTitle>
+            <CardDescription>
+              Вопросы и ответы для этой миссии. Правильные ответы подсвечены.
+            </CardDescription>
+          </CardHeader>
+          <CardContent class="space-y-6">
+            <div v-for="(question, qIndex) in mission.details?.questions" :key="qIndex">
+              <p class="font-semibold">{{ qIndex + 1 }}. {{ question.text }}</p>
+              <ul class="mt-2 space-y-1 list-disc list-inside">
+                <li
+                  v-for="(answer, aIndex) in question.answers"
+                  :key="aIndex"
+                  :class="['pl-2', { 'font-bold text-primary': answer.is_correct }]"
+                >
+                  {{ answer.text }}
+                </li>
+              </ul>
+            </div>
+            <div v-if="mission.details?.pass_threshold" class="border-t pt-4">
+              <p><span class="font-semibold">Порог прохождения:</span> {{ (mission.details.pass_threshold * 100).toFixed(0) }}%</p>
+            </div>
+          </CardContent>
+        </Card>
+
         <Card>
           <CardHeader>
             <CardTitle>Обязательная ачивка</CardTitle>

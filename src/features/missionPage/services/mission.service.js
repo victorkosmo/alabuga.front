@@ -56,6 +56,20 @@ export const createQrMission = async (data) => {
 };
 
 /**
+ * Create a new quiz-based mission.
+ * @param {Object} data - The mission data.
+ * @returns {Promise<Object>} The created mission data.
+ */
+export const createQuizMission = async (data) => {
+  const response = await post('/web/missions/type-quiz', data);
+  if (response.success) {
+    successMessage('Миссия успешно создана');
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to create Quiz mission');
+};
+
+/**
  * Update a URL-based mission.
  * @param {string} missionId - The ID of the mission to update.
  * @param {Object} data - The updated mission data.
@@ -86,6 +100,21 @@ export const updateQrMission = async (missionId, data) => {
 };
 
 /**
+ * Update a quiz-based mission.
+ * @param {string} missionId - The ID of the mission to update.
+ * @param {Object} data - The updated mission data.
+ * @returns {Promise<Object>} The updated mission data.
+ */
+export const updateQuizMission = async (missionId, data) => {
+  const response = await put(`/web/missions/type-quiz/${missionId}`, data);
+  if (response.success) {
+    successMessage('Миссия успешно обновлена');
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to update Quiz mission');
+};
+
+/**
  * Get a URL-based mission by ID.
  * @param {string} missionId - The ID of the mission.
  * @returns {Promise<Object>} The mission data.
@@ -109,4 +138,17 @@ export const getQrMission = async (missionId) => {
     return response.data;
   }
   throw new Error(response.error?.message || 'Failed to fetch QR mission');
+};
+
+/**
+ * Get a quiz-based mission by ID.
+ * @param {string} missionId - The ID of the mission.
+ * @returns {Promise<Object>} The mission data.
+ */
+export const getQuizMission = async (missionId) => {
+  const response = await get(`/web/missions/type-quiz/${missionId}`);
+  if (response.success) {
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to fetch Quiz mission');
 };
