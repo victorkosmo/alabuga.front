@@ -1,25 +1,23 @@
 <template>
   <Card class="overflow-hidden cursor-pointer transition-all hover:shadow-md" @click="goToCampaign(campaign.id)">
-    <div class="flex flex-col md:flex-row md:h-[300px]">
+    <div class="flex flex-col md:flex-row">
       <div class="flex flex-grow flex-col p-6">
-        <div class="flex items-start justify-between mb-2">
-          <h3 class="text-xl font-bold pr-4">{{ campaign.title }}</h3>
-          <Badge :variant="statusVariant(campaign.status)" class="flex-shrink-0">{{ campaign.status }}</Badge>
+        <div class="flex justify-between items-start mb-4">
+          <div class="flex-grow pr-4">
+            <h3 class="text-xl font-bold">{{ campaign.title }}</h3>
+            <p class="text-sm text-muted-foreground mt-1">{{ formatDateRange(campaign.start_date, campaign.end_date) }}</p>
+          </div>
+          <div class="flex-shrink-0 text-right">
+            <Badge :variant="statusVariant(campaign.status)">{{ campaign.status }}</Badge>
+            <div class="mt-1">
+              <p class="text-xs text-muted-foreground">Код активации</p>
+              <p class="font-mono text-sm">{{ campaign.activation_code || 'N/A' }}</p>
+            </div>
+          </div>
         </div>
         <p v-if="campaign.description" class="text-sm text-muted-foreground mb-4 line-clamp-2">{{ campaign.description }}</p>
 
-       <CampaignCardDetails :campaign="campaign" class="mb-4" />
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm mt-auto">
-          <div>
-            <p class="font-semibold text-muted-foreground">Код активации</p>
-            <p class="font-mono">{{ campaign.activation_code || 'N/A' }}</p>
-          </div>
-          <div>
-            <p class="font-semibold text-muted-foreground">Даты проведения</p>
-            <p>{{ formatDateRange(campaign.start_date, campaign.end_date) }}</p>
-          </div>
-        </div>
+        <CampaignCardDetails :campaign="campaign" />
       </div>
       <div class="relative h-48 md:w-1/4 flex-shrink-0 bg-secondary order-first md:order-last">
         <img
