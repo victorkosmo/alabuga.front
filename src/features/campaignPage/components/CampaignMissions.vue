@@ -14,7 +14,17 @@
           <CardContent class="space-y-2">
             <div class="flex items-center">
               <span class="font-semibold">Тип:</span>
-              <Badge v-if="missionTypeDetails[mission.type]" :class="['ml-2', missionTypeDetails[mission.type].color]">
+              <Badge
+                v-if="missionTypeDetails[mission.type]"
+                :class="[
+                  'ml-2',
+                  {
+                    'bg-blue-100 text-blue-800 hover:bg-blue-100/80': mission.type === 'MANUAL_URL',
+                    'bg-green-100 text-green-800 hover:bg-green-100/80': mission.type === 'QR_CODE',
+                    'bg-purple-100 text-purple-800 hover:bg-purple-100/80': mission.type === 'QUIZ',
+                  },
+                ]"
+              >
                 <component
                   :is="missionTypeDetails[mission.type].icon"
                   class="h-3.5 w-3.5 mr-1"
