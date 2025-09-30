@@ -24,10 +24,12 @@
           <div class="flex justify-between items-start mb-4">
             <div class="flex-grow pr-4">
               <h3 class="text-xl font-bold line-clamp-2">{{ campaign.title }}</h3>
-              <p class="text-sm text-muted-foreground mt-1">{{ formatDateRange(campaign.start_date, campaign.end_date) }}</p>
+              <p class="text-sm text-muted-foreground mt-1">
+                Даты проведения: {{ formatDateRange(campaign.start_date, campaign.end_date) }}
+              </p>
             </div>
             <div class="flex-shrink-0 text-right">
-              <Badge :variant="statusVariant(campaign.status)">{{ campaign.status }}</Badge>
+              <Badge :variant="statusVariant(campaign.status)">{{ translateStatus(campaign.status) }}</Badge>
               <div class="mt-1">
                 <p class="text-xs text-muted-foreground">Код активации</p>
                 <p class="font-mono text-sm">{{ campaign.activation_code || 'N/A' }}</p>
@@ -57,6 +59,18 @@ defineProps({
     required: true,
   },
 });
+
+const statusMap = {
+  DRAFT: 'Черновик',
+  ACTIVE: 'Активна',
+  PAUSED: 'На паузе',
+  COMPLETED: 'Завершена',
+  ARCHIVED: 'В архиве',
+};
+
+const translateStatus = (status) => {
+  return statusMap[status] || status;
+};
 
 const goToCampaign = (id) => {
   router.push(`/campaigns/${id}`);

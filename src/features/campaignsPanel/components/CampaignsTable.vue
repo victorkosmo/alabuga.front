@@ -21,7 +21,7 @@
             {{ campaign.title }}
           </TableCell>
           <TableCell>
-            <Badge :variant="statusVariant(campaign.status)">{{ campaign.status }}</Badge>
+            <Badge :variant="statusVariant(campaign.status)">{{ translateStatus(campaign.status) }}</Badge>
           </TableCell>
           <TableCell>{{ campaign.activation_code }}</TableCell>
           <TableCell>{{ formatDateRange(campaign.start_date, campaign.end_date) }}</TableCell>
@@ -59,6 +59,18 @@ defineProps({
     required: true,
   },
 });
+
+const statusMap = {
+  DRAFT: 'Черновик',
+  ACTIVE: 'Активна',
+  PAUSED: 'На паузе',
+  COMPLETED: 'Завершена',
+  ARCHIVED: 'В архиве',
+};
+
+const translateStatus = (status) => {
+  return statusMap[status] || status;
+};
 
 const goToCampaign = (id) => {
   router.push(`/campaigns/${id}`);
