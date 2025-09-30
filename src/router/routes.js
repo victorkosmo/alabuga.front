@@ -77,7 +77,7 @@ export const mainLayoutRoutes = [
     },
     {
         path: '/competencies',
-        name: 'Компетенции',
+        name: 'Навыки',
         component: () => import('@/features/competenciesPanel/competenciesPanelView.vue'),
         meta: { requiresAuth: true, useInNav: true }
     }
