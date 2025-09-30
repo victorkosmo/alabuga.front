@@ -31,20 +31,25 @@
         @edit="openEditDialog"
         @delete="openDeleteDialog"
       />
-      <div class="mt-6 flex flex-wrap items-start gap-6">
-        <div class="w-full lg:w-1/2">
+      <div class="flex flex-col min-[1230px]:flex-row gap-3 mt-6 w-full">
+
+        <div class="w-full min-[1230px]:w-7/12">
           <CampaignJoiningInfo :campaign="campaign" />
         </div>
-        <div class="w-full md:w-1/2 lg:w-1/4">
-          <CampaignStats :campaign="campaign" />
+
+        <div class="flex w-full min-[1230px]:w-5/12 gap-3">
+          <div class="w-1/2">
+            <CampaignStats :campaign="campaign" />
+          </div>
+          <div class="w-1/2">
+            <CampaignCover
+              :campaign="campaign"
+              :is-uploading-cover="isUploadingCover"
+              @upload-cover="handleUploadCover"
+            />
+          </div>
         </div>
-        <div class="w-full md:w-1/2 lg:w-1/4">
-          <CampaignCover
-            :campaign="campaign"
-            :is-uploading-cover="isUploadingCover"
-            @upload-cover="handleUploadCover"
-          />
-        </div>
+
       </div>
       <CampaignSection
         v-if="campaign.missions"
