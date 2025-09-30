@@ -23,9 +23,9 @@
           >
             <CardHeader class="flex flex-row items-start gap-4 p-4">
               <component
-                :is="missionTypeDetails[missionType.value]?.icon"
-                v-if="missionTypeDetails[missionType.value]?.icon"
-                :class="['h-12 w-12 flex-shrink-0', missionTypeDetails[missionType.value]?.color]"
+                :is="missionTypeConfig[missionType.value]?.icon"
+                v-if="missionTypeConfig[missionType.value]?.icon"
+                :class="['h-12 w-12 flex-shrink-0', missionTypeConfig[missionType.value]?.dialogIconClass]"
                 aria-hidden="true"
               />
               <div>
@@ -56,22 +56,7 @@ import {
 } from '@/components/ui/dialog';
 import { Card, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { getMissionTypes } from '@/features/missionPage/services/mission.service';
-import { Link, QrCode, FileQuestion } from 'lucide-vue-next';
-
-const missionTypeDetails = {
-  MANUAL_URL: {
-    icon: Link,
-    color: 'text-blue-500',
-  },
-  QR_CODE: {
-    icon: QrCode,
-    color: 'text-green-500',
-  },
-  QUIZ: {
-    icon: FileQuestion,
-    color: 'text-purple-500',
-  },
-};
+import { missionTypeConfig } from '@/features/missionPage/missionTypeConfig';
 
 const props = defineProps({
   open: Boolean,

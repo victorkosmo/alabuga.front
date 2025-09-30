@@ -14,23 +14,17 @@
           <CardContent class="space-y-2">
             <div class="flex items-center">
               <span class="font-semibold">Тип:</span>
-              <Badge
-                v-if="missionTypeDetails[mission.type]"
-                :class="[
-                  'ml-2',
-                  {
-                    'bg-blue-100 text-blue-800 hover:bg-blue-100/80': mission.type === 'MANUAL_URL',
-                    'bg-green-100 text-green-800 hover:bg-green-100/80': mission.type === 'QR_CODE',
-                    'bg-purple-100 text-purple-800 hover:bg-purple-100/80': mission.type === 'QUIZ',
-                  },
-                ]"
-              >
-                <component
-                  :is="missionTypeDetails[mission.type].icon"
-                  class="h-3.5 w-3.5 mr-1"
-                  aria-hidden="true"
-                />
-                {{ missionTypeDetails[mission.type].label }}
+              <Badge v-if="mission.type === 'MANUAL_URL'" class="ml-2 bg-blue-100 text-blue-800 hover:bg-blue-100/80">
+                <component :is="missionTypeConfig.MANUAL_URL.icon" class="h-3.5 w-3.5 mr-1" aria-hidden="true" />
+                {{ missionTypeConfig.MANUAL_URL.label }}
+              </Badge>
+              <Badge v-else-if="mission.type === 'QR_CODE'" class="ml-2 bg-green-100 text-green-800 hover:bg-green-100/80">
+                <component :is="missionTypeConfig.QR_CODE.icon" class="h-3.5 w-3.5 mr-1" aria-hidden="true" />
+                {{ missionTypeConfig.QR_CODE.label }}
+              </Badge>
+              <Badge v-else-if="mission.type === 'QUIZ'" class="ml-2 bg-purple-100 text-purple-800 hover:bg-purple-100/80">
+                <component :is="missionTypeConfig.QUIZ.icon" class="h-3.5 w-3.5 mr-1" aria-hidden="true" />
+                {{ missionTypeConfig.QUIZ.label }}
               </Badge>
               <span v-else class="ml-2">{{ mission.type }}</span>
             </div>
@@ -56,26 +50,8 @@
 <script setup>
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Link, QrCode, FileQuestion } from 'lucide-vue-next';
 import { Badge } from '@/components/ui/badge';
-
-const missionTypeDetails = {
-  MANUAL_URL: {
-    label: 'Ссылка',
-    icon: Link,
-    color: 'bg-blue-100 text-blue-800 hover:bg-blue-100/80',
-  },
-  QR_CODE: {
-    label: 'QR-код',
-    icon: QrCode,
-    color: 'bg-green-100 text-green-800 hover:bg-green-100/80',
-  },
-  QUIZ: {
-    label: 'Квиз',
-    icon: FileQuestion,
-    color: 'bg-purple-100 text-purple-800 hover:bg-purple-100/80',
-  },
-};
+import { missionTypeConfig } from '@/features/missionPage/missionTypeConfig';
 
 defineProps({
   missions: {
