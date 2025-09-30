@@ -30,12 +30,6 @@
               </Badge>
               <span v-else class="ml-2">{{ mission.type }}</span>
             </div>
-            <div>
-              <span class="font-semibold">Награда EXP:</span> {{ mission.experience_reward }}
-            </div>
-            <div v-if="mission.mana_reward > 0">
-              <span class="font-semibold">Награда Mana:</span> {{ mission.mana_reward }}
-            </div>
             <div v-if="mission.required_achievement_name">
               <span class="font-semibold">Требуется ачивка:</span> {{ mission.required_achievement_name }}
             </div>
