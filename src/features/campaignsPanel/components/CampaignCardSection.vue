@@ -7,15 +7,15 @@
         :key="item.title"
         :text="item.title"
       >
-        <div class="relative h-10 w-10 border-2 border-card rounded-full">
+        <div class="relative h-12 w-12 border-2 border-card rounded-full">
           <img v-if="item.image_url" :src="item.image_url" :alt="item.title" class="h-full w-full rounded-full object-cover" />
           <div v-else class="flex h-full w-full items-center justify-center rounded-full bg-muted">
-            <component :is="placeholderIcon" class="h-5 w-5 text-muted-foreground" />
+            <component :is="placeholderIcon" class="h-6 w-6 text-muted-foreground" />
           </div>
         </div>
       </CustomTooltip>
 
-      <div v-if="items.length > 5" class="flex items-center justify-center h-10 w-10 rounded-full bg-muted-foreground/20 text-xs font-medium text-muted-foreground border-2 border-card">
+      <div v-if="items.length > 5" class="flex items-center justify-center h-12 w-12 rounded-full bg-muted-foreground/20 text-xs font-medium text-muted-foreground border-2 border-card">
         +{{ items.length - 5 }}
       </div>
     </div>
