@@ -1,10 +1,10 @@
 <template>
-  <Table>
+  <Table class="w-full table-fixed">
     <TableHeader>
       <TableRow>
-        <TableHead class="w-1/3">Название</TableHead>
-        <TableHead class="w-2/3">Описание</TableHead>
-        <TableHead class="text-right">Действия</TableHead>
+        <TableHead class="w-[30%]">Название</TableHead>
+        <TableHead>Описание</TableHead>
+        <TableHead class="w-[180px] text-right">Действия</TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
