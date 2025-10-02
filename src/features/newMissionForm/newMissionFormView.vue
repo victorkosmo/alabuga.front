@@ -19,15 +19,9 @@
       </CardHeader>
       <CardContent>
         <div v-if="missionType === 'MANUAL_URL'" class="space-y-4">
-          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div>
-              <Label for="title">Название миссии</Label>
-              <Input id="title" v-model="formData.title" required />
-            </div>
-            <div>
-              <Label for="category">Категория</Label>
-              <Input id="category" v-model="formData.category" required />
-            </div>
+          <div>
+            <Label for="title">Название миссии</Label>
+            <Input id="title" v-model="formData.title" required />
           </div>
 
           <div>
@@ -44,86 +38,22 @@
             <Label for="placeholder_text">Пример (placeholder)</Label>
             <Input id="placeholder_text" v-model="formData.placeholder_text" />
           </div>
-
-          <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div>
-              <Label for="experience_reward">Награда (опыт)</Label>
-              <Input id="experience_reward" v-model.number="formData.experience_reward" type="number" />
-            </div>
-            <div>
-              <Label for="mana_reward">Награда (мана)</Label>
-              <Input id="mana_reward" v-model.number="formData.mana_reward" type="number" />
-            </div>
-            <div>
-              <Label for="required_rank_id">Требуемый ранг</Label>
-              <Select v-model="formData.required_rank_id">
-                <SelectTrigger id="required_rank_id">
-                  <SelectValue placeholder="Выберите ранг" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem v-for="rank in ranks" :key="rank.id" :value="rank.id">
-                      {{ rank.title }}
-                    </SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
         </div>
         <div v-else-if="missionType === 'QR_CODE'" class="space-y-4">
-          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div>
-              <Label for="title">Название миссии</Label>
-              <Input id="title" v-model="formData.title" required />
-            </div>
-            <div>
-              <Label for="category">Категория</Label>
-              <Input id="category" v-model="formData.category" required />
-            </div>
+          <div>
+            <Label for="title">Название миссии</Label>
+            <Input id="title" v-model="formData.title" required />
           </div>
 
           <div>
             <Label for="description">Описание</Label>
             <Textarea id="description" v-model="formData.description" />
           </div>
-
-          <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-            <div>
-              <Label for="experience_reward">Награда (опыт)</Label>
-              <Input id="experience_reward" v-model.number="formData.experience_reward" type="number" />
-            </div>
-            <div>
-              <Label for="mana_reward">Награда (мана)</Label>
-              <Input id="mana_reward" v-model.number="formData.mana_reward" type="number" />
-            </div>
-            <div>
-              <Label for="required_rank_id">Требуемый ранг</Label>
-              <Select v-model="formData.required_rank_id">
-                <SelectTrigger id="required_rank_id">
-                  <SelectValue placeholder="Выберите ранг" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem v-for="rank in ranks" :key="rank.id" :value="rank.id">
-                      {{ rank.title }}
-                    </SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
         </div>
         <div v-else-if="missionType === 'QUIZ'" class="space-y-6">
-          <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-            <div>
-              <Label for="title">Название миссии</Label>
-              <Input id="title" v-model="formData.title" required />
-            </div>
-            <div>
-              <Label for="category">Категория</Label>
-              <Input id="category" v-model="formData.category" required />
-            </div>
+          <div>
+            <Label for="title">Название миссии</Label>
+            <Input id="title" v-model="formData.title" required />
           </div>
 
           <div>
@@ -159,37 +89,10 @@
 
           <div class="border-t pt-6">
             <h3 class="text-lg font-medium">Настройки квиза</h3>
-            <div>
-              <Label for="pass_threshold">Порог прохождения (0.0 - 1.0)</Label>
-              <Input id="pass_threshold" v-model.number="formData.pass_threshold" type="number" step="0.1" min="0" max="1" />
-              <p class="text-sm text-muted-foreground">Доля правильных ответов, необходимая для прохождения. 1.0 = 100%.</p>
-            </div>
-          </div>
-
-          <div class="grid grid-cols-1 gap-4 md:grid-cols-3 border-t pt-6">
-            <div>
-              <Label for="experience_reward">Награда (опыт)</Label>
-              <Input id="experience_reward" v-model.number="formData.experience_reward" type="number" />
-            </div>
-            <div>
-              <Label for="mana_reward">Награда (мана)</Label>
-              <Input id="mana_reward" v-model.number="formData.mana_reward" type="number" />
-            </div>
-            <div>
-              <Label for="required_rank_id">Требуемый ранг</Label>
-              <Select v-model="formData.required_rank_id">
-                <SelectTrigger id="required_rank_id">
-                  <SelectValue placeholder="Выберите ранг" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem v-for="rank in ranks" :key="rank.id" :value="rank.id">
-                      {{ rank.title }}
-                    </SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
+            <QuizThresholdSetter
+              v-model="formData.pass_threshold"
+              :question-count="formData.questions.length"
+            />
           </div>
         </div>
         <p v-else class="text-muted-foreground">Форма для типа миссии '{{ missionType }}' не реализована.</p>
@@ -205,7 +108,7 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref, onMounted } from 'vue';
+import { computed, reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ArrowLeft, Loader2, Trash2, X } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
@@ -213,9 +116,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { createUrlMission, createQrMission, createQuizMission } from '@/features/missionPage/services/mission.service';
-import { getMinimalRanks } from './services/ranks.service';
+import QuizThresholdSetter from './components/QuizThresholdSetter.vue';
 
 const route = useRoute();
 const router = useRouter();
@@ -224,28 +126,14 @@ const missionType = computed(() => route.query.type);
 const campaignId = route.params.id;
 
 const isSubmitting = ref(false);
-const ranks = ref([]);
 const formData = reactive({
   title: '',
   description: '',
-  category: '',
-  required_rank_id: null,
-  experience_reward: 0,
-  mana_reward: 0,
   submission_prompt: '',
   placeholder_text: '',
   // QUIZ type
   questions: [{ text: '', answers: [{ text: '', is_correct: true }, { text: '', is_correct: false }] }],
   pass_threshold: 1.0,
-});
-
-onMounted(async () => {
-  try {
-    ranks.value = await getMinimalRanks();
-  } catch (error) {
-    console.error('Failed to fetch ranks:', error);
-    // Error toast is handled by the fetch interceptor
-  }
 });
 
 const setCorrectAnswer = (questionIndex, answerIndex) => {
@@ -294,10 +182,7 @@ const handleSubmit = async () => {
     campaign_id: campaignId,
     title: formData.title,
     description: formData.description,
-    category: formData.category,
-    required_rank_id: formData.required_rank_id,
-    experience_reward: formData.experience_reward,
-    mana_reward: formData.mana_reward,
+    category: 'default',
   };
 
   try {

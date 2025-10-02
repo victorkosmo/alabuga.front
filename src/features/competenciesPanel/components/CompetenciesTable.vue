@@ -1,17 +1,17 @@
 <template>
-  <Table>
+  <Table class="w-full table-fixed">
     <TableHeader>
       <TableRow>
-        <TableHead class="w-1/3">Название</TableHead>
-        <TableHead class="w-2/3">Описание</TableHead>
-        <TableHead class="text-right">Действия</TableHead>
+        <TableHead class="w-[30%]">Название</TableHead>
+        <TableHead>Описание</TableHead>
+        <TableHead class="w-[180px] text-right">Действия</TableHead>
       </TableRow>
     </TableHeader>
     <TableBody>
       <template v-if="competencies.length">
         <TableRow v-for="competency in competencies" :key="competency.id">
           <TableCell class="font-medium">{{ competency.name }}</TableCell>
-          <TableCell>{{ competency.description }}</TableCell>
+          <TableCell class="min-w-0 break-all">{{ competency.description }}</TableCell>
           <TableCell class="text-right">
             <div class="flex justify-end gap-2">
               <Button variant="outline" size="sm" @click="$emit('edit', competency)">
