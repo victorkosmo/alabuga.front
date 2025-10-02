@@ -33,6 +33,18 @@
             <div v-if="mission.required_achievement_name">
               <span class="font-semibold">Требуется ачивка:</span> {{ mission.required_achievement_name }}
             </div>
+            <div v-if="mission.type === 'MANUAL_URL'">
+              <router-link
+                :to="{ name: 'Проверка заполнений', params: { campaignId: campaignId, missionId: mission.id } }"
+                custom
+                v-slot="{ navigate }"
+                @click.stop
+              >
+                <Button @click="navigate" class="w-full" variant="outline">
+                  Проверить выполнения
+                </Button>
+              </router-link>
+            </div>
           </CardContent>
         </Card>
       </router-link>
@@ -43,6 +55,7 @@
 <script setup>
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { Link, QrCode, FileQuestion } from 'lucide-vue-next';
 import CampaignSection from './CampaignSection.vue';
 
