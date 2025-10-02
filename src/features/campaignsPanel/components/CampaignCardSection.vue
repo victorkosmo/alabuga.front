@@ -7,7 +7,7 @@
         :key="item.title"
         :text="item.title"
       >
-        <div class="relative h-12 w-12 border-2 border-card rounded-full">
+        <div class="relative h-14 w-14 border-2 border-card rounded-full">
           <img v-if="item.image_url" :src="item.image_url" :alt="item.title" class="h-full w-full rounded-full object-cover" />
           <div v-else class="flex h-full w-full items-center justify-center rounded-full bg-muted">
             <component :is="placeholderIcon" class="h-6 w-6 text-muted-foreground" />
