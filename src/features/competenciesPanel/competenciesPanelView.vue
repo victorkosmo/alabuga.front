@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 sm:p-6 lg:p-8">
+  <div class="p-4 sm:p-6 lg:p-8 max-w-4xl mx-auto">
     <header class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-bold">Навыки</h1>
       <Button @click="openCreateDialog">Добавить навык</Button>
@@ -11,12 +11,19 @@
       <Skeleton class="h-12 w-full" />
     </div>
 
-    <div v-else>
-      <CompetenciesTable
-        :competencies="competencies"
-        @edit="openEditDialog"
-        @delete="openDeleteDialog"
-      />
+    <div v-else class="space-y-4">
+      <template v-if="competencies.length">
+        <CompetencyCard
+          v-for="competency in competencies"
+          :key="competency.id"
+          :competency="competency"
+          @edit="openEditDialog"
+          @delete="openDeleteDialog"
+        />
+      </template>
+      <div v-else class="text-center text-muted-foreground py-12 border border-dashed rounded-lg">
+        <p>Нет данных.</p>
+      </div>
 
       <div v-if="pagination && pagination.pages > 1" class="flex items-center justify-end space-x-2 py-4">
         <Button
@@ -59,9 +66,9 @@
 <script setup>
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import CompetenciesTable from './components/CompetenciesTable.vue';
 import CreateEditCompetencyDialog from './components/CreateEditCompetencyDialog.vue';
 import DeleteCompetencyDialog from './components/DeleteCompetencyDialog.vue';
+import CompetencyCard from './components/CompetencyCard.vue';
 import { useCompetencies } from './composables/useCompetencies';
 
 const {
