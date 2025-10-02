@@ -89,11 +89,10 @@
 
           <div class="border-t pt-6">
             <h3 class="text-lg font-medium">Настройки квиза</h3>
-            <div>
-              <Label for="pass_threshold">Порог прохождения (0.0 - 1.0)</Label>
-              <Input id="pass_threshold" v-model.number="formData.pass_threshold" type="number" step="0.1" min="0" max="1" />
-              <p class="text-sm text-muted-foreground">Доля правильных ответов, необходимая для прохождения. 1.0 = 100%.</p>
-            </div>
+            <QuizThresholdSetter
+              v-model="formData.pass_threshold"
+              :question-count="formData.questions.length"
+            />
           </div>
         </div>
         <p v-else class="text-muted-foreground">Форма для типа миссии '{{ missionType }}' не реализована.</p>
@@ -118,6 +117,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { createUrlMission, createQrMission, createQuizMission } from '@/features/missionPage/services/mission.service';
+import QuizThresholdSetter from './components/QuizThresholdSetter.vue';
 
 const route = useRoute();
 const router = useRouter();
