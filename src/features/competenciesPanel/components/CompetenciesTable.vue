@@ -11,7 +11,7 @@
       <template v-if="competencies.length">
         <TableRow v-for="competency in competencies" :key="competency.id">
           <TableCell class="font-medium">{{ competency.name }}</TableCell>
-          <TableCell class="break-words">{{ competency.description }}</TableCell>
+          <TableCell class="break-all">{{ competency.description }}</TableCell>
           <TableCell class="text-right">
             <div class="flex justify-end gap-2">
               <Button variant="outline" size="sm" @click="$emit('edit', competency)">
