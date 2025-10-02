@@ -26,15 +26,9 @@
         <CardDescription>Измените детали миссии и сохраните.</CardDescription>
       </CardHeader>
       <CardContent class="space-y-4">
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div>
-            <Label for="title">Название миссии</Label>
-            <Input id="title" v-model="formData.title" required />
-          </div>
-          <div>
-            <Label for="category">Категория</Label>
-            <Input id="category" v-model="formData.category" required />
-          </div>
+        <div>
+          <Label for="title">Название миссии</Label>
+          <Input id="title" v-model="formData.title" required />
         </div>
 
         <div>
@@ -51,32 +45,6 @@
           <Label for="placeholder_text">Пример (placeholder)</Label>
           <Input id="placeholder_text" v-model="formData.placeholder_text" />
         </div>
-
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <div>
-            <Label for="experience_reward">Награда (опыт)</Label>
-            <Input id="experience_reward" v-model.number="formData.experience_reward" type="number" />
-          </div>
-          <div>
-            <Label for="mana_reward">Награда (мана)</Label>
-            <Input id="mana_reward" v-model.number="formData.mana_reward" type="number" />
-          </div>
-          <div>
-            <Label for="required_rank_id">Требуемый ранг</Label>
-            <Select v-model="formData.required_rank_id">
-              <SelectTrigger id="required_rank_id">
-                <SelectValue placeholder="Выберите ранг" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem v-for="rank in ranks" :key="rank.id" :value="rank.id">
-                    {{ rank.title }}
-                  </SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
       </CardContent>
       <CardFooter>
         <Button :disabled="isSubmitting" @click="handleSubmit">
@@ -91,46 +59,14 @@
         <CardDescription>Измените детали миссии и сохраните.</CardDescription>
       </CardHeader>
       <CardContent class="space-y-4">
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div>
-            <Label for="title">Название миссии</Label>
-            <Input id="title" v-model="formData.title" required />
-          </div>
-          <div>
-            <Label for="category">Категория</Label>
-            <Input id="category" v-model="formData.category" required />
-          </div>
+        <div>
+          <Label for="title">Название миссии</Label>
+          <Input id="title" v-model="formData.title" required />
         </div>
 
         <div>
           <Label for="description">Описание</Label>
           <Textarea id="description" v-model="formData.description" />
-        </div>
-
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-3">
-          <div>
-            <Label for="experience_reward">Награда (опыт)</Label>
-            <Input id="experience_reward" v-model.number="formData.experience_reward" type="number" />
-          </div>
-          <div>
-            <Label for="mana_reward">Награда (мана)</Label>
-            <Input id="mana_reward" v-model.number="formData.mana_reward" type="number" />
-          </div>
-          <div>
-            <Label for="required_rank_id">Требуемый ранг</Label>
-            <Select v-model="formData.required_rank_id">
-              <SelectTrigger id="required_rank_id">
-                <SelectValue placeholder="Выберите ранг" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem v-for="rank in ranks" :key="rank.id" :value="rank.id">
-                    {{ rank.title }}
-                  </SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
         </div>
       </CardContent>
       <CardFooter>
@@ -146,15 +82,9 @@
         <CardDescription>Измените детали миссии и сохраните.</CardDescription>
       </CardHeader>
       <CardContent class="space-y-6">
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
-          <div>
-            <Label for="title">Название миссии</Label>
-            <Input id="title" v-model="formData.title" required />
-          </div>
-          <div>
-            <Label for="category">Категория</Label>
-            <Input id="category" v-model="formData.category" required />
-          </div>
+        <div>
+          <Label for="title">Название миссии</Label>
+          <Input id="title" v-model="formData.title" required />
         </div>
 
         <div>
@@ -196,32 +126,6 @@
             <p class="text-sm text-muted-foreground">Доля правильных ответов, необходимая для прохождения. 1.0 = 100%.</p>
           </div>
         </div>
-
-        <div class="grid grid-cols-1 gap-4 md:grid-cols-3 border-t pt-6">
-          <div>
-            <Label for="experience_reward">Награда (опыт)</Label>
-            <Input id="experience_reward" v-model.number="formData.experience_reward" type="number" />
-          </div>
-          <div>
-            <Label for="mana_reward">Награда (мана)</Label>
-            <Input id="mana_reward" v-model.number="formData.mana_reward" type="number" />
-          </div>
-          <div>
-            <Label for="required_rank_id">Требуемый ранг</Label>
-            <Select v-model="formData.required_rank_id">
-              <SelectTrigger id="required_rank_id">
-                <SelectValue placeholder="Выберите ранг" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectGroup>
-                  <SelectItem v-for="rank in ranks" :key="rank.id" :value="rank.id">
-                    {{ rank.title }}
-                  </SelectItem>
-                </SelectGroup>
-              </SelectContent>
-            </Select>
-          </div>
-        </div>
       </CardContent>
       <CardFooter>
         <Button :disabled="isSubmitting" @click="handleSubmit">
@@ -244,10 +148,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 import * as missionService from '@/features/missionPage/services/mission.service';
-import { getMinimalRanks } from '@/features/newMissionForm/services/ranks.service';
 import { missionTypeDetails } from '@/features/missionPage/missionTypes';
 
 const route = useRoute();
@@ -260,14 +162,9 @@ const missionType = computed(() => route.query.type);
 const isLoading = ref(true);
 const isSubmitting = ref(false);
 const error = ref(null);
-const ranks = ref([]);
 const formData = reactive({
   title: '',
   description: '',
-  category: '',
-  required_rank_id: null,
-  experience_reward: 0,
-  mana_reward: 0,
   submission_prompt: '',
   placeholder_text: '',
   // QUIZ type
@@ -286,10 +183,6 @@ const fetchMissionData = async () => {
     // Common fields
     formData.title = missionData.title;
     formData.description = missionData.description;
-    formData.category = missionData.category;
-    formData.required_rank_id = missionData.required_rank_id;
-    formData.experience_reward = missionData.experience_reward;
-    formData.mana_reward = missionData.mana_reward;
 
     // Type-specific fields
     if (missionType.value === 'MANUAL_URL') {
@@ -309,16 +202,7 @@ const fetchMissionData = async () => {
   }
 };
 
-const fetchRanks = async () => {
-  try {
-    ranks.value = await getMinimalRanks();
-  } catch (e) {
-    console.error('Failed to fetch ranks:', e);
-  }
-};
-
 onMounted(() => {
-  fetchRanks();
   fetchMissionData();
 });
 
@@ -377,10 +261,6 @@ const handleSubmit = async () => {
     const payload = {
       title: formData.title,
       description: formData.description,
-      category: formData.category,
-      required_rank_id: formData.required_rank_id,
-      experience_reward: formData.experience_reward,
-      mana_reward: formData.mana_reward
     };
 
     // Add type-specific fields to payload
