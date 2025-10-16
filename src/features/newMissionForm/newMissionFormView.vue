@@ -29,10 +29,20 @@
             <Textarea id="description" v-model="formData.description" />
           </div>
 
-          <div>
-            <Label for="cover-manual">Обложка миссии</Label>
-            <Input id="cover-manual" type="file" accept="image/*" @change="handleCoverSelected" />
-            <p v-if="coverFile" class="text-sm text-muted-foreground mt-1">Выбран файл: {{ coverFile.name }}</p>
+          <div class="space-y-2">
+            <Label>Обложка миссии</Label>
+            <div v-if="coverPreviewUrl" class="relative group">
+              <img :src="coverPreviewUrl" alt="Предпросмотр обложки" class="w-full h-auto object-cover rounded-md max-w-sm" />
+            </div>
+            <div v-else class="flex items-center justify-center h-32 border-2 border-dashed rounded-md max-w-sm">
+              <p class="text-muted-foreground">Нет обложки</p>
+            </div>
+            <div>
+              <Button variant="outline" @click="triggerCoverUpload">
+                {{ coverPreviewUrl ? 'Заменить обложку' : 'Загрузить обложку' }}
+              </Button>
+              <input ref="coverInput" type="file" class="hidden" accept="image/*" @change="handleCoverSelected" />
+            </div>
           </div>
 
           <div>
@@ -56,10 +66,20 @@
             <Textarea id="description" v-model="formData.description" />
           </div>
 
-          <div>
-            <Label for="cover-qr">Обложка миссии</Label>
-            <Input id="cover-qr" type="file" accept="image/*" @change="handleCoverSelected" />
-            <p v-if="coverFile" class="text-sm text-muted-foreground mt-1">Выбран файл: {{ coverFile.name }}</p>
+          <div class="space-y-2">
+            <Label>Обложка миссии</Label>
+            <div v-if="coverPreviewUrl" class="relative group">
+              <img :src="coverPreviewUrl" alt="Предпросмотр обложки" class="w-full h-auto object-cover rounded-md max-w-sm" />
+            </div>
+            <div v-else class="flex items-center justify-center h-32 border-2 border-dashed rounded-md max-w-sm">
+              <p class="text-muted-foreground">Нет обложки</p>
+            </div>
+            <div>
+              <Button variant="outline" @click="triggerCoverUpload">
+                {{ coverPreviewUrl ? 'Заменить обложку' : 'Загрузить обложку' }}
+              </Button>
+              <input ref="coverInput" type="file" class="hidden" accept="image/*" @change="handleCoverSelected" />
+            </div>
           </div>
         </div>
         <div v-else-if="missionType === 'QUIZ'" class="space-y-6">
@@ -73,10 +93,20 @@
             <Textarea id="description" v-model="formData.description" />
           </div>
 
-          <div>
-            <Label for="cover-quiz">Обложка миссии</Label>
-            <Input id="cover-quiz" type="file" accept="image/*" @change="handleCoverSelected" />
-            <p v-if="coverFile" class="text-sm text-muted-foreground mt-1">Выбран файл: {{ coverFile.name }}</p>
+          <div class="space-y-2">
+            <Label>Обложка миссии</Label>
+            <div v-if="coverPreviewUrl" class="relative group">
+              <img :src="coverPreviewUrl" alt="Предпросмотр обложки" class="w-full h-auto object-cover rounded-md max-w-sm" />
+            </div>
+            <div v-else class="flex items-center justify-center h-32 border-2 border-dashed rounded-md max-w-sm">
+              <p class="text-muted-foreground">Нет обложки</p>
+            </div>
+            <div>
+              <Button variant="outline" @click="triggerCoverUpload">
+                {{ coverPreviewUrl ? 'Заменить обложку' : 'Загрузить обложку' }}
+              </Button>
+              <input ref="coverInput" type="file" class="hidden" accept="image/*" @change="handleCoverSelected" />
+            </div>
           </div>
 
           <div class="border-t pt-6">
@@ -126,7 +156,7 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ArrowLeft, Loader2, Trash2, X } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
@@ -144,6 +174,8 @@ const missionType = computed(() => route.query.type);
 const campaignId = route.params.id;
 
 const coverFile = ref(null);
+const coverPreviewUrl = ref(null);
+const coverInput = ref(null);
 const isSubmitting = ref(false);
 const formData = reactive({
   title: '',
@@ -155,8 +187,27 @@ const formData = reactive({
   pass_threshold: 1.0,
 });
 
+const triggerCoverUpload = () => {
+  coverInput.value?.click();
+};
+
 const handleCoverSelected = (event) => {
-  coverFile.value = event.target.files[0] || null;
+  const file = event.target.files[0];
+  if (coverPreviewUrl.value) {
+    URL.revokeObjectURL(coverPreviewUrl.value);
+    coverPreviewUrl.value = null;
+  }
+
+  if (file) {
+    coverFile.value = file;
+    coverPreviewUrl.value = URL.createObjectURL(file);
+  } else {
+    coverFile.value = null;
+  }
+  // Reset input value to allow re-uploading the same file
+  if (event.target) {
+    event.target.value = null;
+  }
 };
 
 const setCorrectAnswer = (questionIndex, answerIndex) => {
@@ -244,4 +295,10 @@ const handleSubmit = async () => {
     isSubmitting.value = false;
   }
 };
+
+onUnmounted(() => {
+  if (coverPreviewUrl.value) {
+    URL.revokeObjectURL(coverPreviewUrl.value);
+  }
+});
 </script>
