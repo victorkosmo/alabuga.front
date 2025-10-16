@@ -30,6 +30,12 @@
           </div>
 
           <div>
+            <Label for="cover-manual">Обложка миссии</Label>
+            <Input id="cover-manual" type="file" accept="image/*" @change="handleCoverSelected" />
+            <p v-if="coverFile" class="text-sm text-muted-foreground mt-1">Выбран файл: {{ coverFile.name }}</p>
+          </div>
+
+          <div>
             <Label for="submission_prompt">Задание для исполнителя</Label>
             <Textarea id="submission_prompt" v-model="formData.submission_prompt" required />
           </div>
@@ -49,6 +55,12 @@
             <Label for="description">Описание</Label>
             <Textarea id="description" v-model="formData.description" />
           </div>
+
+          <div>
+            <Label for="cover-qr">Обложка миссии</Label>
+            <Input id="cover-qr" type="file" accept="image/*" @change="handleCoverSelected" />
+            <p v-if="coverFile" class="text-sm text-muted-foreground mt-1">Выбран файл: {{ coverFile.name }}</p>
+          </div>
         </div>
         <div v-else-if="missionType === 'QUIZ'" class="space-y-6">
           <div>
@@ -59,6 +71,12 @@
           <div>
             <Label for="description">Описание</Label>
             <Textarea id="description" v-model="formData.description" />
+          </div>
+
+          <div>
+            <Label for="cover-quiz">Обложка миссии</Label>
+            <Input id="cover-quiz" type="file" accept="image/*" @change="handleCoverSelected" />
+            <p v-if="coverFile" class="text-sm text-muted-foreground mt-1">Выбран файл: {{ coverFile.name }}</p>
           </div>
 
           <div class="border-t pt-6">
@@ -116,7 +134,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { createUrlMission, createQrMission, createQuizMission } from '@/features/missionPage/services/mission.service';
+import { createUrlMission, createQrMission, createQuizMission, uploadUrlMissionCover, uploadQrMissionCover, uploadQuizMissionCover } from '@/features/missionPage/services/mission.service';
 import QuizThresholdSetter from './components/QuizThresholdSetter.vue';
 
 const route = useRoute();
@@ -125,6 +143,7 @@ const router = useRouter();
 const missionType = computed(() => route.query.type);
 const campaignId = route.params.id;
 
+const coverFile = ref(null);
 const isSubmitting = ref(false);
 const formData = reactive({
   title: '',
@@ -135,6 +154,10 @@ const formData = reactive({
   questions: [{ text: '', answers: [{ text: '', is_correct: true }, { text: '', is_correct: false }] }],
   pass_threshold: 1.0,
 });
+
+const handleCoverSelected = (event) => {
+  coverFile.value = event.target.files[0] || null;
+};
 
 const setCorrectAnswer = (questionIndex, answerIndex) => {
   formData.questions[questionIndex].answers.forEach((answer, i) => {
@@ -186,21 +209,33 @@ const handleSubmit = async () => {
   };
 
   try {
+    let createdMission;
     if (missionType.value === 'MANUAL_URL') {
-      await createUrlMission({
+      createdMission = await createUrlMission({
         ...missionData,
         submission_prompt: formData.submission_prompt,
         placeholder_text: formData.placeholder_text,
       });
     } else if (missionType.value === 'QR_CODE') {
-      await createQrMission(missionData);
+      createdMission = await createQrMission(missionData);
     } else if (missionType.value === 'QUIZ') {
-      await createQuizMission({
+      createdMission = await createQuizMission({
         ...missionData,
         questions: formData.questions,
         pass_threshold: formData.pass_threshold,
       });
     }
+
+    if (createdMission && coverFile.value) {
+      if (missionType.value === 'MANUAL_URL') {
+        await uploadUrlMissionCover(createdMission.id, coverFile.value);
+      } else if (missionType.value === 'QR_CODE') {
+        await uploadQrMissionCover(createdMission.id, coverFile.value);
+      } else if (missionType.value === 'QUIZ') {
+        await uploadQuizMissionCover(createdMission.id, coverFile.value);
+      }
+    }
+
     router.push({ name: 'Кампания', params: { id: campaignId } });
   } catch (error) {
     console.error('Failed to create mission:', error);

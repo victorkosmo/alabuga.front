@@ -115,6 +115,75 @@ export const updateQuizMission = async (missionId, data) => {
 };
 
 /**
+ * Upload a cover for a URL-based mission.
+ * @param {string} missionId - The ID of the mission.
+ * @param {File} coverFile - The cover image file.
+ * @returns {Promise<Object>} The updated mission data.
+ */
+export const uploadUrlMissionCover = async (missionId, coverFile) => {
+  const formData = new FormData();
+  formData.append('cover', coverFile);
+
+  const response = await post(`/web/missions/type-url/${missionId}/cover`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  if (response.success) {
+    successMessage('Обложка миссии успешно загружена');
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to upload mission cover');
+};
+
+/**
+ * Upload a cover for a QR-based mission.
+ * @param {string} missionId - The ID of the mission.
+ * @param {File} coverFile - The cover image file.
+ * @returns {Promise<Object>} The updated mission data.
+ */
+export const uploadQrMissionCover = async (missionId, coverFile) => {
+  const formData = new FormData();
+  formData.append('cover', coverFile);
+
+  const response = await post(`/web/missions/type-qr/${missionId}/cover`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  if (response.success) {
+    successMessage('Обложка миссии успешно загружена');
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to upload mission cover');
+};
+
+/**
+ * Upload a cover for a Quiz-based mission.
+ * @param {string} missionId - The ID of the mission.
+ * @param {File} coverFile - The cover image file.
+ * @returns {Promise<Object>} The updated mission data.
+ */
+export const uploadQuizMissionCover = async (missionId, coverFile) => {
+  const formData = new FormData();
+  formData.append('cover', coverFile);
+
+  const response = await post(`/web/missions/type-quiz/${missionId}/cover`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+
+  if (response.success) {
+    successMessage('Обложка миссии успешно загружена');
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to upload mission cover');
+};
+
+/**
  * Get a URL-based mission by ID.
  * @param {string} missionId - The ID of the mission.
  * @returns {Promise<Object>} The mission data.
