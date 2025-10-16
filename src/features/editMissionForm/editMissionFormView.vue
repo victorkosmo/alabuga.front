@@ -36,23 +36,6 @@
           <Textarea id="description" v-model="formData.description" />
         </div>
 
-        <div class="space-y-2">
-          <Label>Обложка миссии</Label>
-          <div v-if="formData.cover_url" class="relative group">
-            <img :src="formData.cover_url" alt="Обложка миссии" class="w-full h-auto object-cover rounded-md max-w-sm" />
-          </div>
-          <div v-else class="flex items-center justify-center h-32 border-2 border-dashed rounded-md max-w-sm">
-            <p class="text-muted-foreground">Нет обложки</p>
-          </div>
-          <div>
-            <Button variant="outline" @click="triggerCoverUpload" :disabled="isUploadingCover">
-              <Loader2 v-if="isUploadingCover" class="mr-2 h-4 w-4 animate-spin" />
-              {{ formData.cover_url ? 'Заменить обложку' : 'Загрузить обложку' }}
-            </Button>
-            <input ref="coverInput" type="file" class="hidden" accept="image/*" @change="handleCoverSelected" />
-          </div>
-        </div>
-
         <div>
           <Label for="submission_prompt">Задание для исполнителя</Label>
           <Textarea id="submission_prompt" v-model="formData.submission_prompt" required />
@@ -85,23 +68,6 @@
           <Label for="description">Описание</Label>
           <Textarea id="description" v-model="formData.description" />
         </div>
-
-        <div class="space-y-2">
-          <Label>Обложка миссии</Label>
-          <div v-if="formData.cover_url" class="relative group">
-            <img :src="formData.cover_url" alt="Обложка миссии" class="w-full h-auto object-cover rounded-md max-w-sm" />
-          </div>
-          <div v-else class="flex items-center justify-center h-32 border-2 border-dashed rounded-md max-w-sm">
-            <p class="text-muted-foreground">Нет обложки</p>
-          </div>
-          <div>
-            <Button variant="outline" @click="triggerCoverUpload" :disabled="isUploadingCover">
-              <Loader2 v-if="isUploadingCover" class="mr-2 h-4 w-4 animate-spin" />
-              {{ formData.cover_url ? 'Заменить обложку' : 'Загрузить обложку' }}
-            </Button>
-            <input ref="coverInput" type="file" class="hidden" accept="image/*" @change="handleCoverSelected" />
-          </div>
-        </div>
       </CardContent>
       <CardFooter>
         <Button :disabled="isSubmitting" @click="handleSubmit">
@@ -124,23 +90,6 @@
         <div>
           <Label for="description">Описание</Label>
           <Textarea id="description" v-model="formData.description" />
-        </div>
-
-        <div class="space-y-2">
-          <Label>Обложка миссии</Label>
-          <div v-if="formData.cover_url" class="relative group">
-            <img :src="formData.cover_url" alt="Обложка миссии" class="w-full h-auto object-cover rounded-md max-w-sm" />
-          </div>
-          <div v-else class="flex items-center justify-center h-32 border-2 border-dashed rounded-md max-w-sm">
-            <p class="text-muted-foreground">Нет обложки</p>
-          </div>
-          <div>
-            <Button variant="outline" @click="triggerCoverUpload" :disabled="isUploadingCover">
-              <Loader2 v-if="isUploadingCover" class="mr-2 h-4 w-4 animate-spin" />
-              {{ formData.cover_url ? 'Заменить обложку' : 'Загрузить обложку' }}
-            </Button>
-            <input ref="coverInput" type="file" class="hidden" accept="image/*" @change="handleCoverSelected" />
-          </div>
         </div>
 
         <div class="border-t pt-6">
@@ -212,8 +161,6 @@ const missionType = computed(() => route.query.type);
 
 const isLoading = ref(true);
 const isSubmitting = ref(false);
-const isUploadingCover = ref(false);
-const coverInput = ref(null);
 const error = ref(null);
 const formData = reactive({
   title: '',
@@ -260,36 +207,6 @@ const fetchMissionData = async () => {
 onMounted(() => {
   fetchMissionData();
 });
-
-const triggerCoverUpload = () => {
-  coverInput.value?.click();
-};
-
-const handleCoverSelected = async (event) => {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  isUploadingCover.value = true;
-  try {
-    let updatedMission;
-    if (missionType.value === 'MANUAL_URL') {
-      updatedMission = await missionService.uploadUrlMissionCover(missionId.value, file);
-    } else if (missionType.value === 'QR_CODE') {
-      updatedMission = await missionService.uploadQrMissionCover(missionId.value, file);
-    } else if (missionType.value === 'QUIZ') {
-      updatedMission = await missionService.uploadQuizMissionCover(missionId.value, file);
-    }
-    if (updatedMission) {
-      formData.cover_url = updatedMission.cover_url;
-    }
-  } catch (e) {
-    console.error('Failed to upload cover', e);
-    // toast is handled by service
-  } finally {
-    isUploadingCover.value = false;
-    event.target.value = null;
-  }
-};
 
 const goToMissionPage = () => {
   router.push({
