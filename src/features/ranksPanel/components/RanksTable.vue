@@ -1,4 +1,3 @@
-// src/features/ranksPanel/components/RanksTable.vue
 <template>
   <Table>
     <TableHeader>
