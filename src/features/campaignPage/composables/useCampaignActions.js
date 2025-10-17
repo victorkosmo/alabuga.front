@@ -18,6 +18,7 @@ export function useCampaignActions(
   const selectedAchievement = ref(null);
   const selectedStoreItem = ref(null);
   const isUploadingCover = ref(false);
+  const isUploadingIcon = ref(false);
   const isUploadingStoreItemImage = ref(false);
   const isUploadingAchievementImage = ref(false);
 
@@ -97,6 +98,21 @@ export function useCampaignActions(
       console.error('Failed to upload cover:', error);
     } finally {
       isUploadingCover.value = false;
+    }
+  };
+
+  const handleUploadIcon = async (file) => {
+    const formData = new FormData();
+    formData.append('icon', file);
+
+    isUploadingIcon.value = true;
+    try {
+      await campaignService.uploadCampaignIcon(campaignId, formData);
+      await refetchCampaign();
+    } catch (error) {
+      console.error('Failed to upload icon:', error);
+    } finally {
+      isUploadingIcon.value = false;
     }
   };
 
@@ -204,6 +220,7 @@ export function useCampaignActions(
     dialogs,
     selectedAchievement,
     isUploadingCover,
+    isUploadingIcon,
     openEditDialog,
     openDeleteDialog,
     openCreateMissionDialog,
@@ -213,6 +230,7 @@ export function useCampaignActions(
     handleUpdateCampaign,
     handleDeleteCampaign,
     handleUploadCover,
+    handleUploadIcon,
     handleSelectMissionType,
     handleSaveAchievement,
     handleDeleteAchievement,

@@ -37,16 +37,23 @@
           <CampaignJoiningInfo :campaign="campaign" />
         </div>
 
-        <div class="flex w-full min-[1230px]:w-5/12 gap-3">
-          <div class="w-1/2">
-            <CampaignStats :campaign="campaign" />
-          </div>
-          <div class="w-1/2">
-            <CampaignCover
-              :campaign="campaign"
-              :is-uploading-cover="isUploadingCover"
-              @upload-cover="handleUploadCover"
-            />
+        <div class="flex flex-col w-full min-[1230px]:w-5/12 gap-3">
+          <CampaignStats :campaign="campaign" />
+          <div class="flex gap-3">
+            <div class="w-1/2">
+              <CampaignCover
+                :campaign="campaign"
+                :is-uploading-cover="isUploadingCover"
+                @upload-cover="handleUploadCover"
+              />
+            </div>
+            <div class="w-1/2">
+              <CampaignIcon
+                :campaign="campaign"
+                :is-uploading-icon="isUploadingIcon"
+                @upload-icon="handleUploadIcon"
+              />
+            </div>
           </div>
         </div>
 
@@ -129,6 +136,7 @@ import CampaignHeader from './components/CampaignHeader.vue';
 import CampaignJoiningInfo from './components/CampaignJoiningInfo.vue';
 import CampaignStats from './components/CampaignStats.vue';
 import CampaignCover from './components/CampaignCover.vue';
+import CampaignIcon from './components/CampaignIcon.vue';
 import CampaignMissions from './components/CampaignMissions.vue';
 import CampaignAchievements from './components/CampaignAchievements.vue';
 import CampaignStoreItems from './components/CampaignStoreItems.vue';
@@ -164,6 +172,7 @@ const {
   dialogs,
   selectedAchievement,
   isUploadingCover,
+  isUploadingIcon,
   openEditDialog,
   openDeleteDialog,
   openCreateMissionDialog,
@@ -173,6 +182,7 @@ const {
   handleUpdateCampaign,
   handleDeleteCampaign,
   handleUploadCover,
+  handleUploadIcon,
   handleSelectMissionType,
   handleSaveAchievement,
   handleDeleteAchievement,
