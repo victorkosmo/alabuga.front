@@ -15,6 +15,7 @@ export function useMission() {
 
   const achievements = ref([]);
   const isUpdatingAchievement = ref(false);
+  const isUploadingCover = ref(false);
 
   const fetchMission = async () => {
     isLoading.value = true;
@@ -62,6 +63,34 @@ export function useMission() {
     }
   };
 
+  const uploadCover = async (file) => {
+    if (!mission.value) return;
+
+    isUploadingCover.value = true;
+    try {
+      const missionId = mission.value.id;
+      const missionType = mission.value.type;
+      let updatedMission;
+
+      if (missionType === 'MANUAL_URL') {
+        updatedMission = await missionService.uploadUrlMissionCover(missionId, file);
+      } else if (missionType === 'QR_CODE') {
+        updatedMission = await missionService.uploadQrMissionCover(missionId, file);
+      } else if (missionType === 'QUIZ') {
+        updatedMission = await missionService.uploadQuizMissionCover(missionId, file);
+      }
+
+      if (updatedMission) {
+        mission.value.cover_url = updatedMission.cover_url;
+      }
+    } catch (e) {
+      console.error('Failed to upload cover', e);
+      // toast is handled by service
+    } finally {
+      isUploadingCover.value = false;
+    }
+  };
+
   const updateRequiredAchievement = async (newAchievementId) => {
     isUpdatingAchievement.value = true;
     try {
@@ -97,6 +126,8 @@ export function useMission() {
     fetchMission,
     achievements,
     isUpdatingAchievement,
-    updateRequiredAchievement
+    updateRequiredAchievement,
+    isUploadingCover,
+    uploadCover,
   };
 }

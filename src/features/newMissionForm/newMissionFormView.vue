@@ -29,6 +29,22 @@
             <Textarea id="description" v-model="formData.description" />
           </div>
 
+          <div class="space-y-2">
+            <Label>Обложка миссии</Label>
+            <div v-if="coverPreviewUrl" class="relative group">
+              <img :src="coverPreviewUrl" alt="Предпросмотр обложки" class="w-full h-auto object-cover rounded-md max-w-sm" />
+            </div>
+            <div v-else class="flex items-center justify-center h-32 border-2 border-dashed rounded-md max-w-sm">
+              <p class="text-muted-foreground">Нет обложки</p>
+            </div>
+            <div>
+              <Button variant="outline" @click="triggerCoverUpload">
+                {{ coverPreviewUrl ? 'Заменить обложку' : 'Загрузить обложку' }}
+              </Button>
+              <input ref="coverInput" type="file" class="hidden" accept="image/*" @change="handleCoverSelected" />
+            </div>
+          </div>
+
           <div>
             <Label for="submission_prompt">Задание для исполнителя</Label>
             <Textarea id="submission_prompt" v-model="formData.submission_prompt" required />
@@ -49,6 +65,22 @@
             <Label for="description">Описание</Label>
             <Textarea id="description" v-model="formData.description" />
           </div>
+
+          <div class="space-y-2">
+            <Label>Обложка миссии</Label>
+            <div v-if="coverPreviewUrl" class="relative group">
+              <img :src="coverPreviewUrl" alt="Предпросмотр обложки" class="w-full h-auto object-cover rounded-md max-w-sm" />
+            </div>
+            <div v-else class="flex items-center justify-center h-32 border-2 border-dashed rounded-md max-w-sm">
+              <p class="text-muted-foreground">Нет обложки</p>
+            </div>
+            <div>
+              <Button variant="outline" @click="triggerCoverUpload">
+                {{ coverPreviewUrl ? 'Заменить обложку' : 'Загрузить обложку' }}
+              </Button>
+              <input ref="coverInput" type="file" class="hidden" accept="image/*" @change="handleCoverSelected" />
+            </div>
+          </div>
         </div>
         <div v-else-if="missionType === 'QUIZ'" class="space-y-6">
           <div>
@@ -59,6 +91,22 @@
           <div>
             <Label for="description">Описание</Label>
             <Textarea id="description" v-model="formData.description" />
+          </div>
+
+          <div class="space-y-2">
+            <Label>Обложка миссии</Label>
+            <div v-if="coverPreviewUrl" class="relative group">
+              <img :src="coverPreviewUrl" alt="Предпросмотр обложки" class="w-full h-auto object-cover rounded-md max-w-sm" />
+            </div>
+            <div v-else class="flex items-center justify-center h-32 border-2 border-dashed rounded-md max-w-sm">
+              <p class="text-muted-foreground">Нет обложки</p>
+            </div>
+            <div>
+              <Button variant="outline" @click="triggerCoverUpload">
+                {{ coverPreviewUrl ? 'Заменить обложку' : 'Загрузить обложку' }}
+              </Button>
+              <input ref="coverInput" type="file" class="hidden" accept="image/*" @change="handleCoverSelected" />
+            </div>
           </div>
 
           <div class="border-t pt-6">
@@ -108,7 +156,7 @@
 </template>
 
 <script setup>
-import { computed, reactive, ref } from 'vue';
+import { computed, reactive, ref, onUnmounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ArrowLeft, Loader2, Trash2, X } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
@@ -116,7 +164,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { createUrlMission, createQrMission, createQuizMission } from '@/features/missionPage/services/mission.service';
+import { createUrlMission, createQrMission, createQuizMission, uploadUrlMissionCover, uploadQrMissionCover, uploadQuizMissionCover } from '@/features/missionPage/services/mission.service';
 import QuizThresholdSetter from './components/QuizThresholdSetter.vue';
 
 const route = useRoute();
@@ -125,6 +173,9 @@ const router = useRouter();
 const missionType = computed(() => route.query.type);
 const campaignId = route.params.id;
 
+const coverFile = ref(null);
+const coverPreviewUrl = ref(null);
+const coverInput = ref(null);
 const isSubmitting = ref(false);
 const formData = reactive({
   title: '',
@@ -135,6 +186,29 @@ const formData = reactive({
   questions: [{ text: '', answers: [{ text: '', is_correct: true }, { text: '', is_correct: false }] }],
   pass_threshold: 1.0,
 });
+
+const triggerCoverUpload = () => {
+  coverInput.value?.click();
+};
+
+const handleCoverSelected = (event) => {
+  const file = event.target.files[0];
+  if (coverPreviewUrl.value) {
+    URL.revokeObjectURL(coverPreviewUrl.value);
+    coverPreviewUrl.value = null;
+  }
+
+  if (file) {
+    coverFile.value = file;
+    coverPreviewUrl.value = URL.createObjectURL(file);
+  } else {
+    coverFile.value = null;
+  }
+  // Reset input value to allow re-uploading the same file
+  if (event.target) {
+    event.target.value = null;
+  }
+};
 
 const setCorrectAnswer = (questionIndex, answerIndex) => {
   formData.questions[questionIndex].answers.forEach((answer, i) => {
@@ -186,21 +260,33 @@ const handleSubmit = async () => {
   };
 
   try {
+    let createdMission;
     if (missionType.value === 'MANUAL_URL') {
-      await createUrlMission({
+      createdMission = await createUrlMission({
         ...missionData,
         submission_prompt: formData.submission_prompt,
         placeholder_text: formData.placeholder_text,
       });
     } else if (missionType.value === 'QR_CODE') {
-      await createQrMission(missionData);
+      createdMission = await createQrMission(missionData);
     } else if (missionType.value === 'QUIZ') {
-      await createQuizMission({
+      createdMission = await createQuizMission({
         ...missionData,
         questions: formData.questions,
         pass_threshold: formData.pass_threshold,
       });
     }
+
+    if (createdMission && coverFile.value) {
+      if (missionType.value === 'MANUAL_URL') {
+        await uploadUrlMissionCover(createdMission.id, coverFile.value);
+      } else if (missionType.value === 'QR_CODE') {
+        await uploadQrMissionCover(createdMission.id, coverFile.value);
+      } else if (missionType.value === 'QUIZ') {
+        await uploadQuizMissionCover(createdMission.id, coverFile.value);
+      }
+    }
+
     router.push({ name: 'Кампания', params: { id: campaignId } });
   } catch (error) {
     console.error('Failed to create mission:', error);
@@ -209,4 +295,10 @@ const handleSubmit = async () => {
     isSubmitting.value = false;
   }
 };
+
+onUnmounted(() => {
+  if (coverPreviewUrl.value) {
+    URL.revokeObjectURL(coverPreviewUrl.value);
+  }
+});
 </script>

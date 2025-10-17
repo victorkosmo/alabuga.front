@@ -8,6 +8,7 @@
       <Skeleton class="h-8 w-3/4" />
       <div class="mt-6 grid gap-6">
         <Skeleton class="h-48 w-full" />
+        <Skeleton class="h-48 w-full" />
         <Skeleton class="h-32 w-full" />
       </div>
     </div>
@@ -55,6 +56,8 @@
       </header>
 
       <div class="grid gap-6">
+        <MissionCover :mission="mission" :is-uploading="isUploadingCover" @upload-cover="uploadCover" />
+
         <Card v-if="mission.type === 'MANUAL_URL'">
           <CardHeader>
             <CardTitle>Задание</CardTitle>
@@ -195,6 +198,7 @@ import { ref } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import { useMission } from './composables/useMission';
 import { ArrowLeft, Pencil } from 'lucide-vue-next';
+import MissionCover from './components/MissionCover.vue';
 
 import {
   Dialog,
@@ -238,6 +242,8 @@ const {
   fetchMission,
   achievements,
   isUpdatingAchievement,
-  updateRequiredAchievement
+  updateRequiredAchievement,
+  isUploadingCover,
+  uploadCover,
 } = useMission();
 </script>
