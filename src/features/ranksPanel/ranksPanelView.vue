@@ -11,7 +11,13 @@
     </div>
 
     <div v-else class="space-y-4">
-      <RanksTable v-if="ranks.length" :ranks="ranks" />
+      <template v-if="ranks.length">
+        <RankCard
+          v-for="rank in ranks"
+          :key="rank.id"
+          :rank="rank"
+        />
+      </template>
       <div v-else class="text-center text-muted-foreground py-12 border border-dashed rounded-lg">
         <p>Нет данных.</p>
       </div>
@@ -44,7 +50,7 @@
 <script setup>
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import RanksTable from './components/RanksTable.vue';
+import RankCard from './components/RankCard.vue';
 import { useRanks } from './composables/useRanks';
 
 const {
