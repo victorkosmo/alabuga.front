@@ -80,6 +80,12 @@ export const mainLayoutRoutes = [
         name: 'Навыки',
         component: () => import('@/features/competenciesPanel/competenciesPanelView.vue'),
         meta: { requiresAuth: true, useInNav: true }
+    },
+    {
+        path: '/ranks',
+        name: 'Ранги',
+        component: () => import('@/features/ranksPanel/ranksPanelView.vue'),
+        meta: { requiresAuth: true, useInNav: true }
     }
 ];
 
