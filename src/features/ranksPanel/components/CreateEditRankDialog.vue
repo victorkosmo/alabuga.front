@@ -1,37 +1,38 @@
 <template>
   <Dialog :open="isOpen" @update:open="handleClose">
-    <DialogContent class="sm:max-w-[600px]">
+    <DialogContent class="sm:max-w-[800px]">
       <DialogHeader>
         <DialogTitle>{{ isEditing ? 'Редактировать ранг' : 'Создать ранг' }}</DialogTitle>
         <DialogDescription>
           {{ isEditing ? 'Внесите изменения и нажмите "Сохранить".' : 'Заполните информацию о новом ранге.' }}
         </DialogDescription>
       </DialogHeader>
-      <div class="grid gap-4 py-4">
-        <div class="grid grid-cols-4 items-center gap-4">
-          <Label for="title" class="text-right">Название</Label>
-          <Input id="title" v-model="form.title" class="col-span-3" />
-        </div>
-        <div class="grid grid-cols-4 items-center gap-4">
-          <Label for="description" class="text-right">Описание</Label>
-          <Textarea id="description" v-model="form.description" class="col-span-3" />
-        </div>
-        <div class="grid grid-cols-4 items-center gap-4">
-          <Label for="priority" class="text-right">Приоритет</Label>
-          <Input id="priority" v-model.number="form.priority" type="number" class="col-span-3" />
-        </div>
-        <div class="grid grid-cols-4 items-start gap-4">
-          <Label class="text-right pt-2">Условия разблокировки</Label>
-          <div class="col-span-3">
-            <UnlockConditionsBuilder v-model="unlockConditions" />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 py-4">
+        <!-- Left Column: Rank Details -->
+        <div class="space-y-4">
+          <div class="space-y-2">
+            <Label for="title">Название</Label>
+            <Input id="title" v-model="form.title" />
           </div>
-        </div>
-        <div class="grid grid-cols-4 items-center gap-4">
-          <Label for="image" class="text-right">Изображение</Label>
-          <div class="col-span-3">
+          <div class="space-y-2">
+            <Label for="description">Описание</Label>
+            <Textarea id="description" v-model="form.description" />
+          </div>
+          <div class="space-y-2">
+            <Label for="priority">Приоритет</Label>
+            <Input id="priority" v-model.number="form.priority" type="number" />
+          </div>
+          <div class="space-y-2">
+            <Label for="image">Изображение</Label>
             <Input id="image" type="file" @change="handleFileChange" accept="image/*" />
             <img v-if="imagePreview" :src="imagePreview" alt="Предпросмотр" class="mt-2 max-h-32 rounded" />
           </div>
+        </div>
+
+        <!-- Right Column: Unlock Conditions -->
+        <div class="space-y-2">
+          <Label>Условия разблокировки</Label>
+          <UnlockConditionsBuilder v-model="unlockConditions" />
         </div>
       </div>
       <DialogFooter>
