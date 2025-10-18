@@ -39,13 +39,6 @@ export function useUnlockConditionsBuilder(initialConditions) {
     selectedAchievementIds.value = conditions?.required_achievements?.ids || [];
   };
 
-  watch(initialConditions, (newConditions) => {
-    // Add this check to prevent re-parsing from self-triggered updates
-    if (JSON.stringify(newConditions) !== JSON.stringify(unlockConditions.value)) {
-      parseConditions(newConditions || {});
-    }
-  }, { immediate: true, deep: true });
-
   // Computed property to build the final unlock_conditions object
   const unlockConditions = computed(() => {
     const conditions = {};
@@ -63,6 +56,13 @@ export function useUnlockConditionsBuilder(initialConditions) {
     }
     return conditions;
   });
+
+  watch(initialConditions, (newConditions) => {
+    // Add this check to prevent re-parsing from self-triggered updates
+    if (JSON.stringify(newConditions) !== JSON.stringify(unlockConditions.value)) {
+      parseConditions(newConditions || {});
+    }
+  }, { immediate: true, deep: true });
 
   onMounted(fetchData);
 
