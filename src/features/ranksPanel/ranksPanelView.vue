@@ -13,16 +13,24 @@
       @save="saveRank"
     />
 
-    <div v-if="isLoading" class="space-y-4">
-      <Skeleton class="h-12 w-full" />
-      <Skeleton class="h-12 w-full" />
-      <Skeleton class="h-12 w-full" />
+    <div v-if="isLoading" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <Skeleton v-for="i in 6" :key="i" class="h-64 w-full" />
     </div>
 
-    <div v-else class="space-y-4">
-      <RanksTable :ranks="ranks" @edit="openEditDialog" />
+    <div v-else>
+      <div v-if="ranks.length" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <RankCard
+          v-for="rank in ranks"
+          :key="rank.id"
+          :rank="rank"
+          @edit="openEditDialog"
+        />
+      </div>
+      <div v-else class="text-center py-12 text-muted-foreground">
+        Нет данных.
+      </div>
 
-      <div v-if="pagination && pagination.pages > 1" class="flex items-center justify-end space-x-2 py-4">
+      <div v-if="pagination && pagination.pages > 1" class="flex items-center justify-end space-x-2 py-4 mt-6">
         <Button
           variant="outline"
           size="sm"
@@ -50,7 +58,7 @@
 <script setup>
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import RanksTable from './components/RanksTable.vue';
+import RankCard from './components/RankCard.vue';
 import CreateEditRankDialog from './components/CreateEditRankDialog.vue';
 import { useRanks } from './composables/useRanks';
 

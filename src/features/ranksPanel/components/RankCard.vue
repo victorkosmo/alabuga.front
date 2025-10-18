@@ -1,7 +1,10 @@
 <template>
   <Card>
-    <CardHeader>
+    <CardHeader class="flex flex-row items-center justify-between">
       <CardTitle>{{ rank.title }}</CardTitle>
+      <Button variant="ghost" size="icon" @click="$emit('edit', rank)">
+        <Pencil class="h-4 w-4" />
+      </Button>
     </CardHeader>
     <CardContent class="grid gap-4">
       <div v-if="rank.image_url" class="flex justify-center">
@@ -24,6 +27,8 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Pencil } from 'lucide-vue-next';
 
 defineProps({
   rank: {
@@ -31,4 +36,6 @@ defineProps({
     required: true,
   },
 });
+
+defineEmits(['edit']);
 </script>
