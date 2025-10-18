@@ -1,5 +1,6 @@
 // src/features/ranksPanel/services/ranks.service.js
-import { get } from '@/utils/fetch';
+import { get, post, put } from '@/utils/fetch';
+import { successMessage } from '@/utils/toast';
 
 /**
  * Get paginated list of ranks.
@@ -11,4 +12,37 @@ import { get } from '@/utils/fetch';
  */
 export const getRanks = (params = {}) => {
   return get('/web/ranks', { params });
+};
+
+/**
+ * Create a new rank.
+ * @param {FormData} data - The rank data.
+ * @returns {Promise<Object>} The created rank data.
+ */
+export const createRank = async (data) => {
+  const response = await post('/web/ranks', data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  if (response.success) {
+    successMessage('Ранг успешно создан');
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to create rank');
+};
+
+/**
+ * Update an existing rank.
+ * @param {string} id - The ID of the rank to update.
+ * @param {FormData} data - The updated rank data.
+ * @returns {Promise<Object>} The updated rank data.
+ */
+export const updateRank = async (id, data) => {
+  const response = await put(`/web/ranks/${id}`, data, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  });
+  if (response.success) {
+    successMessage('Ранг успешно обновлен');
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to update rank');
 };

@@ -2,7 +2,16 @@
   <div class="p-4 sm:p-6 lg:p-8">
     <header class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-bold">Ранги</h1>
+      <Button @click="openCreateDialog">Создать ранг</Button>
     </header>
+
+    <CreateEditRankDialog
+      :is-open="dialogs.createEdit"
+      :rank="selectedRank"
+      :is-saving="isSaving"
+      @close="closeCreateEditDialog"
+      @save="saveRank"
+    />
 
     <div v-if="isLoading" class="space-y-4">
       <Skeleton class="h-12 w-full" />
@@ -11,16 +20,7 @@
     </div>
 
     <div v-else class="space-y-4">
-      <template v-if="ranks.length">
-        <RankCard
-          v-for="rank in ranks"
-          :key="rank.id"
-          :rank="rank"
-        />
-      </template>
-      <div v-else class="text-center text-muted-foreground py-12 border border-dashed rounded-lg">
-        <p>Нет данных.</p>
-      </div>
+      <RanksTable :ranks="ranks" @edit="openEditDialog" />
 
       <div v-if="pagination && pagination.pages > 1" class="flex items-center justify-end space-x-2 py-4">
         <Button
@@ -50,7 +50,8 @@
 <script setup>
 import { Button } from '@/components/ui/button';
 import { Skeleton } from '@/components/ui/skeleton';
-import RankCard from './components/RankCard.vue';
+import RanksTable from './components/RanksTable.vue';
+import CreateEditRankDialog from './components/CreateEditRankDialog.vue';
 import { useRanks } from './composables/useRanks';
 
 const {
@@ -58,5 +59,12 @@ const {
   pagination,
   isLoading,
   fetchRanks,
+  dialogs,
+  selectedRank,
+  isSaving,
+  openCreateDialog,
+  openEditDialog,
+  closeCreateEditDialog,
+  saveRank,
 } = useRanks();
 </script>
