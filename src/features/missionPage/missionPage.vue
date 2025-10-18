@@ -166,7 +166,14 @@
             <div v-if="mission.mana_reward > 0">
               <span class="font-semibold">Мана:</span> {{ mission.mana_reward }}
             </div>
-            <!-- Competency rewards can be added here later -->
+            <div v-if="competencyRewardsWithNames.length > 0" class="pt-2">
+              <h4 class="font-semibold">Компетенции:</h4>
+              <ul class="list-disc list-inside text-muted-foreground">
+                <li v-for="reward in competencyRewardsWithNames" :key="reward.competency_id">
+                  {{ reward.name }}: +{{ reward.points }}
+                </li>
+              </ul>
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -245,5 +252,6 @@ const {
   updateRequiredAchievement,
   isUploadingCover,
   uploadCover,
+  competencyRewardsWithNames,
 } = useMission();
 </script>

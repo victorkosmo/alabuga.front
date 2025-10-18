@@ -45,6 +45,40 @@
           <Label for="placeholder_text">Пример (placeholder)</Label>
           <Input id="placeholder_text" v-model="formData.placeholder_text" />
         </div>
+
+        <div class="border-t pt-6">
+          <h3 class="text-lg font-medium">Награды за компетенции</h3>
+          <div v-if="!formData.competency_rewards || formData.competency_rewards.length === 0" class="mt-2 text-sm text-muted-foreground">
+            Нет наград за компетенции.
+          </div>
+          <div v-else>
+            <div v-for="(reward, index) in formData.competency_rewards" :key="index" class="mt-4 flex items-end gap-4 rounded-md border p-4">
+              <div class="flex-grow">
+                <Label :for="`competency-select-${index}`">Компетенция</Label>
+                <Select v-model="reward.competency_id">
+                  <SelectTrigger :id="`competency-select-${index}`">
+                    <SelectValue placeholder="Выберите компетенцию" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem v-for="comp in availableCompetencies(reward.competency_id)" :key="comp.id" :value="comp.id">
+                        {{ comp.name }}
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div class="w-24 shrink-0">
+                <Label :for="`competency-points-${index}`">Баллы</Label>
+                <Input :id="`competency-points-${index}`" type="number" v-model.number="reward.points" />
+              </div>
+              <Button variant="ghost" size="icon" @click="removeCompetencyReward(index)">
+                <Trash2 class="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <Button class="mt-4" variant="outline" @click="addCompetencyReward" :disabled="allCompetenciesSelected">Добавить награду</Button>
+        </div>
       </CardContent>
       <CardFooter>
         <Button :disabled="isSubmitting" @click="handleSubmit">
@@ -67,6 +101,40 @@
         <div>
           <Label for="description">Описание</Label>
           <Textarea id="description" v-model="formData.description" />
+        </div>
+
+        <div class="border-t pt-6">
+          <h3 class="text-lg font-medium">Награды за компетенции</h3>
+          <div v-if="!formData.competency_rewards || formData.competency_rewards.length === 0" class="mt-2 text-sm text-muted-foreground">
+            Нет наград за компетенции.
+          </div>
+          <div v-else>
+            <div v-for="(reward, index) in formData.competency_rewards" :key="index" class="mt-4 flex items-end gap-4 rounded-md border p-4">
+              <div class="flex-grow">
+                <Label :for="`competency-select-${index}`">Компетенция</Label>
+                <Select v-model="reward.competency_id">
+                  <SelectTrigger :id="`competency-select-${index}`">
+                    <SelectValue placeholder="Выберите компетенцию" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem v-for="comp in availableCompetencies(reward.competency_id)" :key="comp.id" :value="comp.id">
+                        {{ comp.name }}
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div class="w-24 shrink-0">
+                <Label :for="`competency-points-${index}`">Баллы</Label>
+                <Input :id="`competency-points-${index}`" type="number" v-model.number="reward.points" />
+              </div>
+              <Button variant="ghost" size="icon" @click="removeCompetencyReward(index)">
+                <Trash2 class="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <Button class="mt-4" variant="outline" @click="addCompetencyReward" :disabled="allCompetenciesSelected">Добавить награду</Button>
         </div>
       </CardContent>
       <CardFooter>
@@ -125,6 +193,40 @@
             :question-count="formData.questions.length"
           />
         </div>
+
+        <div class="border-t pt-6">
+          <h3 class="text-lg font-medium">Награды за компетенции</h3>
+          <div v-if="!formData.competency_rewards || formData.competency_rewards.length === 0" class="mt-2 text-sm text-muted-foreground">
+            Нет наград за компетенции.
+          </div>
+          <div v-else>
+            <div v-for="(reward, index) in formData.competency_rewards" :key="index" class="mt-4 flex items-end gap-4 rounded-md border p-4">
+              <div class="flex-grow">
+                <Label :for="`competency-select-${index}`">Компетенция</Label>
+                <Select v-model="reward.competency_id">
+                  <SelectTrigger :id="`competency-select-${index}`">
+                    <SelectValue placeholder="Выберите компетенцию" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectItem v-for="comp in availableCompetencies(reward.competency_id)" :key="comp.id" :value="comp.id">
+                        {{ comp.name }}
+                      </SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div class="w-24 shrink-0">
+                <Label :for="`competency-points-${index}`">Баллы</Label>
+                <Input :id="`competency-points-${index}`" type="number" v-model.number="reward.points" />
+              </div>
+              <Button variant="ghost" size="icon" @click="removeCompetencyReward(index)">
+                <Trash2 class="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <Button class="mt-4" variant="outline" @click="addCompetencyReward" :disabled="allCompetenciesSelected">Добавить награду</Button>
+        </div>
       </CardContent>
       <CardFooter>
         <Button :disabled="isSubmitting" @click="handleSubmit">
@@ -147,6 +249,8 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
 
 import QuizThresholdSetter from '@/features/newMissionForm/components/QuizThresholdSetter.vue';
 import * as missionService from '@/features/missionPage/services/mission.service';
@@ -158,6 +262,8 @@ const router = useRouter();
 const campaignId = computed(() => route.params.id);
 const missionId = computed(() => route.query.missionId);
 const missionType = computed(() => route.query.type);
+
+const competencies = ref([]);
 
 const isLoading = ref(true);
 const isSubmitting = ref(false);
@@ -171,7 +277,21 @@ const formData = reactive({
   // QUIZ type
   questions: [],
   pass_threshold: 1.0,
+  competency_rewards: [],
 });
+
+const fetchCompetencies = async () => {
+  try {
+    const response = await missionService.getMinimalCompetencies();
+    if (response.success) {
+      competencies.value = response.data;
+    } else {
+      throw new Error(response.error?.message || 'Failed to fetch competencies');
+    }
+  } catch (e) {
+    console.error('Failed to load competencies list', e);
+  }
+};
 
 const fetchMissionData = async () => {
   error.value = null;
@@ -185,6 +305,7 @@ const fetchMissionData = async () => {
     formData.title = missionData.title;
     formData.description = missionData.description;
     formData.cover_url = missionData.cover_url;
+    formData.competency_rewards = structuredClone(missionData.competency_rewards || []);
 
     // Type-specific fields
     if (missionType.value === 'MANUAL_URL') {
@@ -206,6 +327,7 @@ const fetchMissionData = async () => {
 
 onMounted(() => {
   fetchMissionData();
+  fetchCompetencies();
 });
 
 const goToMissionPage = () => {
@@ -214,6 +336,31 @@ const goToMissionPage = () => {
     params: { campaignId: campaignId.value, missionId: missionId.value },
     query: { type: missionType.value }
   });
+};
+
+const availableCompetencies = (currentId) => {
+  const selectedIds = new Set(formData.competency_rewards.map(r => r.competency_id));
+  return competencies.value.filter(c => !selectedIds.has(c.id) || c.id === currentId);
+};
+
+const allCompetenciesSelected = computed(() => {
+  if (competencies.value.length === 0) return true;
+  return formData.competency_rewards.length >= competencies.value.length;
+});
+
+const addCompetencyReward = () => {
+  const existingIds = new Set(formData.competency_rewards.map(cr => cr.competency_id));
+  const availableCompetency = competencies.value.find(c => !existingIds.has(c.id));
+  if (availableCompetency) {
+    formData.competency_rewards.push({
+      competency_id: availableCompetency.id,
+      points: 10,
+    });
+  }
+};
+
+const removeCompetencyReward = (index) => {
+  formData.competency_rewards.splice(index, 1);
 };
 
 const setCorrectAnswer = (questionIndex, answerIndex) => {
@@ -263,6 +410,7 @@ const handleSubmit = async () => {
     const payload = {
       title: formData.title,
       description: formData.description,
+      competency_rewards: formData.competency_rewards,
     };
 
     // Add type-specific fields to payload

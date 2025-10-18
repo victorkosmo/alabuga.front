@@ -221,3 +221,14 @@ export const getQuizMission = async (missionId) => {
   }
   throw new Error(response.error?.message || 'Failed to fetch Quiz mission');
 };
+
+/**
+ * Get a minimal list of competencies.
+ * @param {string} [campaignId] - Optional campaign ID to filter by.
+ * @returns {Promise<Object>} A promise that resolves to the response object.
+ */
+export const getMinimalCompetencies = async (campaignId) => {
+  const params = campaignId ? { campaign_id: campaignId } : {};
+  const response = await get('/web/ui/competencies/list-minimal', { params });
+  return response;
+};

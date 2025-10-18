@@ -3,11 +3,19 @@
     <div class="flex flex-col md:flex-row">
       <div class="flex flex-grow flex-col p-6">
         <div class="flex justify-between items-start mb-4">
-          <div class="flex-grow pr-4">
-            <h3 class="text-xl font-bold">{{ campaign.title }}</h3>
-            <p class="text-sm text-muted-foreground mt-1">
-              Даты проведения: {{ formatDateRange(campaign.start_date, campaign.end_date) }}
-            </p>
+          <div class="flex items-start flex-grow pr-4">
+            <img
+              v-if="campaign.icon_url"
+              :src="campaign.icon_url"
+              :alt="campaign.title"
+              class="w-12 h-12 rounded-full mr-4 object-cover flex-shrink-0"
+            />
+            <div>
+              <h3 class="text-xl font-bold">{{ campaign.title }}</h3>
+              <p class="text-sm text-muted-foreground mt-1">
+                Даты проведения: {{ formatDateRange(campaign.start_date, campaign.end_date) }}
+              </p>
+            </div>
           </div>
           <div class="flex-shrink-0 text-right">
             <Badge :variant="statusVariant(campaign.status)">{{ translateStatus(campaign.status) }}</Badge>

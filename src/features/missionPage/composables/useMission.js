@@ -1,4 +1,4 @@
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import { useRoute } from 'vue-router';
 import * as missionService from '@/features/missionPage/services/mission.service';
 import { missionTypeDetails } from '@/features/missionPage/missionTypes';
@@ -14,6 +14,7 @@ export function useMission() {
   const error = ref(null);
 
   const achievements = ref([]);
+  const competencies = ref([]);
   const isUpdatingAchievement = ref(false);
   const isUploadingCover = ref(false);
 
@@ -60,6 +61,17 @@ export function useMission() {
       }
     } catch (e) {
       console.error('Failed to load achievements list', e);
+    }
+  };
+
+  const fetchCompetencies = async () => {
+    try {
+      const response = await missionService.getMinimalCompetencies(campaignId);
+      if (response.success) {
+        competencies.value = response.data;
+      }
+    } catch (e) {
+      console.error('Failed to load competencies list', e);
     }
   };
 
@@ -117,6 +129,18 @@ export function useMission() {
   onMounted(() => {
     fetchMission();
     fetchAchievements();
+    fetchCompetencies();
+  });
+
+  const competencyRewardsWithNames = computed(() => {
+    if (!mission.value?.competency_rewards || !competencies.value.length) {
+      return [];
+    }
+    const competencyMap = new Map(competencies.value.map(c => [c.id, c.name]));
+    return mission.value.competency_rewards.map(reward => ({
+      ...reward,
+      name: competencyMap.get(reward.competency_id) || 'Неизвестная компетенция'
+    }));
   });
 
   return {
@@ -129,5 +153,6 @@ export function useMission() {
     updateRequiredAchievement,
     isUploadingCover,
     uploadCover,
+    competencyRewardsWithNames,
   };
 }

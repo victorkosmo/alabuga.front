@@ -1,5 +1,5 @@
 import { mainLayoutRoutes } from '@/router/routes';
-import { Home, BriefcaseBusiness, Settings, LogOut, Circle, FileBox, Star, Store } from 'lucide-vue-next';
+import { Home, BriefcaseBusiness, Settings, LogOut, Circle, FileBox, Star, Store, Route } from 'lucide-vue-next';
 
 /**
  * @typedef {Object} SidebarConfig
@@ -32,6 +32,7 @@ export const sidebarConfig = {
     'Настройки': Settings,
     'Кампании': BriefcaseBusiness,
     'Магазин': Store,
+    'Ранги': Route,
     _default: Circle // Fallback icon
   },
   

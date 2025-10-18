@@ -57,3 +57,18 @@ export const uploadCampaignCover = async (id, formData) => {
   }
   throw new Error(response.error?.message || 'Failed to upload cover');
 };
+
+/**
+ * Upload an icon image for a campaign.
+ * @param {string} id - The ID of the campaign.
+ * @param {FormData} formData - The form data containing the icon image.
+ * @returns {Promise<Object>} The updated campaign data.
+ */
+export const uploadCampaignIcon = async (id, formData) => {
+  const response = await post(`/web/campaigns/${id}/icon`, formData);
+  if (response.success) {
+    successMessage('Иконка кампании успешно загружена');
+    return response.data;
+  }
+  throw new Error(response.error?.message || 'Failed to upload icon');
+};
