@@ -10,16 +10,19 @@
       <!-- Campaigns -->
       <div class="space-y-2">
         <Label>Требуемое участие в кампаниях (условие ИЛИ)</Label>
-        <Select @update:modelValue="addCampaign" :disabled="unselectedCampaigns.length === 0">
-          <SelectTrigger>
-            <SelectValue placeholder="Добавить кампанию..." />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem v-for="campaign in unselectedCampaigns" :key="campaign.id" :value="campaign.id">
-              {{ campaign.title }}
-            </SelectItem>
-          </SelectContent>
-        </Select>
+        <div class="flex items-center gap-2">
+          <Select v-model="campaignToAdd" :disabled="unselectedCampaigns.length === 0">
+            <SelectTrigger>
+              <SelectValue placeholder="Выберите кампанию..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem v-for="campaign in unselectedCampaigns" :key="campaign.id" :value="campaign.id">
+                {{ campaign.title }}
+              </SelectItem>
+            </SelectContent>
+          </Select>
+          <Button @click="addCampaign" :disabled="!campaignToAdd" size="sm" type="button">Добавить</Button>
+        </div>
         <div class="mt-2 space-y-1 border rounded-md p-2 min-h-[8rem] max-h-48 overflow-y-auto">
           <div v-for="campaignId in selectedCampaignIds" :key="campaignId" class="flex items-center justify-between text-sm p-1 hover:bg-accent rounded">
             <span>{{ getCampaignTitle(campaignId) }}</span>
@@ -34,16 +37,19 @@
       <!-- Achievements -->
       <div class="space-y-2">
         <Label>Требуемые ачивки (условие И)</Label>
-        <Select @update:modelValue="addAchievement" :disabled="unselectedAchievements.length === 0">
-          <SelectTrigger>
-            <SelectValue placeholder="Добавить ачивку..." />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem v-for="ach in unselectedAchievements" :key="ach.id" :value="ach.id">
-              {{ ach.name }} ({{ ach.campaign_title }})
-            </SelectItem>
-          </SelectContent>
-        </Select>
+        <div class="flex items-center gap-2">
+          <Select v-model="achievementToAdd" :disabled="unselectedAchievements.length === 0">
+            <SelectTrigger>
+              <SelectValue placeholder="Выберите ачивку..." />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem v-for="ach in unselectedAchievements" :key="ach.id" :value="ach.id">
+                {{ ach.name }} ({{ ach.campaign_title }})
+              </SelectItem>
+            </SelectContent>
+          </Select>
+          <Button @click="addAchievement" :disabled="!achievementToAdd" size="sm" type="button">Добавить</Button>
+        </div>
         <div class="mt-2 space-y-1 border rounded-md p-2 min-h-[8rem] max-h-48 overflow-y-auto">
           <div v-for="achievementId in selectedAchievementIds" :key="achievementId" class="flex items-center justify-between text-sm p-1 hover:bg-accent rounded">
             <span class="truncate pr-2">{{ getAchievementDetails(achievementId) }}</span>
@@ -59,7 +65,7 @@
 </template>
 
 <script setup>
-import { computed, toRefs, watch } from 'vue';
+import { ref, computed, toRefs, watch } from 'vue';
 import { useUnlockConditionsBuilder } from '../composables/useUnlockConditionsBuilder';
 import { Label } from '@/components/ui/label';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -83,6 +89,9 @@ const props = defineProps({
 const emit = defineEmits(['update:modelValue']);
 
 const { modelValue } = toRefs(props);
+
+const campaignToAdd = ref(null);
+const achievementToAdd = ref(null);
 
 const {
   isLoading,
@@ -114,20 +123,22 @@ const getAchievementDetails = (id) => {
   return ach ? `${ach.name} (${ach.campaign_title})` : 'Неизвестная ачивка';
 };
 
-const addCampaign = (campaignId) => {
-  if (campaignId && !selectedCampaignIds.value.includes(campaignId)) {
-    selectedCampaignIds.value.push(campaignId);
+const addCampaign = () => {
+  if (campaignToAdd.value && !selectedCampaignIds.value.includes(campaignToAdd.value)) {
+    selectedCampaignIds.value.push(campaignToAdd.value);
   }
+  campaignToAdd.value = null; // Reset the select
 };
 
 const removeCampaign = (campaignId) => {
   selectedCampaignIds.value = selectedCampaignIds.value.filter(id => id !== campaignId);
 };
 
-const addAchievement = (achievementId) => {
-  if (achievementId && !selectedAchievementIds.value.includes(achievementId)) {
-    selectedAchievementIds.value.push(achievementId);
+const addAchievement = () => {
+  if (achievementToAdd.value && !selectedAchievementIds.value.includes(achievementToAdd.value)) {
+    selectedAchievementIds.value.push(achievementToAdd.value);
   }
+  achievementToAdd.value = null; // Reset the select
 };
 
 const removeAchievement = (achievementId) => {
