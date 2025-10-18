@@ -40,7 +40,10 @@ export function useUnlockConditionsBuilder(initialConditions) {
   };
 
   watch(initialConditions, (newConditions) => {
-    parseConditions(newConditions || {});
+    // Add this check to prevent re-parsing from self-triggered updates
+    if (JSON.stringify(newConditions) !== JSON.stringify(unlockConditions.value)) {
+      parseConditions(newConditions || {});
+    }
   }, { immediate: true, deep: true });
 
   // Computed property to build the final unlock_conditions object

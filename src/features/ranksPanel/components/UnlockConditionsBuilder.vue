@@ -103,8 +103,11 @@ const {
 } = useUnlockConditionsBuilder(modelValue);
 
 watch(unlockConditions, (newConditions) => {
-  emit('update:modelValue', newConditions);
-});
+  // Add this check to prevent emitting an update if the value hasn't changed
+  if (JSON.stringify(newConditions) !== JSON.stringify(props.modelValue)) {
+    emit('update:modelValue', newConditions);
+  }
+}, { deep: true }); // Also add deep: true to the watcher options
 
 const unselectedCampaigns = computed(() => {
   return availableCampaigns.value.filter(c => !selectedCampaignIds.value.includes(c.id));
