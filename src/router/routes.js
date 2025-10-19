@@ -99,6 +99,12 @@ export const authRoutes = [
         name: 'Login',
         component: () => import('@/pages/login/TheLoginPage.vue'),
         meta: { requiresAuth: false }
+    },
+    {
+        path: '/qr/:missionId',
+        name: 'QR Code',
+        component: () => import('@/pages/qr/qrCodePage.vue'),
+        meta: { requiresAuth: false }
     }
 ];
 
