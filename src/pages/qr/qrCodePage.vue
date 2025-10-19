@@ -1,0 +1,1 @@
+<template>QR code</template>
